@@ -4,7 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TabbedActivity">
+    android:background="@color/colorPrimary"
+    tools:context=".Activity.TabbedActivity">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoSizeTextType="uniform"
+                android:text="Notch Pie"
+                android:textColor="@color/colorTextDark"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
@@ -13,7 +44,14 @@
         android:background="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:tabGravity="fill"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorGravity="bottom"
+        app:tabRippleColor="@color/colorAccent"
+        app:tabSelectedTextColor="#000000"
+        app:tabTextColor="@color/colorTextDark"
+        app:tabUnboundedRipple="true" />
 
 
     <androidx.viewpager.widget.ViewPager

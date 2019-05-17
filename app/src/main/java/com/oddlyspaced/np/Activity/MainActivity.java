@@ -1,9 +1,11 @@
-package com.oddlyspaced.np;
+package com.oddlyspaced.np.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import com.oddlyspaced.np.R;
 
 public class MainActivity extends AppCompatActivity {
 
