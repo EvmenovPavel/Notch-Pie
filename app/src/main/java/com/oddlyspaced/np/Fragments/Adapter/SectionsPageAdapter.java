@@ -6,8 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.oddlyspaced.np.Fragments.BlankFragment;
-
-import java.util.ArrayList;
+import com.oddlyspaced.np.Fragments.NotchSettingsFragment;
 
 public class SectionsPageAdapter extends FragmentPagerAdapter {
 
@@ -22,7 +21,7 @@ public class SectionsPageAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new BlankFragment();
+                return new NotchSettingsFragment();
             case 1:
                 return new BlankFragment();
             case 2:
