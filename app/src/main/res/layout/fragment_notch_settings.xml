@@ -160,7 +160,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:layout_marginEnd="24dp"
-                            android:text="8"
+                            android:text="50"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -271,7 +271,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:layout_marginEnd="24dp"
-                            android:text="8"
+                            android:text="1"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -349,7 +349,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:layout_marginEnd="24dp"
-                            android:text="8"
+                            android:text="1"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -427,7 +427,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:layout_marginEnd="24dp"
-                            android:text="8"
+                            android:text="0"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -505,7 +505,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:layout_marginEnd="24dp"
-                            android:text="8"
+                            android:text="0"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -540,7 +540,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:layout_marginEnd="16dp"
-                            android:text="TextView"
+                            android:text="0"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -610,10 +610,10 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/fabYPositionIncrease"
                             app:layout_constraintStart_toEndOf="@+id/fabYPositionDecrease"
-                            app:layout_constraintTop_toBottomOf="@+id/sbYPosition" />
+                            app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
                         <TextView
-                            android:id="@+id/sbYPosition"
+                            android:id="@+id/textView4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
@@ -629,7 +629,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:layout_marginEnd="16dp"
-                            android:text="TextView"
+                            android:text="0"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -646,7 +646,7 @@
                             app:fabCustomSize="32dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/sbYPosition"
+                            app:layout_constraintTop_toBottomOf="@+id/textView4"
                             app:srcCompat="@drawable/ic_dec" />
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -662,7 +662,7 @@
                             app:fabCustomSize="32dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/sbYPosition"
+                            app:layout_constraintTop_toBottomOf="@+id/textView4"
                             app:srcCompat="@drawable/ic_inc" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

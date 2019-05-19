@@ -13,18 +13,27 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.oddlyspaced.np.R;
+import com.oddlyspaced.np.Utils.NotchManager;
 
 public class NotchSettingsFragment extends Fragment {
+
+    // notch manager object
+    NotchManager manager;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View main = inflater.inflate(R.layout.fragment_notch_settings, container, false);
-        return init(main);
+        init();
+        return attach(main);
+    }
+
+    private void init() {
+        manager = new NotchManager();
     }
 
     // takes the parent view and attaches the listeners to it
-    private View init(View main) {
+    private View attach(View main) {
         // Text views
         final TextView txHeight = main.findViewById(R.id.txHeight);
         final TextView txWidth = main.findViewById(R.id.txWidth);
@@ -51,6 +60,8 @@ public class NotchSettingsFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 txHeight.setText(String.valueOf(progress));
+                manager.setHeight(progress);
+                manager.save();
             }
 
             @Override
@@ -71,6 +82,8 @@ public class NotchSettingsFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 txWidth.setText(String.valueOf(progress));
+                manager.setWidth(progress);
+                manager.save();
             }
 
             @Override
@@ -91,6 +104,8 @@ public class NotchSettingsFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 txNotchSize.setText(String.valueOf(progress));
+                manager.setNotchSize(progress);
+                manager.save();
             }
 
             @Override
@@ -111,6 +126,8 @@ public class NotchSettingsFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 txTopRadius.setText(String.valueOf(progress));
+                manager.setTopRadius(progress);
+                manager.save();
             }
 
             @Override
@@ -131,6 +148,8 @@ public class NotchSettingsFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 txBottomRadius.setText(String.valueOf(progress));
+                manager.setBottomRadius(progress);
+                manager.save();
             }
 
             @Override
@@ -151,6 +170,8 @@ public class NotchSettingsFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 txXPosition.setText(String.valueOf(progress));
+                manager.setxPosition(progress);
+                manager.save();
             }
 
             @Override
@@ -171,6 +192,8 @@ public class NotchSettingsFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 txYPosition.setText(String.valueOf(progress));
+                manager.setyPosition(progress);
+                manager.save();
             }
 
             @Override
@@ -296,6 +319,17 @@ public class NotchSettingsFragment extends Fragment {
                 yPosition.setProgress(yPosition.getProgress() - 1);
             }
         });
+
+        // read the file
+        if (manager.read()) {
+            height.setProgress(manager.getHeight());
+            width.setProgress(manager.getWidth());
+            topRadius.setProgress(manager.getTopRadius());
+            bottomRadius.setProgress(manager.getBottomRadius());
+            notchSize.setProgress(manager.getNotchSize());
+            xPosition.setProgress(manager.getxPosition());
+            yPosition.setProgress(manager.getyPosition());
+        }
 
         return main;
     }
