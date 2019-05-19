@@ -142,20 +142,20 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <SeekBar
-                            android:id="@+id/seekBar"
+                            android:id="@+id/sbHeight"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginEnd="8dp"
                             android:progressTint="@color/colorDark"
                             android:thumbTint="@color/colorDark"
-                            app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton2"
-                            app:layout_constraintEnd_toStartOf="@+id/floatingActionButton3"
-                            app:layout_constraintStart_toEndOf="@+id/floatingActionButton2"
-                            app:layout_constraintTop_toTopOf="@+id/floatingActionButton2" />
+                            app:layout_constraintBottom_toBottomOf="@+id/fabHeightDecrease"
+                            app:layout_constraintEnd_toStartOf="@+id/fabHeightIncrease"
+                            app:layout_constraintStart_toEndOf="@+id/fabHeightDecrease"
+                            app:layout_constraintTop_toTopOf="@+id/fabHeightDecrease" />
 
                         <TextView
-                            android:id="@+id/textView4"
+                            android:id="@+id/txHeight"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -165,7 +165,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/floatingActionButton2"
+                            android:id="@+id/fabHeightDecrease"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
@@ -182,7 +182,7 @@
                             app:srcCompat="@drawable/ic_dec" />
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/floatingActionButton3"
+                            android:id="@+id/fabHeightIncrease"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -208,7 +208,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/view3">
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/floatingActionButton6"
+                            android:id="@+id/fabWidthIncrease"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -224,7 +224,7 @@
                             app:srcCompat="@drawable/ic_inc" />
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/floatingActionButton5"
+                            android:id="@+id/fabWidthDecrease"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
@@ -245,13 +245,13 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="16dp"
-                            android:text="Widht"
+                            android:text="Width"
                             android:textColor="@color/colorTextDark"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <SeekBar
-                            android:id="@+id/seekBar2"
+                            android:id="@+id/sbWidth"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
@@ -261,12 +261,12 @@
                             android:progressTint="@color/colorDark"
                             android:thumbTint="@color/colorDark"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/floatingActionButton6"
-                            app:layout_constraintStart_toEndOf="@+id/floatingActionButton5"
+                            app:layout_constraintEnd_toStartOf="@+id/fabWidthIncrease"
+                            app:layout_constraintStart_toEndOf="@+id/fabWidthDecrease"
                             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
                         <TextView
-                            android:id="@+id/textView6"
+                            android:id="@+id/txWidth"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -286,7 +286,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/view4">
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/floatingActionButton8"
+                            android:id="@+id/fabNotchSizeDecrease"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
@@ -302,7 +302,7 @@
                             app:srcCompat="@drawable/ic_dec" />
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/floatingActionButton7"
+                            android:id="@+id/fabNotchSizeIncrease"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -329,7 +329,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <SeekBar
-                            android:id="@+id/seekBar3"
+                            android:id="@+id/sbNotchSize"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
@@ -339,12 +339,12 @@
                             android:progressTint="@color/colorDark"
                             android:thumbTint="@color/colorDark"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/floatingActionButton7"
-                            app:layout_constraintStart_toEndOf="@+id/floatingActionButton8"
+                            app:layout_constraintEnd_toStartOf="@+id/fabNotchSizeIncrease"
+                            app:layout_constraintStart_toEndOf="@+id/fabNotchSizeDecrease"
                             app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
                         <TextView
-                            android:id="@+id/textView10"
+                            android:id="@+id/txNotchSize"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -364,7 +364,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/view5">
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/floatingActionButton9"
+                            android:id="@+id/fabTopRadiusDecrease"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
@@ -380,7 +380,7 @@
                             app:srcCompat="@drawable/ic_dec" />
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/floatingActionButton10"
+                            android:id="@+id/fabTopRadiusIncrease"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -407,7 +407,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <SeekBar
-                            android:id="@+id/seekBar4"
+                            android:id="@+id/sbTopRadius"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
@@ -417,12 +417,12 @@
                             android:progressTint="@color/colorDark"
                             android:thumbTint="@color/colorDark"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/floatingActionButton10"
-                            app:layout_constraintStart_toEndOf="@+id/floatingActionButton9"
+                            app:layout_constraintEnd_toStartOf="@+id/fabTopRadiusIncrease"
+                            app:layout_constraintStart_toEndOf="@+id/fabTopRadiusDecrease"
                             app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
                         <TextView
-                            android:id="@+id/textView11"
+                            android:id="@+id/txTopRadius"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -442,7 +442,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/view6">
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/floatingActionButton11"
+                            android:id="@+id/fabBottomRadiusIncrease"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -458,7 +458,7 @@
                             app:srcCompat="@drawable/ic_inc" />
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/floatingActionButton12"
+                            android:id="@+id/fabBottomRadiusDecrease"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
@@ -485,7 +485,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <SeekBar
-                            android:id="@+id/seekBar5"
+                            android:id="@+id/sbBottomRadius"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
@@ -495,12 +495,12 @@
                             android:progressTint="@color/colorDark"
                             android:thumbTint="@color/colorDark"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/floatingActionButton11"
-                            app:layout_constraintStart_toEndOf="@+id/floatingActionButton12"
+                            app:layout_constraintEnd_toStartOf="@+id/fabBottomRadiusIncrease"
+                            app:layout_constraintStart_toEndOf="@+id/fabBottomRadiusDecrease"
                             app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
                         <TextView
-                            android:id="@+id/textView12"
+                            android:id="@+id/txBottomRadius"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -520,7 +520,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/view7">
 
                         <SeekBar
-                            android:id="@+id/seekBar7"
+                            android:id="@+id/sbXPosition"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
@@ -530,12 +530,12 @@
                             android:progressTint="@color/colorDark"
                             android:thumbTint="@color/colorDark"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/floatingActionButton13"
-                            app:layout_constraintStart_toEndOf="@+id/floatingActionButton14"
+                            app:layout_constraintEnd_toStartOf="@+id/fabXPositionIncrease"
+                            app:layout_constraintStart_toEndOf="@+id/fabXPositionDecrease"
                             app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
                         <TextView
-                            android:id="@+id/textView14"
+                            android:id="@+id/txXPosition"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -556,7 +556,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/floatingActionButton13"
+                            android:id="@+id/fabXPositionIncrease"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -572,7 +572,7 @@
                             app:srcCompat="@drawable/ic_inc" />
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/floatingActionButton14"
+                            android:id="@+id/fabXPositionDecrease"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
@@ -598,7 +598,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/view8">
 
                         <SeekBar
-                            android:id="@+id/seekBar9"
+                            android:id="@+id/sbYPosition"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
@@ -608,12 +608,12 @@
                             android:progressTint="@color/colorDark"
                             android:thumbTint="@color/colorDark"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/floatingActionButton15"
-                            app:layout_constraintStart_toEndOf="@+id/floatingActionButton16"
-                            app:layout_constraintTop_toBottomOf="@+id/textView17" />
+                            app:layout_constraintEnd_toStartOf="@+id/fabYPositionIncrease"
+                            app:layout_constraintStart_toEndOf="@+id/fabYPositionDecrease"
+                            app:layout_constraintTop_toBottomOf="@+id/sbYPosition" />
 
                         <TextView
-                            android:id="@+id/textView17"
+                            android:id="@+id/sbYPosition"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
@@ -624,7 +624,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/textView18"
+                            android:id="@+id/txYPosition"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -634,7 +634,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/floatingActionButton16"
+                            android:id="@+id/fabYPositionDecrease"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
@@ -646,11 +646,11 @@
                             app:fabCustomSize="32dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView17"
+                            app:layout_constraintTop_toBottomOf="@+id/sbYPosition"
                             app:srcCompat="@drawable/ic_dec" />
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/floatingActionButton15"
+                            android:id="@+id/fabYPositionIncrease"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -662,7 +662,7 @@
                             app:fabCustomSize="32dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView17"
+                            app:layout_constraintTop_toBottomOf="@+id/sbYPosition"
                             app:srcCompat="@drawable/ic_inc" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
