@@ -1,4 +1,4 @@
-package com.oddlyspaced.np.Fragments.Adapter;
+package com.oddlyspaced.np.Adapter;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
