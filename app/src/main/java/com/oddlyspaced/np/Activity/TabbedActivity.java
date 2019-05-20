@@ -6,10 +6,8 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
-import com.oddlyspaced.np.Fragments.Adapter.SectionsPageAdapter;
+import com.oddlyspaced.np.Adapter.SectionsPageAdapter;
 import com.oddlyspaced.np.R;
-
-import java.util.ArrayList;
 
 public class TabbedActivity extends AppCompatActivity {
 
