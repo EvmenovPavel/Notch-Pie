@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -28,12 +29,15 @@ public class ErrorHandler {
         try {
             DateFormat dateFormat = DateFormat.getDateTimeInstance();
             Date date = new Date();
-            File err = new File(new ConstantHolder().getConfigFolderPathExternal() + "/" + tag + "-" + dateFormat.format(date));
+            File err = new File(new ConstantHolder().getConfigFolderPathExternal() + "/" + tag + "-" + dateFormat.format(date) + ".log");
             PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(err)));
             writer.println("----------------------------------------");
             writer.println(exception.toString());
             writer.println("----------------------------------------");
-            writer.println(Arrays.toString(exception.getStackTrace()));
+            StackTraceElement[] log = exception.getStackTrace();
+            for (StackTraceElement element : log) {
+                writer.println(element.toString());
+            }
             writer.close();
         }
         catch (Exception e) {
