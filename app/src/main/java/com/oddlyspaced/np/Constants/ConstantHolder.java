@@ -9,6 +9,7 @@ public class ConstantHolder {
     private final String configFolderPathInternal = Environment.getExternalStorageDirectory() + "/Android/data/com.oddlyspaced.np";
     private final String configFilePathInternal = configFolderPathInternal + "/config";
     private final String settingsFilePathInternal = configFolderPathInternal + "/settings";
+    private final String batteryFilePathInternal = configFolderPathInternal + "/battery";
     private final String configFolderPathExternal = Environment.getExternalStorageDirectory() + "/NotchPie";
     private final String configFetchUrl = "https://raw.githubusercontent.com/oddlyspaced/NotchPie-Data/master/";
 
@@ -34,5 +35,9 @@ public class ConstantHolder {
 
     public String getConfigFetchUrl() {
         return configFetchUrl;
+    }
+
+    public String getBatteryFilePathInternal() {
+        return batteryFilePathInternal;
     }
 }
