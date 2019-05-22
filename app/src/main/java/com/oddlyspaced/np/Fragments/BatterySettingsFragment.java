@@ -1,6 +1,5 @@
 package com.oddlyspaced.np.Fragments;
 
-import android.os.BatteryManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.oddlyspaced.np.BatteryColorAdapter;
+import com.oddlyspaced.np.Adapter.BatteryColorAdapter;
 import com.oddlyspaced.np.Interface.ColorPickerListener;
 import com.oddlyspaced.np.Interface.OnTouchColorLevel;
 import com.oddlyspaced.np.Modal.ColorLevel;

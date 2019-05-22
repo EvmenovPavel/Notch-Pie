@@ -1,4 +1,4 @@
-package com.oddlyspaced.np;
+package com.oddlyspaced.np.Adapter;
 
 import android.content.Context;
 import android.graphics.Color;
