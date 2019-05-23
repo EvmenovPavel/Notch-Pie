@@ -10,18 +10,18 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 
 // Handles data related to notch.
-public class ConfigManager {
+public class SettingsManager {
 
-    private final String TAG = "ConfigManager";
+    private final String TAG = "SettingsManager";
     private boolean fullStatus = false, showBackground = false, chargingAnimation = false, fillOverlay = false;
     private String backgroundColor = "#000000";
     private String filePath;
 
-    public ConfigManager() {
+    public SettingsManager() {
         filePath = new ConstantHolder().getSettingsFilePathInternal();
     }
 
-    public ConfigManager(String filePath) {
+    public SettingsManager(String filePath) {
         this.filePath = filePath;
     }
 

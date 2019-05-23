@@ -330,6 +330,9 @@ public class NotchSettingsFragment extends Fragment {
             xPosition.setProgress(manager.getxPosition());
             yPosition.setProgress(manager.getyPosition());
         }
+        else {
+            manager.save();
+        }
 
         return main;
     }

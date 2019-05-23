@@ -12,11 +12,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.oddlyspaced.np.R;
-import com.oddlyspaced.np.Utils.ConfigManager;
+import com.oddlyspaced.np.Utils.SettingsManager;
 
 public class ConfigSettingsFragment extends Fragment {
 
-    ConfigManager manager;
+    SettingsManager manager;
 
     @Nullable
     @Override
@@ -27,7 +27,7 @@ public class ConfigSettingsFragment extends Fragment {
     }
 
     private void init() {
-        manager = new ConfigManager();
+        manager = new SettingsManager();
     }
 
     private View attach(View parent) {
@@ -41,6 +41,9 @@ public class ConfigSettingsFragment extends Fragment {
             showBackground.setChecked(manager.isShowBackground());
             chargingAnimation.setChecked(manager.isChargingAnimation());
             fillOverlay.setChecked(manager.isFillOverlay());
+        }
+        else {
+            manager.save();
         }
 
         fullStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
