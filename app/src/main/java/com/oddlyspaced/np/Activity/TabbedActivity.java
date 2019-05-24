@@ -9,6 +9,9 @@ import com.google.android.material.tabs.TabLayout;
 import com.oddlyspaced.np.Constants.ConstantHolder;
 import com.oddlyspaced.np.Adapter.SectionsPageAdapter;
 import com.oddlyspaced.np.R;
+import com.oddlyspaced.np.Utils.BatteryConfigManager;
+import com.oddlyspaced.np.Utils.NotchManager;
+import com.oddlyspaced.np.Utils.SettingsManager;
 
 import java.io.File;
 
@@ -23,6 +26,8 @@ public class TabbedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabbed);
         createDirectories();
+        if (!checkConfigs())
+            createConfigs();
         init();
     }
 
@@ -37,6 +42,16 @@ public class TabbedActivity extends AppCompatActivity {
         File folder = new File(new ConstantHolder().getConfigFolderPathInternal());
         if (!folder.exists())
         folder.mkdirs();
+    }
+
+    private void createConfigs() {
+        new SettingsManager().save();
+        new BatteryConfigManager().save();
+        new NotchManager().save();
+    }
+
+    private boolean checkConfigs() {
+        return new File(new ConstantHolder().getConfigFilePathInternal()).exists() && new File(new ConstantHolder().getSettingsFilePathInternal()).exists() && new File(new ConstantHolder().getBatteryFilePathInternal()).exists();
     }
 
 }
