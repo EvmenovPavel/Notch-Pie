@@ -53,9 +53,6 @@ public class BatterySettingsFragment extends Fragment {
             linearAnimation.setChecked(manager.isLinear());
             linearAnimation.setChecked(manager.isDefined());
         }
-        else {
-            manager.save();
-        }
 
         linearAnimation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

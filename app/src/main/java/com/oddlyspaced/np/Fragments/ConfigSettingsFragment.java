@@ -42,9 +42,6 @@ public class ConfigSettingsFragment extends Fragment {
             chargingAnimation.setChecked(manager.isChargingAnimation());
             fillOverlay.setChecked(manager.isFillOverlay());
         }
-        else {
-            manager.save();
-        }
 
         fullStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
