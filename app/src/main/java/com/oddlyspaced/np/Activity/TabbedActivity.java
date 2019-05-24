@@ -3,17 +3,30 @@ package com.oddlyspaced.np.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.accessibilityservice.AccessibilityService;
+import android.accessibilityservice.AccessibilityServiceInfo;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
+import android.view.View;
+import android.view.accessibility.AccessibilityManager;
+import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.oddlyspaced.np.Constants.ConstantHolder;
 import com.oddlyspaced.np.Adapter.SectionsPageAdapter;
 import com.oddlyspaced.np.R;
+import com.oddlyspaced.np.Service.OverlayAccessibilityService;
 import com.oddlyspaced.np.Utils.BatteryConfigManager;
 import com.oddlyspaced.np.Utils.NotchManager;
 import com.oddlyspaced.np.Utils.SettingsManager;
 
 import java.io.File;
+import java.util.List;
 
 public class TabbedActivity extends AppCompatActivity {
 
@@ -29,6 +42,7 @@ public class TabbedActivity extends AppCompatActivity {
         if (!checkConfigs())
             createConfigs();
         init();
+        makeServiceSnackbar();
     }
 
     private void init() {
@@ -41,7 +55,7 @@ public class TabbedActivity extends AppCompatActivity {
     private void createDirectories() {
         File folder = new File(new ConstantHolder().getConfigFolderPathInternal());
         if (!folder.exists())
-        folder.mkdirs();
+            folder.mkdirs();
     }
 
     private void createConfigs() {
@@ -54,4 +68,41 @@ public class TabbedActivity extends AppCompatActivity {
         return new File(new ConstantHolder().getConfigFilePathInternal()).exists() && new File(new ConstantHolder().getSettingsFilePathInternal()).exists() && new File(new ConstantHolder().getBatteryFilePathInternal()).exists();
     }
 
+    private void makeServiceSnackbar () {
+        if (!checkServiceOn()) {
+            Snackbar bar = Snackbar.make(viewPager, "Please turn overlay service on!", Snackbar.LENGTH_INDEFINITE);
+            bar.setAction("Enable", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                    startActivity(intent);
+                    Toast.makeText(getApplicationContext(), getString(R.string.popup_accessibility_toast), Toast.LENGTH_LONG).show();
+                }
+            });
+            bar.show();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        makeServiceSnackbar();
+    }
+
+    private boolean checkServiceOn() {
+        return isAccessibilityServiceEnabled(getApplicationContext(), OverlayAccessibilityService.class);
+    }
+
+    public static boolean isAccessibilityServiceEnabled(Context context, Class<? extends AccessibilityService> service) {
+        AccessibilityManager am = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        List<AccessibilityServiceInfo> enabledServices = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK);
+
+        for (AccessibilityServiceInfo enabledService : enabledServices) {
+            ServiceInfo enabledServiceInfo = enabledService.getResolveInfo().serviceInfo;
+            if (enabledServiceInfo.packageName.equals(context.getPackageName()) && enabledServiceInfo.name.equals(service.getName()))
+                return true;
+        }
+
+        return false;
+    }
 }
