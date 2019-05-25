@@ -13,10 +13,9 @@ import java.io.PrintWriter;
 public class SettingsManager {
 
     private final String TAG = "SettingsManager";
-    private boolean fullStatus = false, showBackground = false, fillOverlay = false;
+    private boolean fullStatus = false, showBackground = false, chargingAnimation = false, fillOverlay = false;
     private String backgroundColor = "#000000";
     private String filePath;
-    private boolean chargingAnimation1 = false, chargingAnimation2 = false, chargingAnimation3 = false;
 
     public SettingsManager() {
         filePath = new ConstantHolder().getSettingsFilePathInternal();
@@ -40,15 +39,9 @@ public class SettingsManager {
                 } else if (line.startsWith("SB:")) {
                     showBackground = line.substring(line.indexOf(":") + 1, line.lastIndexOf(":")).equals("T");
                     backgroundColor = line.substring(line.lastIndexOf(":") + 1);
-                } else if (line.startsWith("CA1:")) {
-                    chargingAnimation1 = line.substring(line.indexOf(":") + 1).equals("T");
-                }
-                else if (line.startsWith("CA2:")) {
-                    chargingAnimation2 = line.substring(line.indexOf(":") + 1).equals("T");
-                }
-                else if (line.startsWith("CA3:")) {
-                    chargingAnimation3 = line.substring(line.indexOf(":") + 1).equals("T");
-                }else if (line.startsWith("FO:")) {
+                } else if (line.startsWith("CA:")) {
+                    chargingAnimation = line.substring(line.indexOf(":") + 1).equals("T");
+                } else if (line.startsWith("FO:")) {
                     fillOverlay = line.substring(line.indexOf(":") + 1).equals("T");
                 }
             }
@@ -76,20 +69,10 @@ public class SettingsManager {
             } else {
                 writer.println("SB:F:" + backgroundColor);
             }
-            if (chargingAnimation1) {
-                writer.println("CA1:T");
+            if (chargingAnimation) {
+                writer.println("CA:T");
             } else {
-                writer.println("CA1:F");
-            }
-            if (chargingAnimation2) {
-                writer.println("CA2:T");
-            } else {
-                writer.println("CA2:F");
-            }
-            if (chargingAnimation3) {
-                writer.println("CA3:T");
-            } else {
-                writer.println("CA3:F");
+                writer.println("CA:F");
             }
             if (fillOverlay) {
                 writer.println("FO:T");
@@ -117,16 +100,8 @@ public class SettingsManager {
         return showBackground;
     }
 
-    public boolean isChargingAnimation1() {
-        return chargingAnimation1;
-    }
-
-    public boolean isChargingAnimation2() {
-        return chargingAnimation2;
-    }
-
-    public boolean isChargingAnimation3() {
-        return chargingAnimation3;
+    public boolean isChargingAnimation() {
+        return chargingAnimation;
     }
 
     public boolean isFillOverlay() {
@@ -149,16 +124,8 @@ public class SettingsManager {
         this.showBackground = showBackground;
     }
 
-    public void setChargingAnimation1(boolean chargingAnimation1) {
-        this.chargingAnimation1 = chargingAnimation1;
-    }
-
-    public void setChargingAnimation2(boolean chargingAnimation2) {
-        this.chargingAnimation2 = chargingAnimation2;
-    }
-
-    public void setChargingAnimation3(boolean chargingAnimation3) {
-        this.chargingAnimation3 = chargingAnimation3;
+    public void setChargingAnimation(boolean chargingAnimation) {
+        this.chargingAnimation = chargingAnimation;
     }
 
     public void setFillOverlay(boolean fillOverlay) {

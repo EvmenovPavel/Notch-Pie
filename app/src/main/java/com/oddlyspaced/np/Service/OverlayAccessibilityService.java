@@ -186,14 +186,16 @@ public class OverlayAccessibilityService extends AccessibilityService {
             public void onChargingConnected(int battery) {
                 Log.e("ood", "odddd");
                 settingsManager.read();
-                if (settingsManager.isChargingAnimation1()) {
+                if (settingsManager.isChargingAnimation() && !isAnimation1Active) {
                     isAnimation1Active = true;
+                    tempBatteryLevel1 = batteryLevel;
                     animation1();
                 }
             }
 
             @Override
             public void oncChargingDisconnected(int battery) {
+                Log.e("ood", "odddssssssssssssssd");
                 isAnimation1Active = false;
                 makeOverlay(batteryLevel);
             }
@@ -416,7 +418,6 @@ public class OverlayAccessibilityService extends AccessibilityService {
     private boolean isAnimation1Active = false;
     private int tempBatteryLevel1 = batteryLevel;
     private void animation1() {
-        tempBatteryLevel1 = batteryLevel;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

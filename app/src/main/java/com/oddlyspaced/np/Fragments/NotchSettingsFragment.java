@@ -18,7 +18,8 @@ import com.oddlyspaced.np.Utils.NotchManager;
 public class NotchSettingsFragment extends Fragment {
 
     // notch manager object
-    NotchManager manager;
+    private NotchManager manager;
+    private boolean isPortrait = false;
 
     @Nullable
     @Override

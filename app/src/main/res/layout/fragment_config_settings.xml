@@ -172,7 +172,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <Switch
-                            android:id="@+id/switchCharging1"
+                            android:id="@+id/switchCharging"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="16dp"
