@@ -33,13 +33,13 @@ public class ConfigSettingsFragment extends Fragment {
     private View attach(View parent) {
         Switch fullStatus = parent.findViewById(R.id.switchFullStatus);
         Switch showBackground = parent.findViewById(R.id.switchShowBackground);
-        Switch chargingAnimation = parent.findViewById(R.id.switchCharging);
+        Switch chargingAnimation = parent.findViewById(R.id.switchCharging1);
         Switch fillOverlay = parent.findViewById(R.id.switchFillOverlay);
 
         if (manager.read()) {
             fullStatus.setChecked(manager.isFullStatus());
             showBackground.setChecked(manager.isShowBackground());
-            chargingAnimation.setChecked(manager.isChargingAnimation());
+            chargingAnimation.setChecked(manager.isChargingAnimation1());
             fillOverlay.setChecked(manager.isFillOverlay());
         }
 
@@ -60,7 +60,7 @@ public class ConfigSettingsFragment extends Fragment {
         chargingAnimation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                manager.setChargingAnimation(isChecked);
+                manager.setChargingAnimation1(isChecked);
                 manager.save();
             }
         });

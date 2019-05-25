@@ -166,13 +166,13 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="16dp"
-                            android:text="Charging Animation"
+                            android:text="Charging Animation 1"
                             android:textColor="@color/colorTextDark"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <Switch
-                            android:id="@+id/switchCharging"
+                            android:id="@+id/switchCharging1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="16dp"

@@ -24,6 +24,12 @@ public class BatteryBroadcastReceiver extends BroadcastReceiver {
         // getting data from intent
         int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
         onBatteryChangedInterface.onChanged(level);
+        int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+        boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||status == BatteryManager.BATTERY_STATUS_FULL;
+        if (isCharging)
+            onBatteryChangedInterface.onChargingConnected(level);
+        else
+            onBatteryChangedInterface.oncChargingDisconnected(level);
     }
 
 }

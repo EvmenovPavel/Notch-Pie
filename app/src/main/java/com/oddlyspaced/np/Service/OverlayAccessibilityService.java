@@ -13,6 +13,7 @@ import android.graphics.PixelFormat;
 import android.graphics.RectF;
 import android.graphics.SweepGradient;
 import android.os.FileObserver;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -161,7 +162,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
             @Override
             public void onPortrait() {
                 isPortrait = true;
-                makeOverlay();
+                makeOverlay(batteryLevel);
             }
 
             @Override
@@ -177,8 +178,24 @@ public class OverlayAccessibilityService extends AccessibilityService {
             public void onChanged(int battery) {
                 batteryLevel = battery;
                 if (isPortrait) {
-                    makeOverlay();
+                    makeOverlay(batteryLevel);
                 }
+            }
+
+            @Override
+            public void onChargingConnected(int battery) {
+                Log.e("ood", "odddd");
+                settingsManager.read();
+                if (settingsManager.isChargingAnimation1()) {
+                    isAnimation1Active = true;
+                    animation1();
+                }
+            }
+
+            @Override
+            public void oncChargingDisconnected(int battery) {
+                isAnimation1Active = false;
+                makeOverlay(batteryLevel);
             }
         });
         IntentFilter intentFilterBattery = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
@@ -187,7 +204,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
             @Override
             public void onEdited() {
                 notchManager.read();
-                makeOverlay();
+                makeOverlay(batteryLevel);
             }
         });
         IntentFilter intentFilterNotchConfig = new IntentFilter(NOTCH_CONFIG_CHANGED_BROADCAST_ACTION);
@@ -196,7 +213,14 @@ public class OverlayAccessibilityService extends AccessibilityService {
             @Override
             public void onEdited() {
                 settingsManager.read();
-                makeOverlay();
+                //if (settingsManager.isChargingAnimation1()) {
+                  //  isAnimation1Active = true;
+                    //animation1();
+                //}
+                //else {
+                  //  isAnimation1Active = false;
+                    makeOverlay(batteryLevel);
+                //}
             }
         });
         IntentFilter intentFilterSettingsConfig = new IntentFilter(SETTINGS_CONFIG_CHANGED_BROADCAST_ACTION);
@@ -205,7 +229,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
             @Override
             public void onEdited() {
                 batteryManager.read();
-                makeOverlay();
+                makeOverlay(batteryLevel);
             }
         });
         IntentFilter intentFilterBatteryConfig = new IntentFilter(BATTERY_CONFIG_CHANGED_BROADCAST_ACTION);
@@ -227,8 +251,8 @@ public class OverlayAccessibilityService extends AccessibilityService {
     }
 
     // -- Overlay Manager --
-    private void makeOverlay() {
-        Bitmap bitmap = drawNotch();
+    private void makeOverlay(int battery) {
+        Bitmap bitmap = drawNotch(battery);
         ImageView img = overlayView.findViewById(R.id.imageView);
         img.setImageBitmap(bitmap);
         img.setRotation(0);
@@ -261,7 +285,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
     // please don't ask me how it works now
     // i kinda forgot myself
     // it just works so i am not commenting out anything in it.
-    private Bitmap drawNotch() {
+    private Bitmap drawNotch(int battery) {
         int w = notchManager.getWidth();
         int h = notchManager.getHeight();
         int ns = notchManager.getNotchSize();
@@ -308,7 +332,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
         paint.setDither(true);
         paint.setStyle(Paint.Style.FILL);
 
-        int[] colors = getColorArray(batteryLevel, settingsManager.isFullStatus());
+        int[] colors = getColorArray(battery, settingsManager.isFullStatus());
         float[] positions = getPositionArray();
         SweepGradient sweepGradient = new SweepGradient((int) (Math.abs(rectF.width()) / 2) /*center*/, 0, colors, positions);
         paint.setShader(sweepGradient);
@@ -385,6 +409,26 @@ public class OverlayAccessibilityService extends AccessibilityService {
         }
         p[180] = 0.5F;
         return p;
+    }
+
+    // -- Animation methods --
+    // idea by Mohammed ELNagger (@Negrroo) on telegram
+    private boolean isAnimation1Active = false;
+    private int tempBatteryLevel1 = batteryLevel;
+    private void animation1() {
+        tempBatteryLevel1 = batteryLevel;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (tempBatteryLevel1 == 100)
+                    tempBatteryLevel1 = batteryLevel;
+                else
+                    tempBatteryLevel1++;
+                makeOverlay(tempBatteryLevel1);
+                if (isAnimation1Active)
+                    animation1();
+            }
+        }, 100);
     }
 
 }
