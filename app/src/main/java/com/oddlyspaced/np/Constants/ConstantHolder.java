@@ -6,6 +6,7 @@ import android.os.Environment;
 public class ConstantHolder {
 
     private final int appCode = 7;
+    private final String packageName = "com.oddlyspaced.np";
     private final String configFolderPathInternal = Environment.getExternalStorageDirectory() + "/Android/data/com.oddlyspaced.np";
     private final String configFilePathInternal = configFolderPathInternal + "/config";
     private final String settingsFilePathInternal = configFolderPathInternal + "/settings";
@@ -31,6 +32,10 @@ public class ConstantHolder {
 
     public String getConfigFolderPathExternal() {
         return configFolderPathExternal;
+    }
+
+    public String getPackageName() {
+        return packageName;
     }
 
     public String getConfigFetchUrl() {

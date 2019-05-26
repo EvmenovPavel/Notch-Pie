@@ -1,8 +1,12 @@
 package com.oddlyspaced.np.Service;
 
 import android.accessibilityservice.AccessibilityService;
+import android.accessibilityservice.AccessibilityServiceInfo;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -21,19 +25,16 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.oddlyspaced.np.Constants.ConstantHolder;
-import com.oddlyspaced.np.Interface.OnBatteryConfigEdited;
 import com.oddlyspaced.np.Interface.OnBatteryLevelChanged;
-import com.oddlyspaced.np.Interface.OnNotchConfigEdited;
 import com.oddlyspaced.np.Interface.OnRotate;
-import com.oddlyspaced.np.Interface.OnSettingsConfigEdited;
 import com.oddlyspaced.np.Modal.ColorLevel;
 import com.oddlyspaced.np.R;
 import com.oddlyspaced.np.Receiver.BatteryBroadcastReceiver;
-import com.oddlyspaced.np.Receiver.FileBroadcastReceiver;
 import com.oddlyspaced.np.Receiver.OrientationBroadcastReceiver;
 import com.oddlyspaced.np.Utils.BatteryConfigManager;
 import com.oddlyspaced.np.Utils.SettingsManager;
@@ -50,25 +51,65 @@ public class OverlayAccessibilityService extends AccessibilityService {
     private SettingsManager settingsManager;
     private BatteryConfigManager batteryManager;
 
-    @Override
-    public void onAccessibilityEvent(AccessibilityEvent event) {
-
-    }
-
-    @Override
-    public void onInterrupt() {
-        Log.e ("ok", "stoppp");
-        stopConfigObservers();
-        stopReceivers();
-    }
+    private boolean isInApp = false;
+    private boolean isPortrait = true;
+    private int batteryLevel;
 
     // Executed when service started
     @Override
     protected void onServiceConnected() {
+        //Configure these here for compatibility with API 13 and below.
+        AccessibilityServiceInfo config = new AccessibilityServiceInfo();
+        config.eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
+        config.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
+        config.flags = AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS;
+
+
+        setServiceInfo(config);
         init();
         startReceivers();
-        startConfigObservers();
     }
+
+    @Override
+    public void onAccessibilityEvent(AccessibilityEvent event) {
+        if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+            if (event.getPackageName() != null && event.getClassName() != null) {
+                ComponentName componentName = new ComponentName(
+                        event.getPackageName().toString(),
+                        event.getClassName().toString()
+                );
+
+                ActivityInfo activityInfo = getCurrentActivity(componentName);
+                boolean isActivity = activityInfo != null;
+                if (isActivity) {
+                    String activity = componentName.flattenToShortString();
+                    if (activity.startsWith(constants.getPackageName())) {
+                        isInApp = true;
+                        readConfigsContinuosly();
+                    }
+                    else {
+                        isInApp = false;
+                    }
+                }
+            }
+        }
+    }
+
+    // gets the foreground activity name
+    // https://stackoverflow.com/questions/3873659/android-how-can-i-get-the-current-foreground-activity-from-a-service/27642535#27642535
+    private ActivityInfo getCurrentActivity(ComponentName componentName) {
+        try {
+            return getPackageManager().getActivityInfo(componentName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public void onInterrupt() {
+        stopReceivers();
+    }
+
 
     // -- Handlers --
     private void init() {
@@ -77,13 +118,14 @@ public class OverlayAccessibilityService extends AccessibilityService {
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         // the parent image view in which the bitmap is set
         overlayView = LayoutInflater.from(this).inflate(R.layout.overlay_float, null); // the view which will be overlayed
-        overlayView.setRotationY(180); // mirroring
         notchManager = new NotchManager();
         settingsManager = new SettingsManager();
         batteryManager = new BatteryConfigManager();
         notchManager.read();
         settingsManager.read();
         batteryManager.read();
+
+        readConfigsContinuosly();
     }
 
     // -- Utils --
@@ -97,64 +139,9 @@ public class OverlayAccessibilityService extends AccessibilityService {
     }
 
     // -- Receiver / Observer handlers --
-    private FileObserver notchConfigObserver;
-    private FileObserver settingConfigObserver;
-    private FileObserver batteryConfigObserver;
-
-    private final String NOTCH_CONFIG_CHANGED_BROADCAST_ACTION = "NOTCH_CONFIG_CHANGED_BROADCAST_ACTION";
-    private final String SETTINGS_CONFIG_CHANGED_BROADCAST_ACTION = "SETTINGS_CONFIG_CHANGED_BROADCAST_ACTION";
-    private final String BATTERY_CONFIG_CHANGED_BROADCAST_ACTION = "BATTERY_CONFIG_CHANGED_BROADCAST_ACTION";
-
-
-    private void startConfigObservers() {
-        notchConfigObserver = new FileObserver(constants.getConfigFilePathInternal()) {
-            @Override
-            public void onEvent(int event, @Nullable String path) {
-                if (event == MODIFY && isPortrait) {
-                    Intent intent = new Intent(NOTCH_CONFIG_CHANGED_BROADCAST_ACTION);
-                    sendBroadcast(intent);
-                }
-            }
-        };
-        notchConfigObserver.startWatching();
-
-        settingConfigObserver = new FileObserver(constants.getSettingsFilePathInternal()) {
-            @Override
-            public void onEvent(int event, @Nullable String path) {
-                if (event == MODIFY && isPortrait) {
-                    Intent intent = new Intent(SETTINGS_CONFIG_CHANGED_BROADCAST_ACTION);
-                    sendBroadcast(intent);
-                }
-            }
-        };
-        settingConfigObserver.startWatching();
-
-        batteryConfigObserver = new FileObserver(constants.getBatteryFilePathInternal()) {
-            @Override
-            public void onEvent(int event, @Nullable String path) {
-                if (event == MODIFY && isPortrait) {
-                    Intent intent = new Intent(BATTERY_CONFIG_CHANGED_BROADCAST_ACTION);
-                    sendBroadcast(intent);
-                }
-            }
-        };
-        batteryConfigObserver.startWatching();
-    }
-
-    private void stopConfigObservers() {
-        notchConfigObserver.stopWatching();
-        settingConfigObserver.stopWatching();
-        batteryConfigObserver.stopWatching();
-    }
-
-    private boolean isPortrait = true;
-    private int batteryLevel;
 
     private OrientationBroadcastReceiver receiverOrientation;
     private BatteryBroadcastReceiver receiverBattery;
-    private FileBroadcastReceiver receiverNotchConfig;
-    private FileBroadcastReceiver receiverSettingsConfig;
-    private FileBroadcastReceiver receiverBatteryConfig;
 
     // this method starts and initialises every receiver to be uses in service
     private void startReceivers() {
@@ -202,54 +189,34 @@ public class OverlayAccessibilityService extends AccessibilityService {
         });
         IntentFilter intentFilterBattery = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 
-        receiverNotchConfig = new FileBroadcastReceiver(new OnNotchConfigEdited() {
-            @Override
-            public void onEdited() {
-                notchManager.read();
-                makeOverlay(batteryLevel);
-            }
-        });
-        IntentFilter intentFilterNotchConfig = new IntentFilter(NOTCH_CONFIG_CHANGED_BROADCAST_ACTION);
-
-        receiverSettingsConfig = new FileBroadcastReceiver(new OnSettingsConfigEdited() {
-            @Override
-            public void onEdited() {
-                settingsManager.read();
-                //if (settingsManager.isChargingAnimation1()) {
-                  //  isAnimation1Active = true;
-                    //animation1();
-                //}
-                //else {
-                  //  isAnimation1Active = false;
-                    makeOverlay(batteryLevel);
-                //}
-            }
-        });
-        IntentFilter intentFilterSettingsConfig = new IntentFilter(SETTINGS_CONFIG_CHANGED_BROADCAST_ACTION);
-
-        receiverBatteryConfig = new FileBroadcastReceiver(new OnBatteryConfigEdited() {
-            @Override
-            public void onEdited() {
-                batteryManager.read();
-                makeOverlay(batteryLevel);
-            }
-        });
-        IntentFilter intentFilterBatteryConfig = new IntentFilter(BATTERY_CONFIG_CHANGED_BROADCAST_ACTION);
-
-
         registerReceiver(receiverOrientation, intentFilterOrientation);
         registerReceiver(receiverBattery, intentFilterBattery);
-        registerReceiver(receiverNotchConfig, intentFilterNotchConfig);
-        registerReceiver(receiverSettingsConfig, intentFilterSettingsConfig);
-        registerReceiver(receiverBatteryConfig, intentFilterBatteryConfig);
     }
+
+    private void readConfigsContinuosly() {
+        Toast.makeText(getApplicationContext(), "sure", Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                notchManager.read();
+                settingsManager.read();
+                batteryManager.read();
+                if (isPortrait) {
+                    makeOverlay(batteryLevel);
+                }
+                else {
+                    removeOverlay();
+                }
+                if (isInApp)
+                    readConfigsContinuosly();
+            }
+        }, 100);
+    }
+
 
     private void stopReceivers() {
         unregisterReceiver(receiverOrientation);
         unregisterReceiver(receiverBattery);
-        unregisterReceiver(receiverNotchConfig);
-        unregisterReceiver(receiverSettingsConfig);
-        unregisterReceiver(receiverBatteryConfig);
     }
 
     // -- Overlay Manager --
