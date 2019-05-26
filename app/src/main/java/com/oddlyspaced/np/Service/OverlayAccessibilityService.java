@@ -64,7 +64,6 @@ public class OverlayAccessibilityService extends AccessibilityService {
         config.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
         config.flags = AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS;
 
-
         setServiceInfo(config);
         init();
         startReceivers();
@@ -171,7 +170,6 @@ public class OverlayAccessibilityService extends AccessibilityService {
 
             @Override
             public void onChargingConnected(int battery) {
-                Log.e("ood", "odddd");
                 settingsManager.read();
                 if (settingsManager.isChargingAnimation() && !isAnimation1Active) {
                     isAnimation1Active = true;
@@ -182,7 +180,6 @@ public class OverlayAccessibilityService extends AccessibilityService {
 
             @Override
             public void oncChargingDisconnected(int battery) {
-                Log.e("ood", "odddssssssssssssssd");
                 isAnimation1Active = false;
                 makeOverlay(batteryLevel);
             }
@@ -194,7 +191,6 @@ public class OverlayAccessibilityService extends AccessibilityService {
     }
 
     private void readConfigsContinuosly() {
-        Toast.makeText(getApplicationContext(), "sure", Toast.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -228,14 +224,11 @@ public class OverlayAccessibilityService extends AccessibilityService {
         overlayView.setRotation(0);
         try {
             windowManager.updateViewLayout(overlayView, generateParams(bitmap.getHeight(), bitmap.getWidth()));
-            Log.e("yee", "haww");
         } catch (Exception e) {
-            Log.e("original", e.toString());
             // if this gives an error then its probably because wm is empty
             try {
                 windowManager.addView(overlayView, generateParams(bitmap.getHeight(), bitmap.getWidth()));
             } catch (Exception ee) {
-                Log.e("why tho", ee.toString());
             }
         }
     }
