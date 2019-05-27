@@ -12,6 +12,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
@@ -121,6 +122,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
         settingsManager.read();
         batteryManager.read();
 
+        overlayView.setRotationY(180);
         readConfigsContinuously();
     }
 
@@ -223,6 +225,10 @@ public class OverlayAccessibilityService extends AccessibilityService {
         img.setImageBitmap(bitmap);
         img.setRotation(0);
         overlayView.setRotation(0);
+        overlayView.setRotationY(180);
+        overlayView.setRotationX(0);
+
+        //overlayView.setBackgroundColor(Color.RED);
         try {
             windowManager.updateViewLayout(overlayView, generateParamsPortrait(bitmap.getHeight(), bitmap.getWidth()));
         } catch (Exception e) {
@@ -236,10 +242,15 @@ public class OverlayAccessibilityService extends AccessibilityService {
 
     private void makeOverlayLandscape(int battery) {
         Bitmap bitmap = drawNotch(battery);
+        bitmap = rotateBitmap(bitmap, 90f);
         ImageView img = overlayView.findViewById(R.id.imageView);
         img.setImageBitmap(bitmap);
         img.setRotation(0);
         overlayView.setRotation(0);
+        overlayView.setRotationY(180);
+        overlayView.setRotationX(0);
+
+        //overlayView.setBackgroundColor(Color.RED);
         try {
             windowManager.updateViewLayout(overlayView, generateParamsLandscape(bitmap.getHeight(), bitmap.getWidth()));
         } catch (Exception e) {
@@ -253,6 +264,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
 
     private void makeOverlayLandscapeReverse(int battery) {
         Bitmap bitmap = drawNotch(battery);
+        bitmap = rotateBitmap(bitmap, -90f);
         ImageView img = overlayView.findViewById(R.id.imageView);
         img.setImageBitmap(bitmap);
         img.setRotation(0);
@@ -342,10 +354,10 @@ public class OverlayAccessibilityService extends AccessibilityService {
                 WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY,
                 layoutParameters,
                 PixelFormat.TRANSLUCENT);
-        p.gravity = Gravity.TOP | Gravity.CENTER;
+        p.gravity = Gravity.END | Gravity.CENTER;
         //setting boundary
-        p.x = notchManager.getxPositionPortrait();
-        p.y = -(getStatusBarHeight()) - notchManager.getyPositionPortrait();
+        p.x =  notchManager.getxPositionLandscape();
+        p.y = notchManager.getyPositionLandscape();
         overlayView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
             @Override
             public void onSystemUiVisibilityChange(int visibility) {
@@ -462,6 +474,14 @@ public class OverlayAccessibilityService extends AccessibilityService {
         p[180] = 0.5F;
         return p;
     }
+
+    public static Bitmap rotateBitmap(Bitmap source, float angle)
+    {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
+
 
     // -- Animation methods --
     // idea by Mohammed ELNagger (@Negrroo) on telegram
