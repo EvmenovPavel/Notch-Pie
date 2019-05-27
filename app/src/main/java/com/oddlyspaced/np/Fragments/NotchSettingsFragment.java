@@ -19,7 +19,6 @@ public class NotchSettingsFragment extends Fragment {
 
     // notch manager object
     private NotchManager manager;
-    private boolean isPortrait = false;
 
     @Nullable
     @Override

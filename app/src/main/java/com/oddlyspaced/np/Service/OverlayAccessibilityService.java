@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -16,18 +17,15 @@ import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.RectF;
 import android.graphics.SweepGradient;
-import android.os.FileObserver;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import androidx.annotation.Nullable;
 
 import com.oddlyspaced.np.Constants.ConstantHolder;
 import com.oddlyspaced.np.Interface.OnBatteryLevelChanged;
@@ -52,8 +50,8 @@ public class OverlayAccessibilityService extends AccessibilityService {
     private BatteryConfigManager batteryManager;
 
     private boolean isInApp = false;
-    private boolean isPortrait = true;
     private int batteryLevel;
+    private int currentRotation = Surface.ROTATION_0;
 
     // Executed when service started
     @Override
@@ -84,9 +82,8 @@ public class OverlayAccessibilityService extends AccessibilityService {
                     String activity = componentName.flattenToShortString();
                     if (activity.startsWith(constants.getPackageName())) {
                         isInApp = true;
-                        readConfigsContinuosly();
-                    }
-                    else {
+                        readConfigsContinuously();
+                    } else {
                         isInApp = false;
                     }
                 }
@@ -124,7 +121,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
         settingsManager.read();
         batteryManager.read();
 
-        readConfigsContinuosly();
+        readConfigsContinuously();
     }
 
     // -- Utils --
@@ -147,14 +144,14 @@ public class OverlayAccessibilityService extends AccessibilityService {
         receiverOrientation = new OrientationBroadcastReceiver(new OnRotate() {
             @Override
             public void onPortrait() {
-                isPortrait = true;
+                currentRotation = Surface.ROTATION_0;
                 makeOverlay(batteryLevel);
             }
 
             @Override
             public void onLandscape() {
-                isPortrait = false;
-                removeOverlay();
+                currentRotation = windowManager.getDefaultDisplay().getRotation();
+                makeOverlay(batteryLevel);
             }
         });
         IntentFilter intentFilterOrientation = new IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED);
@@ -163,9 +160,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
             @Override
             public void onChanged(int battery) {
                 batteryLevel = battery;
-                if (isPortrait) {
-                    makeOverlay(batteryLevel);
-                }
+                makeOverlay(batteryLevel);
             }
 
             @Override
@@ -190,21 +185,16 @@ public class OverlayAccessibilityService extends AccessibilityService {
         registerReceiver(receiverBattery, intentFilterBattery);
     }
 
-    private void readConfigsContinuosly() {
+    private void readConfigsContinuously() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 notchManager.read();
                 settingsManager.read();
                 batteryManager.read();
-                if (isPortrait) {
-                    makeOverlay(batteryLevel);
-                }
-                else {
-                    removeOverlay();
-                }
+                makeOverlay(batteryLevel);
                 if (isInApp)
-                    readConfigsContinuosly();
+                    readConfigsContinuously();
             }
         }, 100);
     }
@@ -217,17 +207,62 @@ public class OverlayAccessibilityService extends AccessibilityService {
 
     // -- Overlay Manager --
     private void makeOverlay(int battery) {
+        if (currentRotation == Surface.ROTATION_0)
+            makeOverlayPortrait(battery);
+        else if (currentRotation == Surface.ROTATION_90)
+            makeOverlayLandscape(battery);
+        else if (currentRotation == Surface.ROTATION_270)
+            makeOverlayLandscapeReverse(battery);
+        else
+            removeOverlay();
+    }
+
+    private void makeOverlayPortrait(int battery) {
         Bitmap bitmap = drawNotch(battery);
         ImageView img = overlayView.findViewById(R.id.imageView);
         img.setImageBitmap(bitmap);
         img.setRotation(0);
         overlayView.setRotation(0);
         try {
-            windowManager.updateViewLayout(overlayView, generateParams(bitmap.getHeight(), bitmap.getWidth()));
+            windowManager.updateViewLayout(overlayView, generateParamsPortrait(bitmap.getHeight(), bitmap.getWidth()));
         } catch (Exception e) {
             // if this gives an error then its probably because wm is empty
             try {
-                windowManager.addView(overlayView, generateParams(bitmap.getHeight(), bitmap.getWidth()));
+                windowManager.addView(overlayView, generateParamsPortrait(bitmap.getHeight(), bitmap.getWidth()));
+            } catch (Exception ee) {
+            }
+        }
+    }
+
+    private void makeOverlayLandscape(int battery) {
+        Bitmap bitmap = drawNotch(battery);
+        ImageView img = overlayView.findViewById(R.id.imageView);
+        img.setImageBitmap(bitmap);
+        img.setRotation(0);
+        overlayView.setRotation(0);
+        try {
+            windowManager.updateViewLayout(overlayView, generateParamsLandscape(bitmap.getHeight(), bitmap.getWidth()));
+        } catch (Exception e) {
+            // if this gives an error then its probably because wm is empty
+            try {
+                windowManager.addView(overlayView, generateParamsLandscape(bitmap.getHeight(), bitmap.getWidth()));
+            } catch (Exception ee) {
+            }
+        }
+    }
+
+    private void makeOverlayLandscapeReverse(int battery) {
+        Bitmap bitmap = drawNotch(battery);
+        ImageView img = overlayView.findViewById(R.id.imageView);
+        img.setImageBitmap(bitmap);
+        img.setRotation(0);
+        overlayView.setRotation(0);
+        try {
+            windowManager.updateViewLayout(overlayView, generateParamsPortraitLandscapeReverse(bitmap.getHeight(), bitmap.getWidth()));
+        } catch (Exception e) {
+            // if this gives an error then its probably because wm is empty
+            try {
+                windowManager.addView(overlayView, generateParamsPortraitLandscapeReverse(bitmap.getHeight(), bitmap.getWidth()));
             } catch (Exception ee) {
             }
         }
@@ -241,6 +276,89 @@ public class OverlayAccessibilityService extends AccessibilityService {
             // such haxx much wow
         }
     }
+
+    // -- Layout Parameter Generator --
+    private WindowManager.LayoutParams generateParamsPortrait(int h, int w) {
+        int layoutParameters = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+        WindowManager.LayoutParams p = new WindowManager.LayoutParams(
+                w,
+                h,
+                WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY,
+                layoutParameters,
+                PixelFormat.TRANSLUCENT);
+        p.gravity = Gravity.TOP | Gravity.CENTER;
+        //setting boundary
+        p.x = notchManager.getxPositionPortrait();
+        p.y = -(getStatusBarHeight()) - notchManager.getyPositionPortrait();
+        overlayView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if (visibility == 0) {
+                    overlayView.setVisibility(View.VISIBLE);
+                } else {//fullscreen
+                    overlayView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        return p;
+    }
+
+    private WindowManager.LayoutParams generateParamsLandscape(int h, int w) {
+        int layoutParameters = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+        WindowManager.LayoutParams p = new WindowManager.LayoutParams(
+                w,
+                h,
+                WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY,
+                layoutParameters,
+                PixelFormat.TRANSLUCENT);
+        p.gravity = Gravity.START | Gravity.CENTER;
+        //setting boundary
+        p.x = notchManager.getxPositionLandscape();
+        p.y = notchManager.getyPositionLandscape();
+        overlayView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if (visibility == 0) {
+                    overlayView.setVisibility(View.VISIBLE);
+                } else {//fullscreen
+                    overlayView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        return p;
+    }
+
+    private WindowManager.LayoutParams generateParamsPortraitLandscapeReverse(int h, int w) {
+        int layoutParameters = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+        WindowManager.LayoutParams p = new WindowManager.LayoutParams(
+                w,
+                h,
+                WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY,
+                layoutParameters,
+                PixelFormat.TRANSLUCENT);
+        p.gravity = Gravity.TOP | Gravity.CENTER;
+        //setting boundary
+        p.x = notchManager.getxPositionPortrait();
+        p.y = -(getStatusBarHeight()) - notchManager.getyPositionPortrait();
+        overlayView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if (visibility == 0) {
+                    overlayView.setVisibility(View.VISIBLE);
+                } else {//fullscreen
+                    overlayView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        return p;
+    }
+
 
     // -- Notch Bitmap Generator --
     // this method draws the notch shape
@@ -304,34 +422,6 @@ public class OverlayAccessibilityService extends AccessibilityService {
         return bitmap;
     }
 
-    // -- Layout Parameter Generator --
-    private WindowManager.LayoutParams generateParams(int h, int w) {
-        int layoutParameters = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
-                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
-        WindowManager.LayoutParams p = new WindowManager.LayoutParams(
-                w,
-                h,
-                WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY,
-                layoutParameters,
-                PixelFormat.TRANSLUCENT);
-        p.gravity = Gravity.TOP | Gravity.CENTER;
-        //setting boundary
-        p.x = notchManager.getxPositionPortrait();
-        p.y = - (getStatusBarHeight()) - notchManager.getyPositionPortrait();
-        overlayView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if (visibility == 0) {
-                    overlayView.setVisibility(View.VISIBLE);
-                } else {//fullscreen
-                    overlayView.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-        return p;
-    }
-
     // -- Array Generators --
     // Array Generators //
     // this method generates the color palette depending upon the config
@@ -347,7 +437,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
             }
         } else { // need partially filler overlay
             for (int i = 0; i < 181; i++)
-                c[i] = (settingsManager.isShowBackground())?Color.parseColor(settingsManager.getBackgroundColor()):Color.TRANSPARENT;
+                c[i] = (settingsManager.isShowBackground()) ? Color.parseColor(settingsManager.getBackgroundColor()) : Color.TRANSPARENT;
             for (ColorLevel item : batteryManager.getColorLevels()) {
                 if (battery >= item.getStartLevel() && battery <= item.getEndLevel()) {
                     int val = (int) ((battery / 100.0) * 180.0);
@@ -377,6 +467,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
     // idea by Mohammed ELNagger (@Negrroo) on telegram
     private boolean isAnimation1Active = false;
     private int tempBatteryLevel1 = batteryLevel;
+
     private void animation1() {
         new Handler().postDelayed(new Runnable() {
             @Override
