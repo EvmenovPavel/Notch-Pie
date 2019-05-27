@@ -35,6 +35,7 @@ public class ConfigSettingsFragment extends Fragment {
         Switch showBackground = parent.findViewById(R.id.switchShowBackground);
         Switch chargingAnimation = parent.findViewById(R.id.switchCharging);
         Switch fillOverlay = parent.findViewById(R.id.switchFillOverlay);
+        Switch landscapeSupprt = parent.findViewById(R.id.switchLandscape);
 
         if (manager.read()) {
             fullStatus.setChecked(manager.isFullStatus());
@@ -68,6 +69,13 @@ public class ConfigSettingsFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 manager.setFillOverlay(isChecked);
+                manager.save();
+            }
+        });
+        landscapeSupprt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                manager.setLandscapeSupport(isChecked);
                 manager.save();
             }
         });

@@ -209,14 +209,26 @@ public class OverlayAccessibilityService extends AccessibilityService {
 
     // -- Overlay Manager --
     private void makeOverlay(int battery) {
-        if (currentRotation == Surface.ROTATION_0)
-            makeOverlayPortrait(battery);
-        else if (currentRotation == Surface.ROTATION_90)
-            makeOverlayLandscape(battery);
-        else if (currentRotation == Surface.ROTATION_270)
-            makeOverlayLandscapeReverse(battery);
-        else
-            removeOverlay();
+        if (settingsManager.isLandscapeSupport()) {
+            if (currentRotation == Surface.ROTATION_0)
+                makeOverlayPortrait(battery);
+            else if (currentRotation == Surface.ROTATION_90)
+                makeOverlayLandscape(battery);
+            else if (currentRotation == Surface.ROTATION_270)
+                makeOverlayLandscapeReverse(battery);
+            else
+                removeOverlay();
+        }
+        else {
+            if (currentRotation == Surface.ROTATION_0)
+                makeOverlayPortrait(battery);
+            else if (currentRotation == Surface.ROTATION_90)
+                removeOverlay();
+            else if (currentRotation == Surface.ROTATION_270)
+                removeOverlay();
+            else
+                removeOverlay();
+        }
     }
 
     private void makeOverlayPortrait(int battery) {
@@ -310,7 +322,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
                 if (visibility == 0) {
                     overlayView.setVisibility(View.VISIBLE);
                 } else {//fullscreen
-                    overlayView.setVisibility(View.VISIBLE);
+                    overlayView.setVisibility(View.GONE);
                 }
             }
         });
@@ -337,7 +349,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
                 if (visibility == 0) {
                     overlayView.setVisibility(View.VISIBLE);
                 } else {//fullscreen
-                    overlayView.setVisibility(View.VISIBLE);
+                    overlayView.setVisibility(View.GONE);
                 }
             }
         });
@@ -364,7 +376,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
                 if (visibility == 0) {
                     overlayView.setVisibility(View.VISIBLE);
                 } else {//fullscreen
-                    overlayView.setVisibility(View.VISIBLE);
+                    overlayView.setVisibility(View.GONE);
                 }
             }
         });

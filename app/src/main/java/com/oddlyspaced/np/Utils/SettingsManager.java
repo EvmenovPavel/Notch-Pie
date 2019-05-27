@@ -13,7 +13,7 @@ import java.io.PrintWriter;
 public class SettingsManager {
 
     private final String TAG = "SettingsManager";
-    private boolean fullStatus = false, showBackground = false, chargingAnimation = false, fillOverlay = false;
+    private boolean fullStatus = false, showBackground = false, chargingAnimation = false, fillOverlay = false, landscapeSupport = false;
     private String backgroundColor = "#000000";
     private String filePath;
 
@@ -43,6 +43,8 @@ public class SettingsManager {
                     chargingAnimation = line.substring(line.indexOf(":") + 1).equals("T");
                 } else if (line.startsWith("FO:")) {
                     fillOverlay = line.substring(line.indexOf(":") + 1).equals("T");
+                } else if (line.startsWith("LS:")) {
+                    landscapeSupport = line.substring(line.indexOf(":") + 1).equals("T");
                 }
             }
             reader.close();
@@ -79,6 +81,7 @@ public class SettingsManager {
             } else {
                 writer.println("FO:F");
             }
+            writer.println("LS:" + ((landscapeSupport)?"T":"F"));
             writer.close();
             return true;
         } catch (Exception e) {
@@ -112,6 +115,10 @@ public class SettingsManager {
         return backgroundColor;
     }
 
+    public boolean isLandscapeSupport() {
+        return landscapeSupport;
+    }
+
     public String getFilePath() {
         return filePath;
     }
@@ -138,5 +145,9 @@ public class SettingsManager {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public void setLandscapeSupport(boolean landscapeSupport) {
+        this.landscapeSupport = landscapeSupport;
     }
 }
