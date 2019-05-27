@@ -52,8 +52,8 @@ public class NotchSettingsFragment extends Fragment {
         int[] notchSizeLimit = {1, 500};
         int[] notchRadiusTopLimit = {0, 100};
         int[] notchRadiusBottomLimit = {0, 100};
-        int[] xPositionLimit = {-100, 100};
-        int[] yPositionLimit = {-100, 100};
+        int[] xPositionLimit = {-200, 200};
+        int[] yPositionLimit = {-200, 200};
 
         final SeekBar height, width, notchSize, topRadius, bottomRadius, xPositionP, yPositionP, xPositionL, yPositionL;
         height = main.findViewById(R.id.sbHeight);
