@@ -13,7 +13,7 @@ import java.io.PrintWriter;
 public class NotchManager {
 
     private final String TAG = "NotchManager";
-    private int height = 0, width = 0, notchSize = 0, topRadius = 0, bottomRadius = 0, xPosition = 0, yPosition = 0;
+    private int height = 0, width = 0, notchSize = 0, topRadius = 0, bottomRadius = 0, xPositionPortrait = 0, yPositionPortrait = 0, xPositionLandscape = 0, yPositionLandscape = 0;
     private String filePath;
 
     public NotchManager() {
@@ -44,9 +44,14 @@ public class NotchManager {
                 } else if (line.startsWith("BR:")) {
                     bottomRadius = Integer.parseInt(line.substring(line.indexOf(":") + 1));
                 } else if (line.startsWith("XP:")) {
-                    xPosition = Integer.parseInt(line.substring(line.indexOf(":") + 1));
+                    xPositionPortrait = Integer.parseInt(line.substring(line.indexOf(":") + 1));
                 } else if (line.startsWith("YP:")) {
-                    yPosition = Integer.parseInt(line.substring(line.indexOf(":") + 1));
+                    yPositionPortrait = Integer.parseInt(line.substring(line.indexOf(":") + 1));
+                }
+                else if (line.startsWith("XL:")) {
+                    xPositionLandscape = Integer.parseInt(line.substring(line.indexOf(":") + 1));
+                } else if (line.startsWith("YL:")) {
+                    yPositionLandscape = Integer.parseInt(line.substring(line.indexOf(":") + 1));
                 }
             }
             reader.close();
@@ -68,8 +73,11 @@ public class NotchManager {
             writer.println("NS:" + notchSize);
             writer.println("TR:" + topRadius);
             writer.println("BR:" + bottomRadius);
-            writer.println("XP:" + xPosition);
-            writer.println("YP:" + yPosition);
+            writer.println("XP:" + xPositionPortrait);
+            writer.println("YP:" + yPositionPortrait);
+            writer.println("XL:" + xPositionLandscape);
+            writer.println("YL:" + yPositionLandscape);
+
             writer.close();
             return true;
         } catch (Exception e) {
@@ -100,12 +108,24 @@ public class NotchManager {
         this.bottomRadius = bottomRadius;
     }
 
-    public void setxPosition(int xPosition) {
-        this.xPosition = xPosition;
+    public void setxPositionPortrait(int xPositionPortrait) {
+        this.xPositionPortrait = xPositionPortrait;
     }
 
-    public void setyPosition(int yPosition) {
-        this.yPosition = yPosition;
+    public void setyPositionPortrait(int yPositionPortrait) {
+        this.yPositionPortrait = yPositionPortrait;
+    }
+
+    public void setxPositionLandscape(int xPositionLandscape) {
+        this.xPositionLandscape = xPositionLandscape;
+    }
+
+    public void setyPositionLandscape(int yPositionLandscape) {
+        this.yPositionLandscape = yPositionLandscape;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     // getters
@@ -129,12 +149,24 @@ public class NotchManager {
         return bottomRadius;
     }
 
-    public int getxPosition() {
-        return xPosition;
+    public String getTAG() {
+        return TAG;
     }
 
-    public int getyPosition() {
-        return yPosition;
+    public int getxPositionPortrait() {
+        return xPositionPortrait;
+    }
+
+    public int getyPositionPortrait() {
+        return yPositionPortrait;
+    }
+
+    public int getxPositionLandscape() {
+        return xPositionLandscape;
+    }
+
+    public int getyPositionLandscape() {
+        return yPositionLandscape;
     }
 
     public String getFilePath() {

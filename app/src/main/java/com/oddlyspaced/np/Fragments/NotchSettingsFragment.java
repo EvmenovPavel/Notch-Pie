@@ -41,8 +41,10 @@ public class NotchSettingsFragment extends Fragment {
         final TextView txNotchSize = main.findViewById(R.id.txNotchSize);
         final TextView txTopRadius = main.findViewById(R.id.txTopRadius);
         final TextView txBottomRadius = main.findViewById(R.id.txBottomRadius);
-        final TextView txXPosition = main.findViewById(R.id.txXPosition);
-        final TextView txYPosition = main.findViewById(R.id.txYPosition);
+        final TextView txXPositionP = main.findViewById(R.id.txXPositionPortrait);
+        final TextView txYPositionP = main.findViewById(R.id.txYPositionPortrait);
+        final TextView txXPositionL = main.findViewById(R.id.txXPositionLandscape);
+        final TextView txYPositionL = main.findViewById(R.id.txYPositionLandscape);
 
         // Seek bars
         int[] heightLimit = {50, 500};
@@ -170,8 +172,8 @@ public class NotchSettingsFragment extends Fragment {
         xPositionP.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                txXPosition.setText(String.valueOf(progress));
-                manager.setxPosition(progress);
+                txXPositionP.setText(String.valueOf(progress));
+                manager.setxPositionPortrait(progress);
                 manager.save();
             }
 
@@ -186,14 +188,58 @@ public class NotchSettingsFragment extends Fragment {
             }
         });
 
-        yPosition = main.findViewById(R.id.sbYPositionPortrait);
-        yPosition.setMin(yPositionLimit[0]);
-        yPosition.setMax(yPositionLimit[1]);
-        yPosition.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        yPositionP = main.findViewById(R.id.sbYPositionPortrait);
+        yPositionP.setMin(yPositionLimit[0]);
+        yPositionP.setMax(yPositionLimit[1]);
+        yPositionP.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                txYPosition.setText(String.valueOf(progress));
-                manager.setyPosition(progress);
+                txYPositionP.setText(String.valueOf(progress));
+                manager.setyPositionPortrait(progress);
+                manager.save();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        xPositionL = main.findViewById(R.id.sbXPositionLandscape);
+        xPositionL.setMin(xPositionLimit[0]);
+        xPositionL.setMax(xPositionLimit[1]);
+        xPositionL.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                txXPositionL.setText(String.valueOf(progress));
+                manager.setxPositionLandscape(progress);
+                manager.save();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        yPositionL = main.findViewById(R.id.sbYPositionLandscape);
+        yPositionL.setMin(yPositionLimit[0]);
+        yPositionL.setMax(yPositionLimit[1]);
+        yPositionL.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                txYPositionL.setText(String.valueOf(progress));
+                manager.setyPositionLandscape(progress);
                 manager.save();
             }
 
@@ -289,35 +335,67 @@ public class NotchSettingsFragment extends Fragment {
             }
         });
 
-        FloatingActionButton xPositionIncrease = main.findViewById(R.id.fabXPositionPortraitIncrease);
-        xPositionIncrease.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton xPositionIncreaseP = main.findViewById(R.id.fabXPositionPortraitIncrease);
+        xPositionIncreaseP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                xPosition.setProgress(xPosition.getProgress() + 1);
+                xPositionP.setProgress(xPositionP.getProgress() + 1);
             }
         });
 
-        FloatingActionButton xPositionDecrease = main.findViewById(R.id.fabXPositionPortraitDecrease);
-        xPositionDecrease.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton xPositionDecreaseP = main.findViewById(R.id.fabXPositionPortraitDecrease);
+        xPositionDecreaseP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                xPosition.setProgress(xPosition.getProgress() - 1);
+                xPositionP.setProgress(xPositionP.getProgress() - 1);
             }
         });
 
-        FloatingActionButton yPositionIncrease = main.findViewById(R.id.fabYPositionPortraitIncrease);
-        yPositionIncrease.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton yPositionIncreaseP = main.findViewById(R.id.fabYPositionPortraitIncrease);
+        yPositionIncreaseP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                yPosition.setProgress(yPosition.getProgress() + 1);
+                yPositionP.setProgress(yPositionP.getProgress() + 1);
             }
         });
 
-        FloatingActionButton yPositionDecrease = main.findViewById(R.id.fabYPositionPortraitDecrease);
-        yPositionDecrease.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton yPositionDecreaseP = main.findViewById(R.id.fabYPositionPortraitDecrease);
+        yPositionDecreaseP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                yPosition.setProgress(yPosition.getProgress() - 1);
+                yPositionP.setProgress(yPositionP.getProgress() - 1);
+            }
+        });
+
+        FloatingActionButton xPositionIncreaseL = main.findViewById(R.id.fabXPositionLandscapeIncrease);
+        xPositionIncreaseL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                xPositionL.setProgress(xPositionL.getProgress() + 1);
+            }
+        });
+
+        FloatingActionButton xPositionDecreaseL = main.findViewById(R.id.fabXPositionLandscapeDecrease);
+        xPositionDecreaseL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                xPositionL.setProgress(xPositionL.getProgress() - 1);
+            }
+        });
+
+        FloatingActionButton yPositionIncreaseL = main.findViewById(R.id.fabYPositionLandscapeIncrease);
+        yPositionIncreaseL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                yPositionL.setProgress(yPositionL.getProgress() + 1);
+            }
+        });
+
+        FloatingActionButton yPositionDecreaseL = main.findViewById(R.id.fabYPositionLandscapeDecrease);
+        yPositionDecreaseL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                yPositionL.setProgress(yPositionL.getProgress() - 1);
             }
         });
 
@@ -328,8 +406,10 @@ public class NotchSettingsFragment extends Fragment {
             topRadius.setProgress(manager.getTopRadius());
             bottomRadius.setProgress(manager.getBottomRadius());
             notchSize.setProgress(manager.getNotchSize());
-            xPosition.setProgress(manager.getxPosition());
-            yPosition.setProgress(manager.getyPosition());
+            xPositionP.setProgress(manager.getxPositionPortrait());
+            yPositionP.setProgress(manager.getyPositionPortrait());
+            xPositionL.setProgress(manager.getxPositionLandscape());
+            yPositionL.setProgress(manager.getyPositionLandscape());
         }
 
         return main;

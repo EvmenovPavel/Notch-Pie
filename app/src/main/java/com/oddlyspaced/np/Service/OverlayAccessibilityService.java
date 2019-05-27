@@ -317,8 +317,8 @@ public class OverlayAccessibilityService extends AccessibilityService {
                 PixelFormat.TRANSLUCENT);
         p.gravity = Gravity.TOP | Gravity.CENTER;
         //setting boundary
-        p.x = notchManager.getxPosition();
-        p.y = - (getStatusBarHeight()) - notchManager.getyPosition();
+        p.x = notchManager.getxPositionPortrait();
+        p.y = - (getStatusBarHeight()) - notchManager.getyPositionPortrait();
         overlayView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
             @Override
             public void onSystemUiVisibilityChange(int visibility) {
