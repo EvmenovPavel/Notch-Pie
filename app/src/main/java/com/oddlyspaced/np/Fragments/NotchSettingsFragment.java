@@ -53,7 +53,7 @@ public class NotchSettingsFragment extends Fragment {
         int[] xPositionLimit = {-100, 100};
         int[] yPositionLimit = {-100, 100};
 
-        final SeekBar height, width, notchSize, topRadius, bottomRadius, xPosition, yPosition;
+        final SeekBar height, width, notchSize, topRadius, bottomRadius, xPositionP, yPositionP, xPositionL, yPositionL;
         height = main.findViewById(R.id.sbHeight);
         height.setMin(heightLimit[0]);
         height.setMax(heightLimit[1]);
@@ -164,10 +164,10 @@ public class NotchSettingsFragment extends Fragment {
             }
         });
 
-        xPosition = main.findViewById(R.id.sbXPosition);
-        xPosition.setMin(xPositionLimit[0]);
-        xPosition.setMax(xPositionLimit[1]);
-        xPosition.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        xPositionP = main.findViewById(R.id.sbXPositionPortrait);
+        xPositionP.setMin(xPositionLimit[0]);
+        xPositionP.setMax(xPositionLimit[1]);
+        xPositionP.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 txXPosition.setText(String.valueOf(progress));
@@ -186,7 +186,7 @@ public class NotchSettingsFragment extends Fragment {
             }
         });
 
-        yPosition = main.findViewById(R.id.sbYPosition);
+        yPosition = main.findViewById(R.id.sbYPositionPortrait);
         yPosition.setMin(yPositionLimit[0]);
         yPosition.setMax(yPositionLimit[1]);
         yPosition.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -289,7 +289,7 @@ public class NotchSettingsFragment extends Fragment {
             }
         });
 
-        FloatingActionButton xPositionIncrease = main.findViewById(R.id.fabXPositionIncrease);
+        FloatingActionButton xPositionIncrease = main.findViewById(R.id.fabXPositionPortraitIncrease);
         xPositionIncrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -297,7 +297,7 @@ public class NotchSettingsFragment extends Fragment {
             }
         });
 
-        FloatingActionButton xPositionDecrease = main.findViewById(R.id.fabXPositionDecrease);
+        FloatingActionButton xPositionDecrease = main.findViewById(R.id.fabXPositionPortraitDecrease);
         xPositionDecrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -305,7 +305,7 @@ public class NotchSettingsFragment extends Fragment {
             }
         });
 
-        FloatingActionButton yPositionIncrease = main.findViewById(R.id.fabYPositionIncrease);
+        FloatingActionButton yPositionIncrease = main.findViewById(R.id.fabYPositionPortraitIncrease);
         yPositionIncrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -313,7 +313,7 @@ public class NotchSettingsFragment extends Fragment {
             }
         });
 
-        FloatingActionButton yPositionDecrease = main.findViewById(R.id.fabYPositionDecrease);
+        FloatingActionButton yPositionDecrease = main.findViewById(R.id.fabYPositionPortraitDecrease);
         yPositionDecrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
