@@ -1,5 +1,7 @@
 package com.oddlyspaced.np.Utils;
 
+import android.util.Log;
+
 import com.oddlyspaced.np.Constants.ConstantHolder;
 import com.oddlyspaced.np.Modal.ColorLevel;
 
@@ -191,7 +193,6 @@ public class BatteryConfigManager {
                             break;
                         StringTokenizer stringTokenizer = new StringTokenizer(s, ",");
                         ColorLevel cl = new ColorLevel();
-
                         cl.setColor(stringTokenizer.nextToken());
                         cl.setStartLevel(Integer.parseInt(stringTokenizer.nextToken()));
                         cl.setEndLevel(Integer.parseInt(stringTokenizer.nextToken()));
@@ -231,7 +232,7 @@ public class BatteryConfigManager {
             for (ColorLevel item : colorLevels) {
                 writer.println(item.getColor() + "," + item.getStartLevel() + "," + item.getEndLevel());
             }
-            writer.println("EndStart");
+            writer.println("ColorEnd");
             writer.close();
             return true;
         } catch (Exception e) {
