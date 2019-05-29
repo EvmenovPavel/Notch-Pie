@@ -53,9 +53,13 @@ public class TabbedActivity extends AppCompatActivity {
     }
 
     private void createDirectories() {
-        File folder = new File(new ConstantHolder().getConfigFolderPathInternal());
-        if (!folder.exists())
-            folder.mkdirs();
+        File folderInternal = new File(new ConstantHolder().getConfigFolderPathInternal());
+        if (!folderInternal.exists())
+            folderInternal.mkdirs();
+        File folderExternal = new File(new ConstantHolder().getConfigFolderPathExternal());
+        if (!folderExternal.exists())
+            folderExternal.mkdirs();
+
     }
 
     private void createConfigs() {
