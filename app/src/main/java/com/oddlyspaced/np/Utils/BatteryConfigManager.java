@@ -17,7 +17,7 @@ import java.util.StringTokenizer;
 public class BatteryConfigManager {
 
     private final String TAG = "BatteryConfigManager";
-    private boolean isLinear = false, isDefined = false;
+    private boolean isLinear = false, isDefined = true;
     private String linearStart = "#FF0000", linearEnd = "#0000FF";
     private ArrayList<ColorLevel> colorLevels;
     private String filePath;
