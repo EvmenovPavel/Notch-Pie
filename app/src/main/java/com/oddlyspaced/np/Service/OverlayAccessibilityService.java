@@ -2,6 +2,7 @@ package com.oddlyspaced.np.Service;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -487,6 +488,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
         return c;
     }
 
+    @SuppressLint("Range")
     private int[] getColorArrayLinear(int battery, boolean isFullStatus) {
         int[] c = new int[181];
         String color1 = batteryManager.getLinearStart();
