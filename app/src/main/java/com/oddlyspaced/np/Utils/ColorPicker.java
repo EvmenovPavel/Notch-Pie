@@ -34,7 +34,7 @@ public class ColorPicker extends AppCompatDialogFragment {
     // text box for showing the color code
     private EditText editTextColor;
     // internal variable to store generated color
-    public String color;
+    public String color = "#FFFFFF";
 
 
     public ColorPicker(ColorPickerListener listener) {

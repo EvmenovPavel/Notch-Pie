@@ -179,8 +179,8 @@ public class BatteryConfigManager {
                     String s = line.substring(line.indexOf(":") + 1);
                     isLinear = s.startsWith("T");
                     s = s.substring(s.indexOf(":") + 1);
-                    linearStart = s.substring(0, line.indexOf(":"));
-                    linearEnd = s.substring(line.indexOf(":") + 1);
+                    linearStart = s.substring(0, s.indexOf(":"));
+                    linearEnd = s.substring(s.indexOf(":") + 1);
                 }
                 if (line.startsWith("DL:")) {
                     isDefined = line.substring(line.indexOf(":") + 1).equals("T");

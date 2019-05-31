@@ -19,6 +19,7 @@ import android.graphics.PixelFormat;
 import android.graphics.RectF;
 import android.graphics.SweepGradient;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -218,8 +219,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
                 makeOverlayLandscapeReverse(battery);
             else
                 removeOverlay();
-        }
-        else {
+        } else {
             if (currentRotation == Surface.ROTATION_0)
                 makeOverlayPortrait(battery);
             else if (currentRotation == Surface.ROTATION_90)
@@ -368,7 +368,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
                 PixelFormat.TRANSLUCENT);
         p.gravity = Gravity.END | Gravity.CENTER;
         //setting boundary
-        p.x =  notchManager.getxPositionLandscape();
+        p.x = notchManager.getxPositionLandscape();
         p.y = notchManager.getyPositionLandscape();
         overlayView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
             @Override
@@ -430,26 +430,37 @@ public class OverlayAccessibilityService extends AccessibilityService {
                 (int) Math.abs(rectF.height()) + 10,// , // Height
                 Bitmap.Config.ARGB_8888 // Config
         );
+
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.RED);
         paint.setAntiAlias(true);
         paint.setDither(true);
         paint.setStyle(Paint.Style.FILL);
 
-        int[] colors = getColorArray(battery, settingsManager.isFullStatus());
         float[] positions = getPositionArray();
+        int[] colors;
+
+        if (batteryManager.isLinear()) {
+            Log.e("sues", "shdwsfbsj");
+            colors = getColorArrayLinear(battery, settingsManager.isFullStatus());
+        } else {
+            colors = getColorArrayDefined(battery, settingsManager.isFullStatus());
+        }
+
         SweepGradient sweepGradient = new SweepGradient((int) (Math.abs(rectF.width()) / 2) /*center*/, 0, colors, positions);
         paint.setShader(sweepGradient);
 
         Canvas canvas = new Canvas(bitmap);
         canvas.drawPath(path, paint);
+
+
         return bitmap;
     }
 
     // -- Array Generators --
     // Array Generators //
     // this method generates the color palette depending upon the config
-    private int[] getColorArray(int battery, boolean isFullStatus) {
+    private int[] getColorArrayDefined(int battery, boolean isFullStatus) {
         int[] c = new int[181];
         if (isFullStatus) { // fill the overlay with one color
             for (ColorLevel item : batteryManager.getColorLevels()) {
@@ -457,6 +468,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
                     for (int i = 0; i < 181; i++) {
                         c[i] = Color.parseColor(item.getColor());
                     }
+                    break;
                 }
             }
         } else { // need partially filler overlay
@@ -468,6 +480,56 @@ public class OverlayAccessibilityService extends AccessibilityService {
                     for (int i = 0; i < val; i++) {
                         c[i] = Color.parseColor(item.getColor());
                     }
+                    break;
+                }
+            }
+        }
+        return c;
+    }
+
+    private int[] getColorArrayLinear(int battery, boolean isFullStatus) {
+        int[] c = new int[181];
+        String color1 = batteryManager.getLinearStart();
+        String color2 = batteryManager.getLinearEnd();
+        int red1 = Integer.parseInt(color1.substring(1, 3), 16);
+        int green1 = Integer.parseInt(color1.substring(3, 5), 16);
+        int blue1 = Integer.parseInt(color1.substring(5), 16);
+        int red2 = Integer.parseInt(color2.substring(1, 3), 16);
+        int green2 = Integer.parseInt(color2.substring(3, 5), 16);
+        int blue2 = Integer.parseInt(color2.substring(5), 16);
+
+        int red = (int) ((red2 - red1) / 100.0) * battery;
+        int green = (int) ((green2 - green1) / 100.0) * battery;
+        int blue = (int) ((blue2 - blue1) / 100.0) * battery;
+
+        String r = Integer.toHexString(red);
+        if (r.length() == 1)
+            r = "0" + r;
+        String g = Integer.toHexString(green);
+        if (g.length() == 1)
+            g = "0" + g;
+        String b = Integer.toHexString(blue);
+        if (b.length() == 1)
+            b = "0" + b;
+        String color = "";
+        color = "#" + r + g + b;
+
+        if (isFullStatus) { // fill the overlay with one color
+            for (int i = 0; i < 181; i++) {
+                c[i] = Color.parseColor(color);
+            }
+
+        } else { // need partially filler overlay
+            for (int i = 0; i < 181; i++)
+                c[i] = (settingsManager.isShowBackground()) ? Color.parseColor(settingsManager.getBackgroundColor()) : Color.TRANSPARENT;
+            for (ColorLevel item : batteryManager.getColorLevels()) {
+                if (battery >= item.getStartLevel() && battery <= item.getEndLevel()) {
+                    int val = (int) ((battery / 100.0) * 180.0);
+                    for (int i = 0; i < val; i++) {
+                        Log.e("color", color);
+                        c[i] = Color.parseColor(color);
+                    }
+                    break;
                 }
             }
         }
@@ -487,8 +549,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
         return p;
     }
 
-    public static Bitmap rotateBitmap(Bitmap source, float angle)
-    {
+    public static Bitmap rotateBitmap(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);

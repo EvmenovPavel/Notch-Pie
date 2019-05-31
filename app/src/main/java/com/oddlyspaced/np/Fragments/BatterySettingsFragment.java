@@ -1,5 +1,6 @@
 package com.oddlyspaced.np.Fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +33,7 @@ public class BatterySettingsFragment extends Fragment {
         View main = inflater.inflate(R.layout.fragment_battery_settings, container, false);
         init();
         main = attach(main);
-        return  main;
+        return main;
     }
 
     private RecyclerView recyclerView;
@@ -48,11 +50,10 @@ public class BatterySettingsFragment extends Fragment {
     private View attach(final View main) {
         final CheckBox linearAnimation = main.findViewById(R.id.cbLinearAnimation);
         final CheckBox definedAnimation = main.findViewById(R.id.cbDefinedAnimation);
-
-        if (manager.read()) {
-            linearAnimation.setChecked(manager.isLinear());
-            linearAnimation.setChecked(manager.isDefined());
-        }
+        final TextView linearStart = main.findViewById(R.id.txLinearColorStart);
+        final TextView linearEnd = main.findViewById(R.id.txLinearColorEnd);
+        final View linearStartBorder = main.findViewById(R.id.viewLinearColorStart);
+        final View linearEndBorder = main.findViewById(R.id.viewLinearColorEnd);
 
         linearAnimation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -63,6 +64,40 @@ public class BatterySettingsFragment extends Fragment {
                 manager.save();
             }
         });
+
+        linearStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ColorPicker colorPicker = new ColorPicker(new ColorPickerListener() {
+                    @Override
+                    public void onColorSet(String color) {
+                        linearStart.setText(color);
+                        manager.setLinearStart(color);
+                        manager.save();
+                        linearStartBorder.setBackgroundColor(Color.parseColor(color));
+                    }
+                });
+                colorPicker.show(getFragmentManager(), "color picker");
+            }
+        });
+
+        linearEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ColorPicker colorPicker = new ColorPicker(new ColorPickerListener() {
+                    @Override
+                    public void onColorSet(String color) {
+                        linearEnd.setText(color);
+                        manager.setLinearEnd(color);
+                        manager.save();
+                        linearEndBorder.setBackgroundColor(Color.parseColor(color));
+
+                    }
+                });
+                colorPicker.show(getFragmentManager(), "color picker");
+            }
+        });
+
         definedAnimation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -100,6 +135,17 @@ public class BatterySettingsFragment extends Fragment {
             }
         });
         recyclerView.setAdapter(batteryColorAdapter);
+
+        if (manager.read()) {
+            linearAnimation.setChecked(manager.isLinear());
+            definedAnimation.setChecked(manager.isDefined());
+            linearStart.setText(manager.getLinearStart());
+            linearEnd.setText(manager.getLinearEnd());
+            Log.e("color", manager.getLinearStart());
+            linearStartBorder.setBackgroundColor(Color.parseColor(manager.getLinearStart()));
+            linearEndBorder.setBackgroundColor(Color.parseColor(manager.getLinearEnd()));
+
+        }
 
         return main;
     }
