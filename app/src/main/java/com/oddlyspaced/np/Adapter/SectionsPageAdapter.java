@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.oddlyspaced.np.Fragments.AboutFragment;
 import com.oddlyspaced.np.Fragments.BatterySettingsFragment;
 import com.oddlyspaced.np.Fragments.BlankFragment;
 import com.oddlyspaced.np.Fragments.ConfigSettingsFragment;
@@ -29,7 +30,7 @@ public class SectionsPageAdapter extends FragmentPagerAdapter {
             case 2:
                 return new BatterySettingsFragment();
             case 3:
-                return new BlankFragment();
+                return new AboutFragment();
             default:
                 return null;
         }
