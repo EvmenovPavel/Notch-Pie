@@ -1,6 +1,8 @@
 package com.oddlyspaced.np.Fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +12,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.oddlyspaced.np.Adapter.BatteryColorAdapter;
+import com.oddlyspaced.np.Adapter.NotchLayoutAdapter;
+import com.oddlyspaced.np.Interface.ColorPickerListener;
+import com.oddlyspaced.np.Interface.NotchStyleTouchListener;
+import com.oddlyspaced.np.Interface.OnTouchColorLevel;
+import com.oddlyspaced.np.Modal.ColorLevel;
+import com.oddlyspaced.np.Modal.NotchItem;
 import com.oddlyspaced.np.R;
+import com.oddlyspaced.np.Utils.BatteryConfigManager;
+import com.oddlyspaced.np.Utils.ColorPicker;
 import com.oddlyspaced.np.Utils.NotchManager;
+
+import java.util.ArrayList;
 
 public class NotchSettingsFragment extends Fragment {
 
@@ -397,6 +412,49 @@ public class NotchSettingsFragment extends Fragment {
                 yPositionL.setProgress(yPositionL.getProgress() - 1);
             }
         });
+
+        ArrayList<NotchItem> list = new ArrayList<>();
+        NotchItem teardrop = new NotchItem();
+        teardrop.setHeight(95);
+        teardrop.setWidth(1);
+        teardrop.setSize(80);
+        teardrop.setTopRadius(0);
+        teardrop.setBottomRadius(100);
+        list.add(teardrop);
+
+        NotchItem wide = new NotchItem();
+        wide.setHeight(104);
+        wide.setWidth(212);
+        wide.setSize(124);
+        wide.setTopRadius(81);
+        wide.setBottomRadius(91);
+        list.add(wide);
+
+
+        NotchItem mid = new NotchItem();
+        mid.setHeight(100);
+        mid.setWidth(56);
+        mid.setSize(167);
+        mid.setTopRadius(81);
+        mid.setBottomRadius(80);
+        list.add(mid);
+
+        RecyclerView notchStyles= main.findViewById(R.id.rvNotchStyles);
+        notchStyles.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        notchStyles.setLayoutManager(layoutManager);
+        NotchLayoutAdapter adapter = new NotchLayoutAdapter(getContext(), list, new NotchStyleTouchListener() {
+            @Override
+            public void onTouch(NotchItem item) {
+                height.setProgress(item.getHeight());
+                width.setProgress(item.getWidth());
+                topRadius.setProgress(item.getTopRadius());
+                bottomRadius.setProgress(item.getBottomRadius());
+                notchSize.setProgress(item.getSize());
+            }
+        });
+        notchStyles.setAdapter(adapter);
+
 
         // read the file
         if (manager.read()) {
