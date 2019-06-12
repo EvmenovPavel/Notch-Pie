@@ -141,10 +141,8 @@ public class BatterySettingsFragment extends Fragment {
             definedAnimation.setChecked(manager.isDefined());
             linearStart.setText(manager.getLinearStart());
             linearEnd.setText(manager.getLinearEnd());
-            Log.e("color", manager.getLinearStart());
             linearStartBorder.setBackgroundColor(Color.parseColor(manager.getLinearStart()));
             linearEndBorder.setBackgroundColor(Color.parseColor(manager.getLinearEnd()));
-
         }
 
         return main;

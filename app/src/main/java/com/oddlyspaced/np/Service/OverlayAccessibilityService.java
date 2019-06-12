@@ -516,7 +516,6 @@ public class OverlayAccessibilityService extends AccessibilityService {
         if (b.length() == 1)
             b = "0" + b;
         String color = "#" + r + "" + g + "" + b;
-
         if (isFullStatus) { // fill the overlay with one color
             for (int i = 0; i < 181; i++) {
                 Log.e("color", color);
