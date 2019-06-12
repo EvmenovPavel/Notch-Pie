@@ -415,7 +415,7 @@ public class NotchSettingsFragment extends Fragment {
 
         ArrayList<NotchItem> list = new ArrayList<>();
         NotchItem teardrop = new NotchItem();
-        teardrop.setHeight(95);
+        teardrop.setHeight(90);
         teardrop.setWidth(1);
         teardrop.setSize(80);
         teardrop.setTopRadius(0);
@@ -432,11 +432,11 @@ public class NotchSettingsFragment extends Fragment {
 
 
         NotchItem mid = new NotchItem();
-        mid.setHeight(100);
-        mid.setWidth(56);
-        mid.setSize(167);
-        mid.setTopRadius(81);
-        mid.setBottomRadius(80);
+        mid.setHeight(92);
+        mid.setWidth(53);
+        mid.setSize(125);
+        mid.setTopRadius(52);
+        mid.setBottomRadius(100);
         list.add(mid);
 
         RecyclerView notchStyles= main.findViewById(R.id.rvNotchStyles);
