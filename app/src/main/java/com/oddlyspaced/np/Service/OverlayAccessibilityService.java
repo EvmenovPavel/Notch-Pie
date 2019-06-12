@@ -500,24 +500,26 @@ public class OverlayAccessibilityService extends AccessibilityService {
         int green2 = Integer.parseInt(color2.substring(3, 5), 16);
         int blue2 = Integer.parseInt(color2.substring(5), 16);
 
-        int red = (int) ((red2 - red1) / 100.0) * battery;
-        int green = (int) ((green2 - green1) / 100.0) * battery;
-        int blue = (int) ((blue2 - blue1) / 100.0) * battery;
+        int red = Math.abs((int) ((red2 - red1) / 100.0) * battery);
+        int green = Math.abs((int) ((green2 - green1) / 100.0) * battery);
+        int blue = Math.abs((int) ((blue2 - blue1) / 100.0) * battery);
 
-        String r = Integer.toHexString(red);
+        Log.e("RED", red + " " + green + blue);
+
+        String r = Integer.toString(red, 16);
         if (r.length() == 1)
             r = "0" + r;
-        String g = Integer.toHexString(green);
+        String g = Integer.toString(green, 16);
         if (g.length() == 1)
             g = "0" + g;
-        String b = Integer.toHexString(blue);
+        String b = Integer.toString(blue, 16);
         if (b.length() == 1)
             b = "0" + b;
-        String color = "";
-        color = "#" + r + g + b;
+        String color = "#" + r + "" + g + "" + b;
 
         if (isFullStatus) { // fill the overlay with one color
             for (int i = 0; i < 181; i++) {
+                Log.e("color", color);
                 c[i] = Color.parseColor(color);
             }
 
