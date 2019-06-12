@@ -32,7 +32,7 @@ public class TabbedActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private final String[] titles = {"Notch Settings", "Config Settings", "Battery Level Settings", "Manage Configs", "About"};
+    private final String[] titles = {"Notch Settings", "Config Settings", "Battery Level Settings", "About"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

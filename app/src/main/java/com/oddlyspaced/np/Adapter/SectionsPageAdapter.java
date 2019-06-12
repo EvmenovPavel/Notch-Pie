@@ -30,8 +30,6 @@ public class SectionsPageAdapter extends FragmentPagerAdapter {
                 return new BatterySettingsFragment();
             case 3:
                 return new BlankFragment();
-            case 4:
-                return new BlankFragment();
             default:
                 return null;
         }
