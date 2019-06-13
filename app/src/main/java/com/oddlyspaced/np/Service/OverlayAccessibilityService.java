@@ -197,8 +197,14 @@ public class OverlayAccessibilityService extends AccessibilityService {
                 settingsManager.read();
                 batteryManager.read();
                 makeOverlay(batteryLevel);
-                if (isInApp)
+                if (isInApp) {
                     readConfigsContinuously();
+                    isAnimation1Active = false;
+                }
+                else {
+                    isAnimation1Active = settingsManager.isChargingAnimation();
+                    makeOverlay(batteryLevel);
+                }
             }
         }, 100);
     }
