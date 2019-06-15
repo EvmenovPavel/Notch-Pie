@@ -1,5 +1,6 @@
 package com.oddlyspaced.np.Activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
@@ -15,6 +16,11 @@ import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.oddlyspaced.np.Constants.ConstantHolder;
@@ -33,6 +39,7 @@ public class TabbedActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private final String[] titles = {"Notch Settings", "Config Settings", "Battery Level Settings", "About"};
+    BillingClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +79,7 @@ public class TabbedActivity extends AppCompatActivity {
         return new File(new ConstantHolder().getConfigFilePathInternal()).exists() && new File(new ConstantHolder().getSettingsFilePathInternal()).exists() && new File(new ConstantHolder().getBatteryFilePathInternal()).exists();
     }
 
-    private void makeServiceSnackbar () {
+    private void makeServiceSnackbar() {
         if (!checkServiceOn()) {
             Snackbar bar = Snackbar.make(viewPager, "Please turn overlay service on!", Snackbar.LENGTH_INDEFINITE);
             bar.setAction("Enable", new View.OnClickListener() {

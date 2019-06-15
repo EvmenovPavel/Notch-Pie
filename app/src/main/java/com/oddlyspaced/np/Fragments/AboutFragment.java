@@ -15,19 +15,37 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.SkuDetailsParams;
+import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.oddlyspaced.np.R;
 
-public class AboutFragment extends Fragment {
+import java.util.Arrays;
+import java.util.List;
+
+public class AboutFragment extends Fragment implements PurchasesUpdatedListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setupBilling();
+        loadData();
         View main = inflater.inflate(R.layout.fragment_about, container, false);
         return attach(main);
     }
 
     String[] amounts = {"$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10"};
     String[] amount_id = {"one_dollar", "two_dollar", "three_dollars", "four_dollar", "five_dollars", "six_dollars", "seven_dollar", "eight_dollars", "nine_dollars", "ten_dollars"};
+    String[] responses = {"THANKS!", "WOAH!", "YOU'RE THE BEST!", "DAMNNNNN", "WOWOWOWWW"};
+    List<SkuDetails> detailsList = null;
+
     int current = 0;
+    BillingClient billingClient;
 
     private View attach(View main) {
         View xda = main.findViewById(R.id.touchXda);
@@ -65,7 +83,6 @@ public class AboutFragment extends Fragment {
                 builder.setSingleChoiceItems(amounts, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getContext(), amount_id[which], Toast.LENGTH_SHORT).show();
                         amt.setText(new String(amounts[which] + " Donation"));
                         current = which;
                     }
@@ -82,10 +99,61 @@ public class AboutFragment extends Fragment {
         donate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), amount_id[current], Toast.LENGTH_SHORT).show();
+                if (detailsList != null) {
+                    BillingFlowParams params = BillingFlowParams.newBuilder().setSkuDetails(detailsList.get(current)).build();
+                    billingClient.launchBillingFlow(getActivity(), params);
+                }
+                else {
+                    Toast.makeText(getContext(), "Please Try Again Later :(", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         return main;
+    }
+
+    private void setupBilling() {
+        billingClient = BillingClient.newBuilder(getContext()).setListener(this).enablePendingPurchases().build();
+        billingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    Toast.makeText(getContext(), "Connected to Billing Service", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), billingResult.getDebugMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                Toast.makeText(getContext(), "Disconnected from billing service.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onPurchasesUpdated(BillingResult billingResult, @Nullable List<Purchase> purchases) {
+        assert purchases != null;
+        if (purchases.size() > 0) {
+            Toast.makeText(getContext(), "YOU'RE THE BEST!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void loadData() {
+        if (billingClient.isReady()) {
+            SkuDetailsParams params = SkuDetailsParams.newBuilder().setSkusList(Arrays.asList(amount_id)).setType(BillingClient.SkuType.INAPP).build();
+            billingClient.querySkuDetailsAsync(params, new SkuDetailsResponseListener() {
+                @Override
+                public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> skuDetailsList) {
+                    Toast.makeText(getContext(), skuDetailsList.size()+ "", Toast.LENGTH_SHORT).show();
+                    if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                        detailsList = skuDetailsList;
+                    }
+                }
+            });
+        }
+        else {
+            Toast.makeText(getContext(), "Client not ready.", Toast.LENGTH_SHORT).show();
+        }
     }
 }
