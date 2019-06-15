@@ -25,6 +25,8 @@ import com.oddlyspaced.np.Modal.ColorLevel;
 import com.oddlyspaced.np.Modal.NotchItem;
 import com.oddlyspaced.np.R;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class NotchLayoutAdapter extends RecyclerView.Adapter<NotchLayoutAdapter.ViewHolder>{
@@ -61,6 +63,7 @@ public class NotchLayoutAdapter extends RecyclerView.Adapter<NotchLayoutAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         //
         final NotchItem item = list.get(position);
+        holder.title.setText(item.getTitle());
         holder.notch.setImageBitmap(drawNotch(item.getHeight(), item.getWidth(), item.getSize(), item.getTopRadius(), item.getBottomRadius()));
         holder.touch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +84,7 @@ public class NotchLayoutAdapter extends RecyclerView.Adapter<NotchLayoutAdapter.
         // defining the modifiable items of the item view
         ImageView notch;
         View touch;
+        TextView title;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -88,6 +92,7 @@ public class NotchLayoutAdapter extends RecyclerView.Adapter<NotchLayoutAdapter.
             // giving context
             notch = itemView.findViewById(R.id.imgNotch);
             touch = itemView.findViewById(R.id.touchNotchStyle);
+            title = itemView.findViewById(R.id.txNotchStyleTitle);
         }
     }
 
