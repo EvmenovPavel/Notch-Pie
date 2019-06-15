@@ -414,30 +414,15 @@ public class NotchSettingsFragment extends Fragment {
         });
 
         ArrayList<NotchItem> list = new ArrayList<>();
-        NotchItem teardrop = new NotchItem();
-        teardrop.setHeight(90);
-        teardrop.setWidth(1);
-        teardrop.setSize(80);
-        teardrop.setTopRadius(0);
-        teardrop.setBottomRadius(100);
+        NotchItem rounded = new NotchItem(90, 1, 80, 0, 100, "Rounded");
+        NotchItem teardrop = new NotchItem(86, 1, 127, 71, 60, "Teardrop");
+        NotchItem mid = new NotchItem(92, 53, 125, 52, 100, "Medium");
+        NotchItem wide = new NotchItem(92, 53, 125, 52, 100, "Large");
+
+        list.add(rounded);
         list.add(teardrop);
-
-        NotchItem wide = new NotchItem();
-        wide.setHeight(104);
-        wide.setWidth(212);
-        wide.setSize(124);
-        wide.setTopRadius(81);
-        wide.setBottomRadius(91);
-        list.add(wide);
-
-
-        NotchItem mid = new NotchItem();
-        mid.setHeight(92);
-        mid.setWidth(53);
-        mid.setSize(125);
-        mid.setTopRadius(52);
-        mid.setBottomRadius(100);
         list.add(mid);
+        list.add(wide);
 
         RecyclerView notchStyles= main.findViewById(R.id.rvNotchStyles);
         notchStyles.setHasFixedSize(true);
