@@ -1,5 +1,7 @@
 package com.oddlyspaced.np.Fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,10 +25,17 @@ public class AboutFragment extends Fragment {
         return attach(main);
     }
 
+    String[] amounts = {"$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10"};
+    String[] amount_id = {"one_dollar", "two_dollar", "three_dollars", "four_dollar", "five_dollars", "six_dollars", "seven_dollar", "eight_dollars", "nine_dollars", "ten_dollars"};
+    int current = 0;
+
     private View attach(View main) {
         View xda = main.findViewById(R.id.touchXda);
         View telegam = main.findViewById(R.id.touchTelegram);
         View github = main.findViewById(R.id.touchGithub);
+        final TextView amt = main.findViewById(R.id.txAmount);
+        View donate = main.findViewById(R.id.touchDonation);
+
         xda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,6 +57,35 @@ public class AboutFragment extends Fragment {
                 startActivity(browserIntent);
             }
         });
+        amt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Choose Amount");
+                builder.setSingleChoiceItems(amounts, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getContext(), amount_id[which], Toast.LENGTH_SHORT).show();
+                        amt.setText(new String(amounts[which] + " Donation"));
+                        current = which;
+                    }
+                });
+                builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.show();
+            }
+        });
+        donate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), amount_id[current], Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return main;
     }
 }
