@@ -34,14 +34,12 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setupBilling();
-        loadData();
         View main = inflater.inflate(R.layout.fragment_about, container, false);
         return attach(main);
     }
 
     String[] amounts = {"$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10"};
     String[] amount_id = {"one_dollar", "two_dollar", "three_dollars", "four_dollar", "five_dollars", "six_dollars", "seven_dollar", "eight_dollars", "nine_dollars", "ten_dollars"};
-    String[] responses = {"THANKS!", "WOAH!", "YOU'RE THE BEST!", "DAMNNNNN", "WOWOWOWWW"};
     List<SkuDetails> detailsList = null;
 
     int current = 0;
@@ -118,23 +116,23 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
             @Override
             public void onBillingSetupFinished(BillingResult billingResult) {
                 if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-                    Toast.makeText(getContext(), "Connected to Billing Service", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "Connected to Billing Service", Toast.LENGTH_SHORT).show();
+                    loadData();
                 } else {
-                    Toast.makeText(getContext(), billingResult.getDebugMessage(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), billingResult.getDebugMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onBillingServiceDisconnected() {
-                Toast.makeText(getContext(), "Disconnected from billing service.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Disconnected from billing service.", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     @Override
     public void onPurchasesUpdated(BillingResult billingResult, @Nullable List<Purchase> purchases) {
-        assert purchases != null;
-        if (purchases.size() > 0) {
+        if (purchases != null && purchases.size() > 0) {
             Toast.makeText(getContext(), "YOU'RE THE BEST!", Toast.LENGTH_SHORT).show();
         }
     }
@@ -145,7 +143,7 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
             billingClient.querySkuDetailsAsync(params, new SkuDetailsResponseListener() {
                 @Override
                 public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> skuDetailsList) {
-                    Toast.makeText(getContext(), skuDetailsList.size()+ "", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), skuDetailsList.size()+ "", Toast.LENGTH_SHORT).show();
                     if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
                         detailsList = skuDetailsList;
                     }
