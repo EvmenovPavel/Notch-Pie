@@ -4,5 +4,7 @@ import com.lorenzomoscati.np.Modal.NotchItem;
 
 // Interface for NotchStyle items.
 public interface NotchStyleTouchListener {
-    void onTouch(NotchItem item);
+
+	void onTouch(NotchItem item);
+
 }

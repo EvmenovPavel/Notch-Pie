@@ -9,18 +9,21 @@ import com.lorenzomoscati.np.Interface.OnFullscreen;
 // Broadcast Receiver for receiving status bar changes
 public class FullscreenReceiver extends BroadcastReceiver {
 
-    // Interface
-    private OnFullscreen onFullscreen;
+	// Interface
+	private OnFullscreen onFullscreen;
 
-    // Constructor
-    public FullscreenReceiver(OnFullscreen onFullscreen) {
-        this.onFullscreen = onFullscreen;
-    }
+	// Constructor
+	public FullscreenReceiver(OnFullscreen onFullscreen) {
+		
+		this.onFullscreen = onFullscreen;
+		
+	}
 
-    // here onReceive is called when status bar visibility is modified
-    @Override
-    public void onReceive(Context context, Intent intent) {
-    }
+	// Here onReceive is called when status bar visibility is modified
+	@Override
+	public void onReceive(Context context, Intent intent) {
+	
+	}
 
 }
 

@@ -25,127 +25,231 @@ import com.lorenzomoscati.np.Utils.BatteryConfigManager;
 import com.lorenzomoscati.np.Utils.ColorPicker;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class BatterySettingsFragment extends Fragment {
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View main = inflater.inflate(R.layout.fragment_battery_settings, container, false);
-        init();
-        main = attach(main);
-        return main;
-    }
 
-    private RecyclerView recyclerView;
-    private BatteryColorAdapter batteryColorAdapter;
-    private ArrayList<ColorLevel> list;
-    private BatteryConfigManager manager;
-    private int positionTouch = -1;
+	@Nullable
+	@Override
+	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-    private void init() {
-        manager = new BatteryConfigManager();
-    }
+		View main = inflater.inflate(R.layout.fragment_battery_settings, container, false);
 
-    // takes the parent view and attaches the listeners to it
-    private View attach(final View main) {
-        final CheckBox linearAnimation = main.findViewById(R.id.cbLinearAnimation);
-        final CheckBox definedAnimation = main.findViewById(R.id.cbDefinedAnimation);
-        final TextView linearStart = main.findViewById(R.id.txLinearColorStart);
-        final TextView linearEnd = main.findViewById(R.id.txLinearColorEnd);
-        final View linearStartBorder = main.findViewById(R.id.viewLinearColorStart);
-        final View linearEndBorder = main.findViewById(R.id.viewLinearColorEnd);
+		init();
 
-        linearAnimation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                manager.setLinear(isChecked);
-                definedAnimation.setChecked(!isChecked);
-                manager.setDefined(!isChecked);
-                manager.save();
-            }
-        });
+		main = attach(main);
 
-        linearStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ColorPicker colorPicker = new ColorPicker(new ColorPickerListener() {
-                    @Override
-                    public void onColorSet(String color) {
-                        linearStart.setText(color);
-                        manager.setLinearStart(color);
-                        manager.save();
-                        linearStartBorder.setBackgroundColor(Color.parseColor(color));
-                    }
-                });
-                colorPicker.show(getFragmentManager(), "color picker");
-            }
-        });
+		return main;
 
-        linearEnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ColorPicker colorPicker = new ColorPicker(new ColorPickerListener() {
-                    @Override
-                    public void onColorSet(String color) {
-                        linearEnd.setText(color);
-                        manager.setLinearEnd(color);
-                        manager.save();
-                        linearEndBorder.setBackgroundColor(Color.parseColor(color));
+	}
 
-                    }
-                });
-                colorPicker.show(getFragmentManager(), "color picker");
-            }
-        });
+	private BatteryColorAdapter batteryColorAdapter;
+	private ArrayList<ColorLevel> list;
+	private BatteryConfigManager manager;
+	private int positionTouch;
 
-        definedAnimation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                manager.setDefined(isChecked);
-                linearAnimation.setChecked(!isChecked);
-                manager.setDefined(!isChecked);
-                manager.save();
-            }
-        });
+	// Initializes the method to call the battery configuration manager's methods
+	private void init() {
 
-        recyclerView = main.findViewById(R.id.rvBatteryLevel);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        list = manager.getColorLevels();
-        if (getContext() == null) {
-            Log.e("why", "why");
-        }
-        batteryColorAdapter = new BatteryColorAdapter(getContext(), list, new OnTouchColorLevel() {
-            @Override
-            public void onTouchItem(int position) {
-                positionTouch = position;
-                ColorPicker colorPicker = new ColorPicker(new ColorPickerListener() {
-                    @Override
-                    public void onColorSet(String color) {
-                        ColorLevel prev = list.get(positionTouch);
-                        prev.setColor(color);
-                        list.set(positionTouch, prev);
-                        batteryColorAdapter.notifyItemChanged(positionTouch);
-                        manager.setColorLevels(list);
-                        manager.save();
-                    }
-                });
-                colorPicker.color = list.get(position).getColor();
-                colorPicker.show(getFragmentManager(), "color picker");
-            }
-        });
-        recyclerView.setAdapter(batteryColorAdapter);
+		manager = new BatteryConfigManager();
 
-        if (manager.read()) {
-            linearAnimation.setChecked(manager.isLinear());
-            definedAnimation.setChecked(manager.isDefined());
-            linearStart.setText(manager.getLinearStart());
-            linearEnd.setText(manager.getLinearEnd());
-            linearStartBorder.setBackgroundColor(Color.parseColor(manager.getLinearStart()));
-            linearEndBorder.setBackgroundColor(Color.parseColor(manager.getLinearEnd()));
-        }
+	}
 
-        return main;
-    }
+	// Takes the parent view and attaches the listeners to it
+	private View attach(final View main) {
+
+		// Checkboxes
+		final CheckBox linearAnimation = main.findViewById(R.id.cbLinearAnimation);
+		final CheckBox definedAnimation = main.findViewById(R.id.cbDefinedAnimation);
+
+		// TextViews
+		final TextView linearStart = main.findViewById(R.id.txLinearColorStart);
+		final TextView linearEnd = main.findViewById(R.id.txLinearColorEnd);
+
+		// Views
+		final View linearStartBorder = main.findViewById(R.id.viewLinearColorStart);
+		final View linearEndBorder = main.findViewById(R.id.viewLinearColorEnd);
+
+		// Applying listener to linear colors
+		linearAnimation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+				// Updates the configuration
+				manager.setLinear(isChecked);
+				// Updates the opposite checkbox
+				definedAnimation.setChecked(!isChecked);
+				// Updates the configuration
+				manager.setDefined(!isChecked);
+				// Saves the confguration
+				manager.save();
+
+			}
+
+		});
+
+		// Applying the listener to the first linear color
+		linearStart.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				// Initializes a color picker
+				ColorPicker colorPicker = new ColorPicker(new ColorPickerListener() {
+
+					@Override
+					public void onColorSet(String color) {
+
+						// Updates the text view
+						linearStart.setText(color);
+						// Updates the configuration
+						manager.setLinearStart(color);
+						// Saves the configuration
+						manager.save();
+						// Updates the color preview
+						linearStartBorder.setBackgroundColor(Color.parseColor(color));
+
+					}
+
+				});
+
+				// Creates the color picker
+				colorPicker.show(Objects.requireNonNull(getFragmentManager()), "color picker");
+
+			}
+
+		});
+
+		// Applying the listener to the last linear color
+		linearEnd.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				// Initializes a color picker
+				ColorPicker colorPicker = new ColorPicker(new ColorPickerListener() {
+
+					@Override
+					public void onColorSet(String color) {
+
+						// Updates the text view
+						linearEnd.setText(color);
+						// Updates the configuration
+						manager.setLinearEnd(color);
+						// Saves the configuration
+						manager.save();
+						// Updates the color preview
+						linearEndBorder.setBackgroundColor(Color.parseColor(color));
+
+					}
+
+				});
+
+				// Creates the color picker
+				colorPicker.show(Objects.requireNonNull(getFragmentManager()), "color picker");
+
+			}
+
+		});
+
+		// Applying listener to defined colors
+		definedAnimation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+				// Updates the configuration
+				manager.setDefined(isChecked);
+				// Updates the opposite checkbox
+				linearAnimation.setChecked(!isChecked);
+				// Updates the configuration
+				manager.setDefined(!isChecked);
+				// Saves the configuration
+				manager.save();
+
+			}
+
+		});
+
+
+
+		// Recycler view for the colors and battery level
+		RecyclerView recyclerView = main.findViewById(R.id.rvBatteryLevel);
+		// Sets the recycler to have a fixed size
+		recyclerView.setHasFixedSize(true);
+		// Applies a layout manager to it
+		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+		// Fills the array with the color levels from the settings
+		list = manager.getColorLevels();
+
+		// ###DEBUG###
+		if (getContext() == null) {
+
+			Log.e("why", "why");
+
+		}
+		// ###DEBUG###
+
+		// Applying a listener to get when the color is touched, so that a color picker can be summoned
+		batteryColorAdapter = new BatteryColorAdapter(getContext(), list, new OnTouchColorLevel() {
+
+			@Override
+			public void onTouchItem(int position) {
+
+				// Retrieves the color that needs to be modified
+				positionTouch = position;
+
+				// Initializes a color picker
+				ColorPicker colorPicker = new ColorPicker(new ColorPickerListener() {
+
+					@Override
+					public void onColorSet(String color) {
+
+						// Gets the previous color
+						ColorLevel prev = list.get(positionTouch);
+						// Sets the new color
+						prev.setColor(color);
+						// Sets the new color into the list
+						list.set(positionTouch, prev);
+						// Notifies the manager that a color has changed
+						batteryColorAdapter.notifyItemChanged(positionTouch);
+						// Updates the configuration
+						manager.setColorLevels(list);
+						// Saves the configuration
+						manager.save();
+
+					}
+
+				});
+
+				// Gets the color to be shown in preview
+				colorPicker.color = list.get(position).getColor();
+				// Creates a color picker
+				colorPicker.show(Objects.requireNonNull(getFragmentManager()), "color picker");
+
+			}
+
+		});
+
+		// Applies the adapter to the recycler view
+		recyclerView.setAdapter(batteryColorAdapter);
+
+		// If the read of the configuration is successful, then the settings are shown in the fragment
+		if (manager.read()) {
+
+			linearAnimation.setChecked(manager.isLinear());
+			definedAnimation.setChecked(manager.isDefined());
+			linearStart.setText(manager.getLinearStart());
+			linearEnd.setText(manager.getLinearEnd());
+			linearStartBorder.setBackgroundColor(Color.parseColor(manager.getLinearStart()));
+			linearEndBorder.setBackgroundColor(Color.parseColor(manager.getLinearEnd()));
+
+		}
+
+		return main;
+
+	}
 
 }

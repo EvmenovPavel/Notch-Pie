@@ -2,39 +2,63 @@ package com.lorenzomoscati.np.Modal;
 
 public class NotchItem {
 
-    private int height, width, size, topRadius, bottomRadius;
-    private String title;
+	private int height, width, size, topRadius, bottomRadius;
+	private String title;
 
-    public NotchItem(int height, int width, int size, int topRadius, int bottomRadius, String title) {
-        this.height = height;
-        this.width = width;
-        this.size = size;
-        this.topRadius = topRadius;
-        this.bottomRadius = bottomRadius;
-        this.title = title;
-    }
+	// Method to contain a notch preset
+	public NotchItem(int height, int width, int size, int topRadius, int bottomRadius, String title) {
 
-    public int getHeight() {
-        return height;
-    }
+		this.height = height;
+		this.width = width;
+		this.size = size;
+		this.topRadius = topRadius;
+		this.bottomRadius = bottomRadius;
+		this.title = title;
 
-    public int getWidth() {
-        return width;
-    }
+	}
 
-    public int getSize() {
-        return size;
-    }
 
-    public int getTopRadius() {
-        return topRadius;
-    }
 
-    public int getBottomRadius() {
-        return bottomRadius;
-    }
+	// Returns [int] the height
+	public int getHeight() {
 
-    public String getTitle() {
-        return title;
-    }
+		return height;
+
+	}
+
+	// Returns [int] the width
+	public int getWidth() {
+
+		return width;
+
+	}
+
+	// Returns [int] the size
+	public int getSize() {
+
+		return size;
+
+	}
+
+	// Returns [int] the topRadius
+	public int getTopRadius() {
+
+		return topRadius;
+
+	}
+
+	// Returns [int] the bottomRadius
+	public int getBottomRadius() {
+
+		return bottomRadius;
+
+	}
+
+	// Returns [int] the title of the preset
+	public String getTitle() {
+
+		return title;
+
+	}
+
 }

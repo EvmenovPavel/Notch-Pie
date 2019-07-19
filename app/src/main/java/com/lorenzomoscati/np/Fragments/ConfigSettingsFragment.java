@@ -17,91 +17,154 @@ import com.lorenzomoscati.np.R;
 import com.lorenzomoscati.np.Utils.ColorPicker;
 import com.lorenzomoscati.np.Utils.SettingsManager;
 
+import java.util.Objects;
+
 public class ConfigSettingsFragment extends Fragment {
 
-    SettingsManager manager;
+	// Settings manager object
+	private SettingsManager manager;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View main = inflater.inflate(R.layout.fragment_config_settings, container, false);
-        init();
-        return attach(main);
-    }
+	@Nullable
+	@Override
+	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-    private void init() {
-        manager = new SettingsManager();
-    }
+		View main = inflater.inflate(R.layout.fragment_config_settings, container, false);
 
-    private View attach(View parent) {
-        Switch fullStatus = parent.findViewById(R.id.switchFullStatus);
-        final Switch showBackground = parent.findViewById(R.id.switchShowBackground);
-        Switch chargingAnimation = parent.findViewById(R.id.switchCharging);
-        Switch fillOverlay = parent.findViewById(R.id.switchFillOverlay);
-        Switch landscapeSupprt = parent.findViewById(R.id.switchLandscape);
-        View showBackgroundColor = parent.findViewById(R.id.viewTouchShowBackground);
-        final TextView backgroundColorText = parent.findViewById(R.id.txBackgroundColor);
+		init();
 
-        if (manager.read()) {
-            fullStatus.setChecked(manager.isFullStatus());
-            showBackground.setChecked(manager.isShowBackground());
-            chargingAnimation.setChecked(manager.isChargingAnimation());
-            fillOverlay.setChecked(manager.isFillOverlay());
-            backgroundColorText.setText(new String("Current Color : " + manager.getBackgroundColor()));
-        }
+		return attach(main);
 
-        fullStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                manager.setFullStatus(isChecked);
-                manager.save();
-            }
-        });
-        showBackground.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                manager.setShowBackground(isChecked);
-                manager.save();
-            }
-        });
-        chargingAnimation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                manager.setChargingAnimation(isChecked);
-                manager.save();
-            }
-        });
-        fillOverlay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                manager.setFillOverlay(isChecked);
-                manager.save();
-            }
-        });
-        landscapeSupprt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                manager.setLandscapeSupport(isChecked);
-                manager.save();
-            }
-        });
-        showBackgroundColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ColorPicker colorPicker = new ColorPicker(new ColorPickerListener() {
-                    @Override
-                    public void onColorSet(String color) {
-                        manager.setBackgroundColor(color);
-                        manager.save();
-                        backgroundColorText.setText(new String("Current Color : " + color));
-                    }
-                });
-                colorPicker.color = manager.getBackgroundColor();
-                colorPicker.show(getFragmentManager(), "color picker");
-            }
-        });
-        return parent;
-    }
+	}
 
+
+	// Initializes the method to call the settings manager's methods
+	private void init() {
+
+		manager = new SettingsManager();
+
+	}
+
+	// Takes the parent view and attaches the listeners to it
+	private View attach(View parent) {
+
+		// Switches
+		Switch fullStatus = parent.findViewById(R.id.switchFullStatus);
+		final Switch showBackground = parent.findViewById(R.id.switchShowBackground);
+		Switch chargingAnimation = parent.findViewById(R.id.switchCharging);
+		Switch landscapeSupprt = parent.findViewById(R.id.switchLandscape);
+
+		// Views
+		View showBackgroundColor = parent.findViewById(R.id.viewTouchShowBackground);
+
+		// TextViews
+		final TextView backgroundColorText = parent.findViewById(R.id.txBackgroundColor);
+
+		// If the read is successful, sets the values to be shown
+		if (manager.read()) {
+
+			fullStatus.setChecked(manager.isFullStatus());
+			showBackground.setChecked(manager.isShowBackground());
+			chargingAnimation.setChecked(manager.isChargingAnimation());
+			backgroundColorText.setText(new String("Current Color : " + manager.getBackgroundColor()));
+
+		}
+
+
+		// Listener for fullStatus
+		fullStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+				// Changes the status
+				manager.setFullStatus(isChecked);
+				// Saves the configuration
+				manager.save();
+
+			}
+
+		});
+
+		// Listener for showBackground
+		showBackground.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+				// Changes the status
+				manager.setShowBackground(isChecked);
+				// Saves the configuraiton
+				manager.save();
+
+			}
+
+		});
+
+		// Listener for chargingAnimation
+		chargingAnimation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+				// Changes the status
+				manager.setChargingAnimation(isChecked);
+				// Saves the configuration
+				manager.save();
+
+			}
+
+		});
+
+		// Listener for landscapeSupport
+		landscapeSupprt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+				// Changes the status
+				manager.setLandscapeSupport(isChecked);
+				// Saves the configuration
+				manager.save();
+
+			}
+
+		});
+
+		// Listener for backgroundColor
+		showBackgroundColor.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				// Creates a colorPicker
+				ColorPicker colorPicker = new ColorPicker(new ColorPickerListener() {
+
+					@Override
+					public void onColorSet(String color) {
+
+						// Sets the background color
+						manager.setBackgroundColor(color);
+						// Saves the configuration
+						manager.save();
+						// Updates the string shown in the fragment
+						backgroundColorText.setText(new String("Current Color : " + color));
+
+					}
+
+				});
+
+				// Sets the color to the one read from the configuration file
+				colorPicker.color = manager.getBackgroundColor();
+
+				// Shows the colorPicker
+				colorPicker.show(Objects.requireNonNull(getFragmentManager()), "color picker");
+
+			}
+
+		});
+
+		return parent;
+
+	}
 
 }

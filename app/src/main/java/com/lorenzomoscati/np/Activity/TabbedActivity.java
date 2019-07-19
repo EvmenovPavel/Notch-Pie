@@ -30,84 +30,153 @@ import java.util.List;
 
 public class TabbedActivity extends AppCompatActivity {
 
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private final String[] titles = {"Notch Settings", "Config Settings", "Battery Level Settings", "About"};
-    BillingClient client;
+	private TabLayout tabLayout;
+	private ViewPager viewPager;
+	private final String[] titles = {"Notch Settings", "Config Settings", "Battery Level Settings", "About"};
+	BillingClient client;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tabbed);
-        createDirectories();
-        if (!checkConfigs())
-            createConfigs();
-        init();
-        makeServiceSnackbar();
-    }
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
 
-    private void init() {
-        tabLayout = findViewById(R.id.tabs);
-        viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(new SectionsPageAdapter(getSupportFragmentManager(), titles));
-        tabLayout.setupWithViewPager(viewPager);
-    }
+		super.onCreate(savedInstanceState);
 
-    private void createDirectories() {
-        File folderInternal = new File(new ConstantHolder().getConfigFolderPathInternal());
-        if (!folderInternal.exists())
-            folderInternal.mkdirs();
-        File folderExternal = new File(new ConstantHolder().getConfigFolderPathExternal());
-        if (!folderExternal.exists())
-            folderExternal.mkdirs();
+		setContentView(R.layout.activity_tabbed);
 
-    }
+		// Creates the configuration directories
+		createDirectories();
 
-    private void createConfigs() {
-        new SettingsManager().save();
-        new BatteryConfigManager().save();
-        new NotchManager().save();
-    }
+		// Creates the config files, if not already present
+		if (!checkConfigs()) {
 
-    private boolean checkConfigs() {
-        return new File(new ConstantHolder().getConfigFilePathInternal()).exists() && new File(new ConstantHolder().getSettingsFilePathInternal()).exists() && new File(new ConstantHolder().getBatteryFilePathInternal()).exists();
-    }
+			createConfigs();
 
-    private void makeServiceSnackbar() {
-        if (!checkServiceOn()) {
-            Snackbar bar = Snackbar.make(viewPager, "Please turn overlay service on!", Snackbar.LENGTH_INDEFINITE);
-            bar.setAction("Enable", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                    startActivity(intent);
-                    Toast.makeText(getApplicationContext(), getString(R.string.popup_accessibility_toast), Toast.LENGTH_LONG).show();
-                }
-            });
-            bar.show();
-        }
-    }
+		}
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        makeServiceSnackbar();
-    }
+		init();
 
-    private boolean checkServiceOn() {
-        return isAccessibilityServiceEnabled(getApplicationContext(), OverlayAccessibilityService.class);
-    }
+		makeServiceSnackbar();
 
-    public static boolean isAccessibilityServiceEnabled(Context context, Class<? extends AccessibilityService> service) {
-        AccessibilityManager am = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-        List<AccessibilityServiceInfo> enabledServices = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK);
+	}
 
-        for (AccessibilityServiceInfo enabledService : enabledServices) {
-            ServiceInfo enabledServiceInfo = enabledService.getResolveInfo().serviceInfo;
-            if (enabledServiceInfo.packageName.equals(context.getPackageName()) && enabledServiceInfo.name.equals(service.getName()))
-                return true;
-        }
+	private void init() {
 
-        return false;
-    }
+		tabLayout = findViewById(R.id.tabs);
+		viewPager = findViewById(R.id.view_pager);
+		viewPager.setAdapter(new SectionsPageAdapter(getSupportFragmentManager(), titles));
+		tabLayout.setupWithViewPager(viewPager);
+
+	}
+
+	private void createDirectories() {
+
+		// Creates the internal folder, if it is not already present
+		File folderInternal = new File(new ConstantHolder().getConfigFolderPathInternal());
+		if (!folderInternal.exists()) {
+
+			folderInternal.mkdirs();
+
+		}
+
+		// Creates the external folder, if it is not already present
+		File folderExternal = new File(new ConstantHolder().getConfigFolderPathExternal());
+		if (!folderExternal.exists()) {
+
+			folderExternal.mkdirs();
+
+		}
+
+	}
+
+	// Creates the config files for each section, based on the results from the setting manager
+	private void createConfigs() {
+
+		new SettingsManager().save();
+		new BatteryConfigManager().save();
+		new NotchManager().save();
+
+	}
+
+	// Checks if the config files are existing
+	private boolean checkConfigs() {
+
+		return new File(new ConstantHolder().getConfigFilePathInternal()).exists() && new File(new ConstantHolder().getSettingsFilePathInternal()).exists() && new File(new ConstantHolder().getBatteryFilePathInternal()).exists();
+
+	}
+
+	// Checks if the accessibility service is turned on
+	private void makeServiceSnackbar() {
+
+		// If the service is not on a snackBar is shown
+		if (!checkServiceOn()) {
+
+			// Sets the title and length (infinite)
+			Snackbar bar = Snackbar.make(viewPager, "Please turn overlay service on!", Snackbar.LENGTH_INDEFINITE);
+
+			// Sets the button to enable it
+			bar.setAction("Enable", new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+
+					// Creates the intent to the settings page
+					Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+					startActivity(intent);
+
+					// Makes a toast to notify the user about what setting to turn on
+					Toast.makeText(getApplicationContext(), getString(R.string.popup_accessibility_toast), Toast.LENGTH_LONG).show();
+
+				}
+
+			});
+
+			// Shows the bar
+			bar.show();
+
+		}
+
+	}
+
+	@Override
+	protected void onResume() {
+
+		super.onResume();
+
+		// Checks again if the accessibility service is enabled
+		makeServiceSnackbar();
+
+	}
+
+	// Method that returns true if the accessibility service is turned on
+	private boolean checkServiceOn() {
+
+		return isAccessibilityServiceEnabled(getApplicationContext(), OverlayAccessibilityService.class);
+
+	}
+
+	// Method that checks the status of the accessibility service
+	public static boolean isAccessibilityServiceEnabled(Context context, Class<? extends AccessibilityService> service) {
+
+		// Defines an array in which are contained the services turned on
+		AccessibilityManager am = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+		List<AccessibilityServiceInfo> enabledServices = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK);
+
+		// Loops that cycles through the array to check if our service is turned on
+		for (AccessibilityServiceInfo enabledService : enabledServices) {
+
+			// Targets the service
+			ServiceInfo enabledServiceInfo = enabledService.getResolveInfo().serviceInfo;
+
+			// Checks if the service is our service
+			if (enabledServiceInfo.packageName.equals(context.getPackageName()) && enabledServiceInfo.name.equals(service.getName())) {
+
+				return true;
+
+			}
+
+		}
+
+		return false;
+
+	}
+
 }

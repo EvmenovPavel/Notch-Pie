@@ -14,162 +14,253 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.lorenzomoscati.np.Interface.ColorPickerListener;
 import com.lorenzomoscati.np.R;
 
-// https://www.youtube.com/watch?v=ARezg1D9Zd0
+import java.util.Objects;
+
 // Fragment class for ColorPicker dialog
 public class ColorPicker extends AppCompatDialogFragment {
 
-    // UI widgets
-    private SeekBar red;
-    private SeekBar green;
-    private SeekBar blue;
-    // the listener for handling color picker changes
-    public ColorPickerListener listener;
-    // the color preview in the dialog
-    private View dColor;
-    // text box for showing the color code
-    private EditText editTextColor;
-    // internal variable to store generated color
-    public String color = "#FFFFFF";
+	// RGB SeekBars
+	private SeekBar red;
+	private SeekBar green;
+	private SeekBar blue;
+
+	// Listener to handle color picker changes
+	private ColorPickerListener listener;
+
+	// Color preview View
+	private View dColor;
+
+	// Text box to show the color code
+	private EditText editTextColor;
+
+	// Internal variable to store generated color
+	public String color = "#FFFFFF";
 
 
-    public ColorPicker(ColorPickerListener listener) {
-        this.listener = listener;
-    }
+	// Method to call the listener
+	public ColorPicker(ColorPickerListener listener) {
 
-    // on creation of fragment
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
+		this.listener = listener;
 
-    // on loading up of dialog
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        // load the layout to show in dialog
-        View view = inflater.inflate(R.layout.dialog_color_picker, null);
-        builder.setView(view); // setting view
-        builder.setCancelable(false);
-        builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                listener.onColorSet(color);
-            }
-        });
-        // initialising items
-        dColor = view.findViewById(R.id.viewDialogColor);
-        red = view.findViewById(R.id.sbRed);
-        red.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                updateColorString();
-                updateColorView(color);
-            }
+	}
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+	@Override
+	public void onAttach(Context context) {
 
-            }
+		super.onAttach(context);
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+	}
 
-            }
-        });
-        green = view.findViewById(R.id.sbGreen);
-        green.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                updateColorString();
-                updateColorView(color);
-            }
+	@Override
+	@NonNull
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-            }
+		LayoutInflater inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+		// Load the layout to show in dialog
+		View view = inflater.inflate(R.layout.dialog_color_picker, null);
 
-            }
-        });
-        blue = view.findViewById(R.id.sbBlue);
-        blue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                updateColorString();
-                updateColorView(color);
-            }
+		builder.setView(view);
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+		builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 
-            }
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+				// Advises the listener that the colors are set
+				listener.onColorSet(color);
 
-            }
-        });
-        editTextColor = view.findViewById(R.id.editTextColor);
-        editTextColor.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
 
-            }
+		});
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try {
-                    dColor.setBackgroundColor(Color.parseColor(s.toString()));
-                    color = s.toString();
-                    updateColorSeekbar(color);
-                } catch (Exception e) {
-                    Toast.makeText(getContext(), "Invalid Color!", Toast.LENGTH_SHORT).show();
-                }
-            }
+		builder.setCancelable(false);
 
-            @Override
-            public void afterTextChanged(Editable s) {
+		// Initialising items
 
-            }
-        });
-        updateColorSeekbar(color);
-        // return the created builder dialog
-        return builder.create();
-    }
+		// Preview
+		dColor = view.findViewById(R.id.viewDialogColor);
 
-    // generate color string from the progress values
-    private void updateColorString() {
-        String r = Integer.toHexString(red.getProgress());
-        if (r.length() == 1)
-            r = "0" + r;
-        String g = Integer.toHexString(green.getProgress());
-        if (g.length() == 1)
-            g = "0" + g;
-        String b = Integer.toHexString(blue.getProgress());
-        if (b.length() == 1)
-            b = "0" + b;
-        color = "#" + r + g + b;
-    }
+		// Red
+		red = view.findViewById(R.id.sbRed);
+		// Listener for Red
+		red.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
-    // update the color view
-    private void updateColorView(String c) {
-        dColor.setBackgroundColor(Color.parseColor(c));
-        editTextColor.setText(c);
-    }
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-    // update values of seekbars
-    private void updateColorSeekbar(String c) {
-        red.setProgress(Integer.parseInt(c.substring(1, 3), 16));
-        green.setProgress(Integer.parseInt(c.substring(3, 5), 16));
-        blue.setProgress(Integer.parseInt(c.substring(5), 16));
-    }
+				// Updates the string according to the level
+				updateColorString();
+				// Updates the preview according to the level
+				updateColorView(color);
+
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+
+			}
+
+		});
+
+		// Green
+		green = view.findViewById(R.id.sbGreen);
+		// Listener for Green
+		green.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+				// Updates the string according to the level
+				updateColorString();
+				// Updates the preview according to the level
+				updateColorView(color);
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+
+			}
+
+		});
+
+		// Blue
+		blue = view.findViewById(R.id.sbBlue);
+		// Listener for Blue
+		blue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+				// Updates the string according to the level
+				updateColorString();
+				// Updates the preview according to the level
+				updateColorView(color);
+
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+
+			}
+
+		});
+
+		// Color String
+		editTextColor = view.findViewById(R.id.editTextColor);
+		// Listener for Color String
+		editTextColor.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+				// Try to change the color according to the given string
+				try {
+
+					// Updates the preview
+					dColor.setBackgroundColor(Color.parseColor(s.toString()));
+
+					// Updates the seekBars
+					color = s.toString();
+					updateColorSeekbar(color);
+
+				} catch (Exception e) {
+
+					// If the color string is not valid, the user is notified
+					Toast.makeText(getContext(), "Invalid Color!", Toast.LENGTH_SHORT).show();
+
+				}
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+
+			}
+
+		});
+
+		updateColorSeekbar(color);
+
+		// Returns the created builder dialog
+		return builder.create();
+
+	}
+
+	// Method to generate the color string from the seekBars
+	private void updateColorString() {
+
+		//  Gets the value of the red seekBar
+		String r = Integer.toHexString(red.getProgress());
+		if (r.length() == 1) {
+			r = "0" + r;
+		}
+
+		//  Gets the value of the green seekBar
+		String g = Integer.toHexString(green.getProgress());
+		if (g.length() == 1) {
+			g = "0" + g;
+		}
+
+		//  Gets the value of the blue seekBar
+		String b = Integer.toHexString(blue.getProgress());
+		if (b.length() == 1) {
+			b = "0" + b;
+		}
+
+		// Creates the string according to the seekBars
+		color = "#" + r + g + b;
+
+	}
+
+	// Method to update the color preview
+	private void updateColorView(String c) {
+
+		// Sets the color preview
+		dColor.setBackgroundColor(Color.parseColor(c));
+
+		// Sets the string
+		editTextColor.setText(c);
+
+	}
+
+	// Method to update the values of the seekBars
+	private void updateColorSeekbar(String c) {
+
+		// Retrieves red amount
+		red.setProgress(Integer.parseInt(c.substring(1, 3), 16));
+		// Retrieves green amount
+		green.setProgress(Integer.parseInt(c.substring(3, 5), 16));
+		// Retrieves blue amount
+		blue.setProgress(Integer.parseInt(c.substring(5), 16));
+
+	}
+
 }

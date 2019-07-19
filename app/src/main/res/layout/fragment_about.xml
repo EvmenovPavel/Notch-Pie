@@ -12,7 +12,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:text="Notch Pie v2.5 - Stable"
+        android:text="Notch Pie v2.5.1"
         android:textColor="@color/colorTextDark"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -176,7 +176,7 @@
                 android:layout_marginBottom="4dp"
                 android:text="Created By"
                 android:textColor="@color/colorTextDark"
-                app:layout_constraintBottom_toTopOf="@+id/textView31"
+
                 app:layout_constraintEnd_toStartOf="@+id/imageView3"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -189,11 +189,12 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="oddlyspaced"
-                app:layout_constraintBottom_toTopOf="@+id/view20"
+                android:text="Fly7113"
+                app:layout_constraintBottom_toTopOf="@+id/textView91"
                 app:layout_constraintEnd_toStartOf="@+id/imageView3"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView33" />
+                app:layout_constraintTop_toBottomOf="@+id/textView33"
+                app:layout_constraintTop_toTopOf="@+id/imageView3"/>
 
             <ImageView
                 android:id="@+id/imageView3"
@@ -201,7 +202,31 @@
                 android:layout_height="80dp"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView33"
+                app:srcCompat="@mipmap/ic_me_foreground" />
+
+            <TextView
+                android:id="@+id/textView91"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="oddlyspaced (discontinued)"
+                app:layout_constraintBottom_toTopOf="@+id/view20"
+                app:layout_constraintEnd_toStartOf="@+id/imageView4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView33"
+                app:layout_constraintTop_toTopOf="@+id/imageView4"/>
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView3"
                 app:srcCompat="@mipmap/ic_me_foreground" />
 
             <View
@@ -212,7 +237,7 @@
                 android:background="@color/colorSeparator"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
             <TextView
                 android:id="@+id/textView34"
@@ -234,7 +259,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:text="https://github.com/oddlyspaced/Notch-Pie-New"
+                android:text="https://github.com/Fly7113/Notch-Pie"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView34" />
@@ -272,17 +297,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView38" />
-
-            <TextView
-                android:id="@+id/txAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="Tap here to choose amount"
-                android:textColor="@color/colorTextDark"
-                app:layout_constraintBottom_toBottomOf="@+id/cardView7"
-                app:layout_constraintStart_toStartOf="@+id/touchGithub"
-                app:layout_constraintTop_toTopOf="@+id/cardView7" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView7"

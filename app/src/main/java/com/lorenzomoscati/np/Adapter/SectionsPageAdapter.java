@@ -12,39 +12,58 @@ import com.lorenzomoscati.np.Fragments.NotchSettingsFragment;
 
 public class SectionsPageAdapter extends FragmentPagerAdapter {
 
-    private String[] titles;
+	private String[] titles;
 
-    public SectionsPageAdapter(FragmentManager fm, String[] titles) {
-        super(fm);
-        this.titles = titles;
-    }
+	public SectionsPageAdapter(FragmentManager fm, String[] titles) {
 
-    @Override
-    public Fragment getItem(int position) {
-        switch (position) {
-            case 0:
-                return new NotchSettingsFragment();
-            case 1:
-                return new ConfigSettingsFragment();
-            case 2:
-                return new BatterySettingsFragment();
-            case 3:
-                return new AboutFragment();
-            default:
-                return null;
-        }
-    }
+		super(fm);
+
+		// Sets the title passed
+		this.titles = titles;
+
+	}
+
+	// Depending on the position given, returns the right fragment
+	@Override
+	public Fragment getItem(int position) {
+
+		switch (position) {
+
+			case 0:
+				return new NotchSettingsFragment();
+
+			case 1:
+				return new ConfigSettingsFragment();
+
+			case 2:
+				return new BatterySettingsFragment();
+
+			case 3:
+				return new AboutFragment();
+
+			default:
+				return null;
+
+		}
+
+	}
 
 
 
-    @Override
-    public int getCount() {
-        return titles.length;
-    }
+	// Returns the number of fragments
+	@Override
+	public int getCount() {
 
-    @Nullable
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return titles[position];
-    }
+		return titles.length;
+
+	}
+
+	@Nullable
+	@Override
+	public CharSequence getPageTitle(int position) {
+
+		return titles[position];
+
+	}
+
 }

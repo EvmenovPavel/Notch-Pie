@@ -1,4 +1,4 @@
-package com.oddlyspaced.np;
+package com.lorenzomoscati.np;
 
 import org.junit.Test;
 

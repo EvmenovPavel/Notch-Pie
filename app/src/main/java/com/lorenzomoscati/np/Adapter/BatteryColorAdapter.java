@@ -15,72 +15,99 @@ import com.lorenzomoscati.np.Modal.ColorLevel;
 import com.lorenzomoscati.np.R;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class BatteryColorAdapter extends RecyclerView.Adapter<BatteryColorAdapter.ViewHolder>{
 
+	// Required items
+	// Array list of items for colors
+	private ArrayList<ColorLevel> list;
 
-    // Required items
-    // ui context
-    private Context context;
-    // array list of items for colors
-    private ArrayList<ColorLevel> list;
-    // the onClick listener for the color items/levels
-    private OnTouchColorLevel listener;
+	// onClick listener for the color items/levels
+	private OnTouchColorLevel listener;
 
-    // parametrized constructor
-    public BatteryColorAdapter(Context context, ArrayList<ColorLevel> list, OnTouchColorLevel listener) {
-        this.context = context;
-        this.list = list;
-        this.listener = listener;
-    }
+	// Parametrized constructor
+	public BatteryColorAdapter(Context context, ArrayList<ColorLevel> list, OnTouchColorLevel listener) {
 
-    // Called when RecyclerView in drawn in UI
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // checking if listener overridden
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View v = inflater.inflate(R.layout.item_color_list, parent, false);
-        return new ViewHolder(v);
-    }
+		this.list = list;
+		this.listener = listener;
 
-    // Called when data is bound to the items
-    // --when the list items are being loaded--
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        ColorLevel item = list.get(position);
-        holder.color.setBackgroundColor(Color.parseColor(item.getColor()));
-        holder.start.setText(item.getStartLevel() + "%");
-        holder.end.setText(item.getEndLevel() + "%");
-        holder.touch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onTouchItem(position);
-            }
-        });
-    }
+	}
 
-    @Override
-    public int getItemCount() {
-        return list.size();
-    }
+	// Called when RecyclerView in drawn in UI
+	@NonNull
+	@Override
+	public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-    // constructor / defining class for the list items
-    class ViewHolder extends RecyclerView.ViewHolder {
+		// Checking if listener overridden
+		LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        // defining the modifiable items of the item view
-        TextView start, end;
-        View color, touch;
+		View v = inflater.inflate(R.layout.item_color_list, parent, false);
 
-        ViewHolder(@NonNull View itemView) {
-            super(itemView);
+		return new ViewHolder(v);
 
-            // giving context
-            start = itemView.findViewById(R.id.txRecyclerViewStartPercentage);
-            end = itemView.findViewById(R.id.txRecyclerViewEndPercentage);
-            color = itemView.findViewById(R.id.viewRecyclerViewColor);
-            touch = itemView.findViewById(R.id.viewRecyclerViewTouch);
-        }
-    }
+	}
+
+	// Called when data is bound to the items
+	// --when the list items are being loaded--
+	@Override
+	public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+
+		// Gets the color item that needs to be modified
+		ColorLevel item = list.get(position);
+
+		// Sets the color preview
+		holder.color.setBackgroundColor(Color.parseColor(item.getColor()));
+		// Sets the starting percentage
+		holder.start.setText(String.format(Locale.getDefault(), "%d%%", item.getStartLevel()));
+		// Sets the ending percentage
+		holder.end.setText(String.format(Locale.getDefault(), "%d%%", item.getEndLevel()));
+
+
+		holder.touch.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				listener.onTouchItem(position);
+
+			}
+
+		});
+
+	}
+
+
+
+	// Method to know how many colors are present in the list
+	@Override
+	public int getItemCount() {
+
+		return list.size();
+
+	}
+
+
+
+	// Constructor / defining class for the list items
+	class ViewHolder extends RecyclerView.ViewHolder {
+
+		// Defining the modifiable items of the item view
+		TextView start, end;
+		View color, touch;
+
+		ViewHolder(@NonNull View itemView) {
+
+			super(itemView);
+
+			// Giving context
+			start = itemView.findViewById(R.id.txRecyclerViewStartPercentage);
+			end = itemView.findViewById(R.id.txRecyclerViewEndPercentage);
+			color = itemView.findViewById(R.id.viewRecyclerViewColor);
+			touch = itemView.findViewById(R.id.viewRecyclerViewTouch);
+
+		}
+
+	}
 
 }
