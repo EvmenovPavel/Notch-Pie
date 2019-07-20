@@ -143,6 +143,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
 
 
 	// -- Handlers --
+	@SuppressLint("InflateParams")
 	private void init() {
 
 		constants = new ConstantHolder();
@@ -154,14 +155,14 @@ public class OverlayAccessibilityService extends AccessibilityService {
 		overlayView = LayoutInflater.from(this).inflate(R.layout.overlay_float, null);
 
 		// Sets the managers to read notch, color and settings
-		notchManager = new NotchManager();
-		settingsManager = new SettingsManager();
-		batteryManager = new BatteryConfigManager();
+		notchManager = new NotchManager(getApplicationContext());
+		settingsManager = new SettingsManager(getApplicationContext());
+		batteryManager = new BatteryConfigManager(getApplicationContext());
 
 		// Reads the settings
-		notchManager.read();
-		settingsManager.read();
-		batteryManager.read();
+		notchManager.read(getApplicationContext());
+		settingsManager.read(getApplicationContext());
+		batteryManager.read(getApplicationContext());
 
 		// Properly rotates the overlay
 		overlayView.setRotationY(180);
@@ -239,7 +240,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
 			@Override
 			public void onChargingConnected(int battery) {
 				
-				settingsManager.read();
+				settingsManager.read(getApplicationContext());
 				
 				// When the battery is charging, if the settings allow so, the charging animation starts
 				if (settingsManager.isChargingAnimation() && !isAnimation1Active) {
@@ -279,9 +280,9 @@ public class OverlayAccessibilityService extends AccessibilityService {
 			@Override
 			public void run() {
 
-				notchManager.read();
-				settingsManager.read();
-				batteryManager.read();
+				notchManager.read(getApplicationContext());
+				settingsManager.read(getApplicationContext());
+				batteryManager.read(getApplicationContext());
 
 				makeOverlay(batteryLevel);
 
@@ -666,18 +667,16 @@ public class OverlayAccessibilityService extends AccessibilityService {
 		path.moveTo(p3 - 1.0f, -1.0f + p1);
 		float p5 = -p1;
 		path.rMoveTo(p5, p5);
-		float p6 = h;
-		float p7 = ns;
-		float p8 = ((tr / 100.0f) * p7);// top radius
+		float p8 = ((tr / 100.0f) * (float) ns);// top radius
 		float p9 = 0.0f;
-		float p10 = ((br / 100.0f) * p7);
-		p4 = -((p4 - ((p7 * 2.0f) + p2)) / 2.0f);
+		float p10 = ((br / 100.0f) * (float) ns);
+		p4 = -((p4 - (((float) ns * 2.0f) + p2)) / 2.0f);
 		path.rMoveTo(p4, 0.0F);
 		float p11 = -p9;
-		p3 = -p7;
-		path.rCubicTo(-p8, p9, p10 - p7, p11 + p6, p3, p6);
+		p3 = - (float) ns;
+		path.rCubicTo(-p8, p9, p10 - (float) ns, p11 + (float) h, p3, (float) h);
 		path.rLineTo(-p2, 0.0f);
-		path.rCubicTo(-p10, p11, p8 - p7, p9 - p6, p3, -p6);
+		path.rCubicTo(-p10, p11, p8 - (float) ns, p9 - (float) h, p3, - (float) h);
 
 		path.close();
 
@@ -702,7 +701,6 @@ public class OverlayAccessibilityService extends AccessibilityService {
 		int[] colors;
 
 		if (batteryManager.isLinear()) {
-			Log.e("sues", "shdwsfbsj");
 			colors = getColorArrayLinear(battery, settingsManager.isFullStatus());
 		} else {
 			colors = getColorArrayDefined(battery, settingsManager.isFullStatus());

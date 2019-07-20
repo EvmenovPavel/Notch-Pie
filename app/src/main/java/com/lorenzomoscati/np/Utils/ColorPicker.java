@@ -1,5 +1,6 @@
 package com.lorenzomoscati.np.Utils;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -66,6 +67,7 @@ public class ColorPicker extends AppCompatDialogFragment {
 		LayoutInflater inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
 
 		// Load the layout to show in dialog
+		@SuppressLint("InflateParams")
 		View view = inflater.inflate(R.layout.dialog_color_picker, null);
 
 		builder.setView(view);

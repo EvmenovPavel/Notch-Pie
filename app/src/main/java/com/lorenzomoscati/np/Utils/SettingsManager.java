@@ -1,5 +1,7 @@
 package com.lorenzomoscati.np.Utils;
 
+import android.content.Context;
+
 import com.lorenzomoscati.np.Constants.ConstantHolder;
 
 import java.io.BufferedReader;
@@ -21,21 +23,15 @@ public class SettingsManager {
 	private String filePath;
 
 	// Requests to the ConstantHolder the path to where the file where the settings are written
-	public SettingsManager() {
+	public SettingsManager(Context context) {
 
-		filePath = new ConstantHolder().getSettingsFilePathInternal();
-
-	}
-
-	public SettingsManager(String filePath) {
-
-		this.filePath = filePath;
+		filePath = new ConstantHolder().getSettingsFilePathInternal(context);
 
 	}
 
 
 	// Reads the config file and returns true if read was successful
-	public boolean read() {
+	public boolean read(Context context) {
 
 		try {
 
@@ -104,7 +100,7 @@ public class SettingsManager {
 			// The TAG and the Exception are sets
 			ErrorHandler handler = new ErrorHandler(TAG, e);
 			// The prepared packet is written to the log file
-			handler.toFile();
+			handler.toFile(context);
 
 			return false;
 
@@ -113,7 +109,7 @@ public class SettingsManager {
 	}
 
 	// This method saves the file
-	public boolean save() {
+	public void save(Context context) {
 
 		try {
 
@@ -176,9 +172,7 @@ public class SettingsManager {
 
 			// Closes the reader
 			writer.close();
-
-			return true;
-
+			
 		} catch (Exception e) {
 
 			// If an error is thrown the error is handled by the ErrorHandler util
@@ -186,22 +180,13 @@ public class SettingsManager {
 			// The TAG and the Exception are sets
 			ErrorHandler handler = new ErrorHandler(TAG, e);
 			// The prepared packet is written to the log file
-			handler.toFile();
-
-			return false;
-
+			handler.toFile(context);
+			
 		}
 
 	}
-
-
-	// Return [string] the TAG for the ErrorHandler record
-	public String getTAG() {
-
-		return TAG;
-
-	}
-
+	
+	
 	// Return [string] the fullStatus setting
 	public boolean isFullStatus() {
 
@@ -236,16 +221,8 @@ public class SettingsManager {
 		return landscapeSupport;
 
 	}
-
-
-	// Returns [string] the path to the file where the settings are written
-	public String getFilePath() {
-
-		return filePath;
-
-	}
-
-
+	
+	
 	// Sets the FullStatus
 	public void setFullStatus(boolean fullStatus) {
 
@@ -280,13 +257,6 @@ public class SettingsManager {
 		this.landscapeSupport = landscapeSupport;
 
 	}
-
-
-	// Sets the path to the file where the settings are written
-	public void setFilePath(String filePath) {
-
-		this.filePath = filePath;
-
-	}
-
+	
+	
 }

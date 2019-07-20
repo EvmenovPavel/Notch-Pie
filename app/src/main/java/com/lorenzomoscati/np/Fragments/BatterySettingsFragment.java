@@ -36,10 +36,8 @@ public class BatterySettingsFragment extends Fragment {
 		View main = inflater.inflate(R.layout.fragment_battery_settings, container, false);
 
 		init();
-
-		main = attach(main);
-
-		return main;
+		
+		return attach(main);
 
 	}
 
@@ -51,7 +49,7 @@ public class BatterySettingsFragment extends Fragment {
 	// Initializes the method to call the battery configuration manager's methods
 	private void init() {
 
-		manager = new BatteryConfigManager();
+		manager = new BatteryConfigManager(getContext());
 
 	}
 
@@ -82,8 +80,8 @@ public class BatterySettingsFragment extends Fragment {
 				definedAnimation.setChecked(!isChecked);
 				// Updates the configuration
 				manager.setDefined(!isChecked);
-				// Saves the confguration
-				manager.save();
+				// Saves the configuration
+				manager.save(getContext());
 
 			}
 
@@ -106,7 +104,7 @@ public class BatterySettingsFragment extends Fragment {
 						// Updates the configuration
 						manager.setLinearStart(color);
 						// Saves the configuration
-						manager.save();
+						manager.save(getContext());
 						// Updates the color preview
 						linearStartBorder.setBackgroundColor(Color.parseColor(color));
 
@@ -138,7 +136,7 @@ public class BatterySettingsFragment extends Fragment {
 						// Updates the configuration
 						manager.setLinearEnd(color);
 						// Saves the configuration
-						manager.save();
+						manager.save(getContext());
 						// Updates the color preview
 						linearEndBorder.setBackgroundColor(Color.parseColor(color));
 
@@ -166,7 +164,7 @@ public class BatterySettingsFragment extends Fragment {
 				// Updates the configuration
 				manager.setDefined(!isChecked);
 				// Saves the configuration
-				manager.save();
+				manager.save(getContext());
 
 			}
 
@@ -218,7 +216,7 @@ public class BatterySettingsFragment extends Fragment {
 						// Updates the configuration
 						manager.setColorLevels(list);
 						// Saves the configuration
-						manager.save();
+						manager.save(getContext());
 
 					}
 
@@ -237,7 +235,7 @@ public class BatterySettingsFragment extends Fragment {
 		recyclerView.setAdapter(batteryColorAdapter);
 
 		// If the read of the configuration is successful, then the settings are shown in the fragment
-		if (manager.read()) {
+		if (manager.read(getContext())) {
 
 			linearAnimation.setChecked(manager.isLinear());
 			definedAnimation.setChecked(manager.isDefined());

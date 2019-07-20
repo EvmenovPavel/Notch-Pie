@@ -1,86 +1,57 @@
 package com.lorenzomoscati.np.Constants;
 
-import android.os.Environment;
+import android.content.Context;
 
 // Sample file holding constant data for app
 public class ConstantHolder {
-
-	private final int appCode = 7;
-	private final String packageName = "com.lorenzomoscati.np";
-
-	private final String configFolderPathInternal = Environment.getExternalStorageDirectory() + "/Android/data/com.lorenzomoscati.np";
-
-	private final String configFilePathInternal = configFolderPathInternal + "/config";
-	private final String settingsFilePathInternal = configFolderPathInternal + "/settings";
-	private final String batteryFilePathInternal = configFolderPathInternal + "/battery";
-
-	private final String configFolderPathExternal = Environment.getExternalStorageDirectory() + "/NotchPie";
-
-	private final String configFetchUrl = "https://raw.githubusercontent.com/oddlyspaced/NotchPie-Data/master/";
-
-
-	// Returns [string] the application code
-	public int getAppCode() {
-
-		return appCode;
-
-	}
-
+	
 	// Returns [string] the package name
 	public String getPackageName() {
-
-		return packageName;
+		
+		return "com.lorenzomoscati.np";
 
 	}
 
 
 
 	// Returns [string] the path of the internal folder where configurations are saved
-	public String getConfigFolderPathInternal() {
+	public String getConfigFolderPathInternal(Context context) {
 
-		return configFolderPathInternal;
+		return context.getFilesDir().getPath();
 
 	}
 
 
 
 	// Returns [string] the path to the file where the configurations are saved
-	public String getConfigFilePathInternal() {
-
-		return configFilePathInternal;
+	public String getConfigFilePathInternal(Context context) {
+		
+		return context.getFilesDir().getPath() + "/config";
 
 	}
 
 	// Returns [string] the path to the file where the settings are saved
-	public String getSettingsFilePathInternal() {
-
-		return settingsFilePathInternal;
+	public String getSettingsFilePathInternal(Context context) {
+		
+		return context.getFilesDir().getPath() + "/settings";
 
 	}
 
 	// Returns [string] the path to the file where the battery settings are saved
-	public String getBatteryFilePathInternal() {
-
-		return batteryFilePathInternal;
+	public String getBatteryFilePathInternal(Context context) {
+		
+		return context.getFilesDir().getPath() + "/battery";
 
 	}
 
 
 
 	// Returns [string] the path of the external folder
-	public String getConfigFolderPathExternal() {
+	public String getConfigFolderPathExternal(Context context) {
 
-		return configFolderPathExternal;
-
-	}
-
-
-
-	// Returns the URL where the configuration are hosted
-	public String getConfigFetchUrl() {
-
-		return configFetchUrl;
+		return context.getFilesDir().getPath() + "/logs";
 
 	}
-
+	
+	
 }

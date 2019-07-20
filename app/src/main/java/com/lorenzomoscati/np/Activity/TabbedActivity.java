@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
 
-import com.android.billingclient.api.BillingClient;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.lorenzomoscati.np.Constants.ConstantHolder;
@@ -27,14 +26,13 @@ import com.lorenzomoscati.np.Utils.SettingsManager;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
 public class TabbedActivity extends AppCompatActivity {
-
-	private TabLayout tabLayout;
+	
 	private ViewPager viewPager;
 	private final String[] titles = {"Notch Settings", "Config Settings", "Battery Level Settings", "About"};
-	BillingClient client;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -59,8 +57,8 @@ public class TabbedActivity extends AppCompatActivity {
 	}
 
 	private void init() {
-
-		tabLayout = findViewById(R.id.tabs);
+		
+		TabLayout tabLayout = findViewById(R.id.tabs);
 		viewPager = findViewById(R.id.view_pager);
 		viewPager.setAdapter(new SectionsPageAdapter(getSupportFragmentManager(), titles));
 		tabLayout.setupWithViewPager(viewPager);
@@ -70,18 +68,32 @@ public class TabbedActivity extends AppCompatActivity {
 	private void createDirectories() {
 
 		// Creates the internal folder, if it is not already present
-		File folderInternal = new File(new ConstantHolder().getConfigFolderPathInternal());
+		File folderInternal = new File(new ConstantHolder().getConfigFolderPathInternal(getApplicationContext()));
+		boolean success;
 		if (!folderInternal.exists()) {
 
-			folderInternal.mkdirs();
+			
+			success = folderInternal.mkdirs();
+			
+			if (!success) {
+				
+				Toast.makeText(getApplicationContext(), "Folder creation was unsuccessful", Toast.LENGTH_SHORT).show();
+				
+			}
 
 		}
 
 		// Creates the external folder, if it is not already present
-		File folderExternal = new File(new ConstantHolder().getConfigFolderPathExternal());
+		File folderExternal = new File(new ConstantHolder().getConfigFolderPathExternal(getApplicationContext()));
 		if (!folderExternal.exists()) {
-
-			folderExternal.mkdirs();
+			
+			success = folderExternal.mkdirs();
+			
+			if (!success) {
+				
+				Toast.makeText(getApplicationContext(), "Folder creation was unsuccessful", Toast.LENGTH_SHORT).show();
+				
+			}
 
 		}
 
@@ -90,16 +102,16 @@ public class TabbedActivity extends AppCompatActivity {
 	// Creates the config files for each section, based on the results from the setting manager
 	private void createConfigs() {
 
-		new SettingsManager().save();
-		new BatteryConfigManager().save();
-		new NotchManager().save();
+		new SettingsManager(getApplicationContext()).save(getApplicationContext());
+		new BatteryConfigManager(getApplicationContext()).save(getApplicationContext());
+		new NotchManager(getApplicationContext()).save(getApplicationContext());
 
 	}
 
 	// Checks if the config files are existing
 	private boolean checkConfigs() {
 
-		return new File(new ConstantHolder().getConfigFilePathInternal()).exists() && new File(new ConstantHolder().getSettingsFilePathInternal()).exists() && new File(new ConstantHolder().getBatteryFilePathInternal()).exists();
+		return new File(new ConstantHolder().getConfigFilePathInternal(getApplicationContext())).exists() && new File(new ConstantHolder().getSettingsFilePathInternal(getApplicationContext())).exists() && new File(new ConstantHolder().getBatteryFilePathInternal(getApplicationContext())).exists();
 
 	}
 
@@ -158,7 +170,7 @@ public class TabbedActivity extends AppCompatActivity {
 
 		// Defines an array in which are contained the services turned on
 		AccessibilityManager am = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-		List<AccessibilityServiceInfo> enabledServices = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK);
+		List<AccessibilityServiceInfo> enabledServices = Objects.requireNonNull(am).getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK);
 
 		// Loops that cycles through the array to check if our service is turned on
 		for (AccessibilityServiceInfo enabledService : enabledServices) {

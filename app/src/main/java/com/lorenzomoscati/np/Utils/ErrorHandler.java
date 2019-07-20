@@ -1,5 +1,6 @@
 package com.lorenzomoscati.np.Utils;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.lorenzomoscati.np.Constants.ConstantHolder;
@@ -12,14 +13,13 @@ import java.text.DateFormat;
 import java.util.Date;
 
 // Saved the error to a file for proper analysis
-public class ErrorHandler {
+class ErrorHandler {
 
 	private String tag;
 	private Exception exception;
-	private final String TAG = "ErrorHandler";
-
+	
 	// Method to set the TAG and the Exception
-	public ErrorHandler(String tag, Exception exception) {
+	ErrorHandler(String tag, Exception exception) {
 
 		// Sets the TAG
 		this.tag = tag;
@@ -29,7 +29,7 @@ public class ErrorHandler {
 	}
 
 	// Writes the packet to the log file
-	public void toFile() {
+	void toFile(Context context) {
 
 		try {
 
@@ -38,7 +38,7 @@ public class ErrorHandler {
 			Date date = new Date();
 
 			// Creates the log file
-			File err = new File(new ConstantHolder().getConfigFolderPathExternal() + "/" + tag + "-" + dateFormat.format(date) + ".log");
+			File err = new File(new ConstantHolder().getConfigFolderPathExternal(context) + "/" + tag + "-" + dateFormat.format(date) + ".log");
 
 			// Initializes the writer
 			PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(err)));
@@ -66,6 +66,7 @@ public class ErrorHandler {
 		catch (Exception e) {
 
 			// If the Handler can't write the log file, the error is written to the console log
+			String TAG = "ErrorHandler";
 			Log.e(TAG, e.toString());
 
 		}

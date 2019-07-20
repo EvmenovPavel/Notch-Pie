@@ -1,5 +1,7 @@
 package com.lorenzomoscati.np.Utils;
 
+import android.content.Context;
+
 import com.lorenzomoscati.np.Constants.ConstantHolder;
 import com.lorenzomoscati.np.Modal.ColorLevel;
 
@@ -22,9 +24,9 @@ public class BatteryConfigManager {
 
 
 	// Configs the default colors
-	public BatteryConfigManager() {
+	public BatteryConfigManager(Context context) {
 
-		filePath = new ConstantHolder().getBatteryFilePathInternal();
+		filePath = new ConstantHolder().getBatteryFilePathInternal(context);
 		ColorLevel level = new ColorLevel();
 
 		colorLevels = new ArrayList<>();
@@ -94,80 +96,9 @@ public class BatteryConfigManager {
 		colorLevels.add(level);
 
 	}
-
-	public BatteryConfigManager(String filePath) {
-
-		this.filePath = filePath;
-		ColorLevel level = new ColorLevel();
-
-		level.setColor("#FF5555");
-		level.setStartLevel(0);
-		level.setEndLevel(5);
-		colorLevels.add(level);
-
-		level = new ColorLevel();
-		level.setColor("#ffb86c");
-		level.setStartLevel(6);
-		level.setEndLevel(10);
-		colorLevels.add(level);
-
-		level = new ColorLevel();
-		level.setColor("#ffb86c");
-		level.setStartLevel(11);
-		level.setEndLevel(20);
-		colorLevels.add(level);
-
-		level = new ColorLevel();
-		level.setColor("#ffb86c");
-		level.setStartLevel(21);
-		level.setEndLevel(30);
-		colorLevels.add(level);
-
-		level = new ColorLevel();
-		level.setColor("#ffb86c");
-		level.setStartLevel(31);
-		level.setEndLevel(40);
-		colorLevels.add(level);
-
-		level = new ColorLevel();
-		level.setColor("#ffb86c");
-		level.setStartLevel(41);
-		level.setEndLevel(50);
-		colorLevels.add(level);
-
-		level = new ColorLevel();
-		level.setColor("#ffb86c");
-		level.setStartLevel(51);
-		level.setEndLevel(60);
-		colorLevels.add(level);
-
-		level = new ColorLevel();
-		level.setColor("#ffb86c");
-		level.setStartLevel(61);
-		level.setEndLevel(70);
-		colorLevels.add(level);
-
-		level = new ColorLevel();
-		level.setColor("#ffb86c");
-		level.setStartLevel(71);
-		level.setEndLevel(80);
-		colorLevels.add(level);
-
-		level = new ColorLevel();
-		level.setColor("#ffb86c");
-		level.setStartLevel(81);
-		level.setEndLevel(90);
-		colorLevels.add(level);
-
-		level = new ColorLevel();
-		level.setColor("#50fa7b");
-		level.setStartLevel(91);
-		level.setEndLevel(100);
-		colorLevels.add(level);
-	}
-
+	
 	// Reads the config file and returns true if read was successful
-	public boolean read() {
+	public boolean read(Context context) {
 
 		try {
 
@@ -262,7 +193,7 @@ public class BatteryConfigManager {
 			// The TAG and the Exception are sets
 			ErrorHandler handler = new ErrorHandler(TAG, e);
 			// The prepared packet is written to the log file
-			handler.toFile();
+			handler.toFile(context);
 
 			return false;
 
@@ -271,7 +202,7 @@ public class BatteryConfigManager {
 	}
 
 	// this method saves the file
-	public boolean save() {
+	public void save(Context context) {
 
 		try {
 
@@ -321,9 +252,7 @@ public class BatteryConfigManager {
 
 			// Closes the writer
 			writer.close();
-
-			return true;
-
+			
 		} catch (Exception e) {
 
 			// If an error is thrown the error is handled by the ErrorHandler util
@@ -331,10 +260,8 @@ public class BatteryConfigManager {
 			// The TAG and the Exception are sets
 			ErrorHandler handler = new ErrorHandler(TAG, e);
 			// The prepared packet is written to the log file
-			handler.toFile();
-
-			return false;
-
+			handler.toFile(context);
+			
 		}
 
 	}
@@ -374,14 +301,7 @@ public class BatteryConfigManager {
 		return colorLevels;
 
 	}
-
-	// Returns [string] the path to the file where the color settings are saved
-	public String getFilePath() {
-
-		return filePath;
-
-	}
-
+	
 	// Sets the isLinear property
 	public void setLinear(boolean linear) {
 
@@ -416,12 +336,5 @@ public class BatteryConfigManager {
 		this.colorLevels = colorLevels;
 
 	}
-
-	// Sets the path for the file where the color settings are saved
-	public void setFilePath(String filePath) {
-
-		this.filePath = filePath;
-
-	}
-
+	
 }

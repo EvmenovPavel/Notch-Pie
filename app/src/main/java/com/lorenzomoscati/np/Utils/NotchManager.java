@@ -1,5 +1,7 @@
 package com.lorenzomoscati.np.Utils;
 
+import android.content.Context;
+
 import com.lorenzomoscati.np.Constants.ConstantHolder;
 
 import java.io.BufferedReader;
@@ -25,20 +27,14 @@ public class NotchManager {
 	private String filePath;
 
 	// Requests to the ConstantHolder the path to where the file where the settings are written
-	public NotchManager() {
+	public NotchManager(Context context) {
 
-		filePath = new ConstantHolder().getConfigFilePathInternal();
-
-	}
-
-	public NotchManager(String filePath) {
-
-		this.filePath = filePath;
+		filePath = new ConstantHolder().getConfigFilePathInternal(context);
 
 	}
-
+	
 	// Reads the config file and returns true if read was successful
-	public boolean read() {
+	public boolean read(Context context) {
 
 		try {
 
@@ -136,7 +132,7 @@ public class NotchManager {
 			// The TAG and the Exception are sets
 			ErrorHandler handler = new ErrorHandler(TAG, e);
 			// The prepared packet is written to the log file
-			handler.toFile();
+			handler.toFile(context);
 
 			return false;
 
@@ -145,7 +141,7 @@ public class NotchManager {
 	}
 
 	// This method saves the file
-	public boolean save() {
+	public void save(Context context) {
 
 		try {
 
@@ -175,9 +171,7 @@ public class NotchManager {
 
 			// Closes the writer
 			writer.close();
-
-			return true;
-
+			
 		} catch (Exception e) {
 
 			// If an error is thrown the error is handled by the ErrorHandler util
@@ -185,10 +179,8 @@ public class NotchManager {
 			// The TAG and the Exception are sets
 			ErrorHandler handler = new ErrorHandler(TAG, e);
 			// The prepared packet is written to the log file
-			handler.toFile();
-
-			return false;
-
+			handler.toFile(context);
+			
 		}
 
 	}
@@ -258,16 +250,8 @@ public class NotchManager {
 		this.yPositionLandscape = yPositionLandscape;
 
 	}
-
-	// Sets the path to the file where the settings are saved
-	public void setFilePath(String filePath) {
-
-		this.filePath = filePath;
-
-	}
-
-
-
+	
+	
 	// Getters
 	// Returns [int] the height
 	public int getHeight() {
@@ -331,19 +315,5 @@ public class NotchManager {
 		return yPositionLandscape;
 
 	}
-
-	// Returns [string] the TAG for the errorHandler
-	public String getTAG() {
-
-		return TAG;
-
-	}
-
-	// Returns [string] the path to the file where the settings are saved
-	public String getFilePath() {
-
-		return filePath;
-
-	}
-
+	
 }

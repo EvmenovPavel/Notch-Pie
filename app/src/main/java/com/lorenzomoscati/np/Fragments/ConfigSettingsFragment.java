@@ -40,7 +40,7 @@ public class ConfigSettingsFragment extends Fragment {
 	// Initializes the method to call the settings manager's methods
 	private void init() {
 
-		manager = new SettingsManager();
+		manager = new SettingsManager(getContext());
 
 	}
 
@@ -51,7 +51,7 @@ public class ConfigSettingsFragment extends Fragment {
 		Switch fullStatus = parent.findViewById(R.id.switchFullStatus);
 		final Switch showBackground = parent.findViewById(R.id.switchShowBackground);
 		Switch chargingAnimation = parent.findViewById(R.id.switchCharging);
-		Switch landscapeSupprt = parent.findViewById(R.id.switchLandscape);
+		Switch landscapeSupport = parent.findViewById(R.id.switchLandscape);
 
 		// Views
 		View showBackgroundColor = parent.findViewById(R.id.viewTouchShowBackground);
@@ -60,12 +60,12 @@ public class ConfigSettingsFragment extends Fragment {
 		final TextView backgroundColorText = parent.findViewById(R.id.txBackgroundColor);
 
 		// If the read is successful, sets the values to be shown
-		if (manager.read()) {
+		if (manager.read(getContext())) {
 
 			fullStatus.setChecked(manager.isFullStatus());
 			showBackground.setChecked(manager.isShowBackground());
 			chargingAnimation.setChecked(manager.isChargingAnimation());
-			backgroundColorText.setText(new String("Current Color : " + manager.getBackgroundColor()));
+			backgroundColorText.setText(String.format("Current Color : %s", manager.getBackgroundColor()));
 
 		}
 
@@ -79,7 +79,7 @@ public class ConfigSettingsFragment extends Fragment {
 				// Changes the status
 				manager.setFullStatus(isChecked);
 				// Saves the configuration
-				manager.save();
+				manager.save(getContext());
 
 			}
 
@@ -93,8 +93,8 @@ public class ConfigSettingsFragment extends Fragment {
 
 				// Changes the status
 				manager.setShowBackground(isChecked);
-				// Saves the configuraiton
-				manager.save();
+				// Saves the configuration
+				manager.save(getContext());
 
 			}
 
@@ -109,14 +109,14 @@ public class ConfigSettingsFragment extends Fragment {
 				// Changes the status
 				manager.setChargingAnimation(isChecked);
 				// Saves the configuration
-				manager.save();
+				manager.save(getContext());
 
 			}
 
 		});
 
 		// Listener for landscapeSupport
-		landscapeSupprt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		landscapeSupport.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -124,7 +124,7 @@ public class ConfigSettingsFragment extends Fragment {
 				// Changes the status
 				manager.setLandscapeSupport(isChecked);
 				// Saves the configuration
-				manager.save();
+				manager.save(getContext());
 
 			}
 
@@ -145,9 +145,9 @@ public class ConfigSettingsFragment extends Fragment {
 						// Sets the background color
 						manager.setBackgroundColor(color);
 						// Saves the configuration
-						manager.save();
+						manager.save(getContext());
 						// Updates the string shown in the fragment
-						backgroundColorText.setText(new String("Current Color : " + color));
+						backgroundColorText.setText(String.format("Current Color : %s", color));
 
 					}
 
