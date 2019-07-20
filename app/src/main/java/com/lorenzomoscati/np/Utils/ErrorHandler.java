@@ -15,8 +15,8 @@ import java.util.Date;
 // Saved the error to a file for proper analysis
 class ErrorHandler {
 
-	private String tag;
-	private Exception exception;
+	private final String tag;
+	private final Exception exception;
 	
 	// Method to set the TAG and the Exception
 	ErrorHandler(String tag, Exception exception) {

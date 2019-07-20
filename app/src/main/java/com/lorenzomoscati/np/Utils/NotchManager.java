@@ -24,7 +24,7 @@ public class NotchManager {
 				yPositionPortrait = 0,
 				xPositionLandscape = 0,
 				yPositionLandscape = 0;
-	private String filePath;
+	private final String filePath;
 
 	// Requests to the ConstantHolder the path to where the file where the settings are written
 	public NotchManager(Context context) {

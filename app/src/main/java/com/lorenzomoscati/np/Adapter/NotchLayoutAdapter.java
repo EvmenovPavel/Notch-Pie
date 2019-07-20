@@ -26,12 +26,12 @@ public class NotchLayoutAdapter extends RecyclerView.Adapter<NotchLayoutAdapter.
 
 
 	// Array list of items for colors
-	private ArrayList<NotchItem> list;
+	private final ArrayList<NotchItem> list;
 	// onClick listener for the color items/levels
-	private NotchStyleTouchListener listener;
+	private final NotchStyleTouchListener listener;
 
 	// Parametrized constructor
-	public NotchLayoutAdapter(Context context, ArrayList<NotchItem> list, NotchStyleTouchListener listener) {
+	public NotchLayoutAdapter(@SuppressWarnings("unused") Context context, ArrayList<NotchItem> list, NotchStyleTouchListener listener) {
 
 		// Required items
 		// UI context
@@ -99,9 +99,9 @@ public class NotchLayoutAdapter extends RecyclerView.Adapter<NotchLayoutAdapter.
 	class ViewHolder extends RecyclerView.ViewHolder {
 
 		// Defining the variable items of the item view
-		ImageView notch;
-		View touch;
-		TextView title;
+		final ImageView notch;
+		final View touch;
+		final TextView title;
 
 		ViewHolder(@NonNull View itemView) {
 

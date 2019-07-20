@@ -12,7 +12,7 @@ import com.lorenzomoscati.np.Fragments.NotchSettingsFragment;
 
 public class SectionsPageAdapter extends FragmentPagerAdapter {
 
-	private String[] titles;
+	private final String[] titles;
 
 	public SectionsPageAdapter(FragmentManager fm, String[] titles) {
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.lorenzomoscati.np">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -17,18 +18,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:fullBackupContent="true">
-        <activity android:name="com$lorenzomoscati$np$Activity.MainActivity">
+        <activity android:name="com.lorenzomoscati.np.Activity.MainActivity"
+            tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com$lorenzomoscati$np$Activity.TabbedActivity" />
+        <activity android:name="com.lorenzomoscati.np.Activity.TabbedActivity"
+            tools:ignore="InnerclassSeparator" />
 
         <service
-            android:name="com$lorenzomoscati$np$Service.OverlayAccessibilityService"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            android:name="com.lorenzomoscati.np.Service.OverlayAccessibilityService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>

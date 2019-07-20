@@ -43,8 +43,8 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 
 	}
 
-	private String[] amounts = {"$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10"};
-	private String[] amount_id = {"one_dollar", "two_dollar", "three_dollars", "four_dollar", "five_dollars", "six_dollars", "seven_dollar", "eight_dollars", "nine_dollars", "ten_dollars"};
+	private final String[] amounts = {"$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10"};
+	private final String[] amount_id = {"one_dollar", "two_dollar", "three_dollars", "four_dollar", "five_dollars", "six_dollars", "seven_dollar", "eight_dollars", "nine_dollars", "ten_dollars"};
 	private List<SkuDetails> detailsList = null;
 
 	private int current = 0;
@@ -68,7 +68,7 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 			public void onClick(View v) {
 
 				// Prepare the link to be opened
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://forum.xda-developers.com/redmi-note-7-pro/themes/app-notch-pie-ring-overlay-to-battery-t3917168"));
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.XDA_thread_URL)));
 
 				// Opens the link
 				startActivity(browserIntent);
@@ -84,7 +84,7 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 			public void onClick(View v) {
 
 				// Prepare the link to be opened
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/notchpie"));
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.Telegram_group_URL)));
 
 				// Opens the link
 				startActivity(browserIntent);
@@ -100,7 +100,7 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 			public void onClick(View v) {
 
 				// Prepare the link to be opened
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Fly7113/Notch-Pie"));
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.GitHub_repository_URL)));
 
 				// Opens the link
 				startActivity(browserIntent);
@@ -119,7 +119,7 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 				AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		
 				// Sets the title
-				builder.setTitle("Choose Amount");
+				builder.setTitle(R.string.donation_title);
 		
 				// Applies listener
 				builder.setSingleChoiceItems(amounts, 0, new DialogInterface.OnClickListener() {
@@ -133,7 +133,7 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 			
 				});
 				
-				builder.setPositiveButton("Donate", new DialogInterface.OnClickListener() {
+				builder.setPositiveButton(R.string.donation_confirm, new DialogInterface.OnClickListener() {
 			
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -149,7 +149,7 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 							
 							catch (IndexOutOfBoundsException ignored) {
 								
-								Toast.makeText(getContext(), "Index out of bound exception, please try again later", Toast.LENGTH_LONG).show();
+								Toast.makeText(getContext(), R.string.donation_error, Toast.LENGTH_LONG).show();
 								
 							}
 
@@ -158,7 +158,7 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 				
 						else {
 					
-							Toast.makeText(getContext(), "Please Try Again Later :(", Toast.LENGTH_SHORT).show();
+							Toast.makeText(getContext(), R.string.billing_error, Toast.LENGTH_SHORT).show();
 					
 						}
 				
@@ -190,7 +190,7 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 				// If the billing client is successful the data is loaded
 				if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
 
-					Toast.makeText(getContext(), "Connected to Billing Service", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getContext(), R.string.billing_connected, Toast.LENGTH_SHORT).show();
 					loadData();
 
 				}
@@ -208,7 +208,7 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 			public void onBillingServiceDisconnected() {
 
 				// If the service is disconnected, the user is notified via a toast
-				Toast.makeText(getContext(), "Disconnected from billing service.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getContext(), R.string.billing_disconnected, Toast.LENGTH_SHORT).show();
 
 			}
 
@@ -222,7 +222,7 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 		if (purchases != null && purchases.size() > 0) {
 
 			// If the purchase has successfully happened the user is greeted
-			Toast.makeText(getContext(), "YOU'RE THE BEST!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getContext(), R.string.donation_thanks, Toast.LENGTH_SHORT).show();
 
 		}
 
@@ -256,7 +256,7 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 
 		else {
 
-			Toast.makeText(getContext(), "Client not ready.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getContext(), R.string.billing_notReady, Toast.LENGTH_SHORT).show();
 
 		}
 

@@ -11,7 +11,7 @@ import com.lorenzomoscati.np.Interface.OnBatteryLevelChanged;
 public class BatteryBroadcastReceiver extends BroadcastReceiver {
 
 	// Interface
-	private OnBatteryLevelChanged onBatteryChangedInterface;
+	private final OnBatteryLevelChanged onBatteryChangedInterface;
 
 	// Constructor
 	public BatteryBroadcastReceiver(OnBatteryLevelChanged onBatteryChangedInterface) {

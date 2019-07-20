@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,7 +11,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:text="Notch Pie v2.5.1"
+        android:text="@string/app_version"
         android:textColor="@color/colorTextDark"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +88,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
-                android:text="XDA Thread"
+                android:text="@string/XDA_thread"
                 android:textColor="@color/colorTextLight"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -132,7 +131,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
-                android:text="Telegram Group"
+                android:text="@string/Telegram_group"
                 android:textColor="@color/colorPrimaryDark"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -174,7 +173,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="4dp"
-                android:text="Created By"
+                android:text="@string/created_by"
                 android:textColor="@color/colorTextDark"
 
                 app:layout_constraintEnd_toStartOf="@+id/imageView3"
@@ -189,7 +188,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="Fly7113"
+                android:text="@string/Fly7113"
                 app:layout_constraintBottom_toTopOf="@+id/textView91"
                 app:layout_constraintEnd_toStartOf="@+id/imageView3"
                 app:layout_constraintStart_toStartOf="parent"
@@ -203,7 +202,8 @@
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView33"
-                app:srcCompat="@mipmap/ic_me_foreground" />
+                app:srcCompat="@mipmap/ic_me_foreground"
+                android:contentDescription="@string/fly7113_logo" />
 
             <TextView
                 android:id="@+id/textView91"
@@ -213,7 +213,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="oddlyspaced (discontinued)"
+                android:text="@string/oddlyspaced_discontinued"
                 app:layout_constraintBottom_toTopOf="@+id/view20"
                 app:layout_constraintEnd_toStartOf="@+id/imageView4"
                 app:layout_constraintStart_toStartOf="parent"
@@ -227,7 +227,8 @@
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView3"
-                app:srcCompat="@mipmap/ic_me_foreground" />
+                app:srcCompat="@mipmap/ic_me_foreground"
+                android:contentDescription="@string/oddlyspaced_logo" />
 
             <View
                 android:id="@+id/view20"
@@ -246,7 +247,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Source Code"
+                android:text="@string/source"
                 android:textColor="@color/colorTextDark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -259,7 +260,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:text="https://github.com/Fly7113/Notch-Pie"
+                android:text="@string/GitHub_repository_URL"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView34" />
@@ -281,7 +282,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Donate"
+                android:text="@string/donate_title"
                 android:textColor="@color/colorTextDark"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view19" />
@@ -293,7 +294,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:text="Like the app? Want to support development? Have some dollars burning a hole in your pocket? Or just want to donate?\nChoose the amount you want and donate! Thanks!!"
+                android:text="@string/donate_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView38" />
@@ -333,7 +334,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="4dp"
-                        android:text="Donate"
+                        android:text="@string/donate_title"
                         android:textColor="@color/colorTextLight"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

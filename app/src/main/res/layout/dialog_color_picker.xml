@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="Red"
+            android:text="@string/dialog_picker_red"
             android:textColor="@color/colorTextDark"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="Green"
+            android:text="@string/dialog_picker_green"
             android:textColor="@color/colorTextDark"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sbRed" />
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="Blue"
+            android:text="@string/dialog_picker_blue"
             android:textColor="@color/colorTextDark"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sbGreen" />
@@ -108,14 +108,16 @@
             android:layout_marginBottom="16dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="#FFFFFF"
+            android:text="@string/white"
             android:textAlignment="center"
             android:textColor="@color/colorTextDark"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sbBlue" />
+            app:layout_constraintTop_toBottomOf="@+id/sbBlue"
+			android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

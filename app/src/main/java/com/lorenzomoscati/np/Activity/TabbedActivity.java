@@ -3,7 +3,6 @@ package com.lorenzomoscati.np.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.Context;
 import android.content.Intent;
@@ -31,7 +30,7 @@ import java.util.Objects;
 public class TabbedActivity extends AppCompatActivity {
 	
 	private ViewPager viewPager;
-	private final String[] titles = {"Notch Settings", "Config Settings", "Battery Level Settings", "About"};
+	private final String[] titles = {getString(R.string.title_notch), getString(R.string.title_config), getString(R.string.title_battery), getString(R.string.title_about)};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +76,7 @@ public class TabbedActivity extends AppCompatActivity {
 			
 			if (!success) {
 				
-				Toast.makeText(getApplicationContext(), "Folder creation was unsuccessful", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), R.string.folderCreationSucc, Toast.LENGTH_SHORT).show();
 				
 			}
 
@@ -91,7 +90,7 @@ public class TabbedActivity extends AppCompatActivity {
 			
 			if (!success) {
 				
-				Toast.makeText(getApplicationContext(), "Folder creation was unsuccessful", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), R.string.folderCreationUnsucc, Toast.LENGTH_SHORT).show();
 				
 			}
 
@@ -122,10 +121,10 @@ public class TabbedActivity extends AppCompatActivity {
 		if (!checkServiceOn()) {
 
 			// Sets the title and length (infinite)
-			Snackbar bar = Snackbar.make(viewPager, "Please turn overlay service on!", Snackbar.LENGTH_INDEFINITE);
+			Snackbar bar = Snackbar.make(viewPager, getString(R.string.turnServiceOn), Snackbar.LENGTH_INDEFINITE);
 
 			// Sets the button to enable it
-			bar.setAction("Enable", new View.OnClickListener() {
+			bar.setAction(getString(R.string.enable), new View.OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
@@ -161,12 +160,12 @@ public class TabbedActivity extends AppCompatActivity {
 	// Method that returns true if the accessibility service is turned on
 	private boolean checkServiceOn() {
 
-		return isAccessibilityServiceEnabled(getApplicationContext(), OverlayAccessibilityService.class);
+		return isAccessibilityServiceEnabled(getApplicationContext());
 
 	}
 
 	// Method that checks the status of the accessibility service
-	public static boolean isAccessibilityServiceEnabled(Context context, Class<? extends AccessibilityService> service) {
+	private static boolean isAccessibilityServiceEnabled(Context context) {
 
 		// Defines an array in which are contained the services turned on
 		AccessibilityManager am = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
@@ -179,7 +178,7 @@ public class TabbedActivity extends AppCompatActivity {
 			ServiceInfo enabledServiceInfo = enabledService.getResolveInfo().serviceInfo;
 
 			// Checks if the service is our service
-			if (enabledServiceInfo.packageName.equals(context.getPackageName()) && enabledServiceInfo.name.equals(service.getName())) {
+			if (enabledServiceInfo.packageName.equals(context.getPackageName()) && enabledServiceInfo.name.equals(OverlayAccessibilityService.class.getName())) {
 
 				return true;
 

@@ -32,7 +32,7 @@ public class ColorPicker extends AppCompatDialogFragment {
 	private SeekBar blue;
 
 	// Listener to handle color picker changes
-	private ColorPickerListener listener;
+	private final ColorPickerListener listener;
 
 	// Color preview View
 	private View dColor;
@@ -72,7 +72,7 @@ public class ColorPicker extends AppCompatDialogFragment {
 
 		builder.setView(view);
 
-		builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+		builder.setPositiveButton(R.string.dialog_positive, new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -196,7 +196,7 @@ public class ColorPicker extends AppCompatDialogFragment {
 				} catch (Exception e) {
 
 					// If the color string is not valid, the user is notified
-					Toast.makeText(getContext(), "Invalid Color!", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getContext(), R.string.color_invalid, Toast.LENGTH_SHORT).show();
 
 				}
 

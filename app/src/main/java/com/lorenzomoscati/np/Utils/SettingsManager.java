@@ -20,7 +20,7 @@ public class SettingsManager {
 					chargingAnimation = false,
 					landscapeSupport = false;
 	private String backgroundColor = "#000000";
-	private String filePath;
+	private final String filePath;
 
 	// Requests to the ConstantHolder the path to where the file where the settings are written
 	public SettingsManager(Context context) {

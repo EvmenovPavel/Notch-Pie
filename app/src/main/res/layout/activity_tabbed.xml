@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:autoSizeTextType="uniform"
-                android:text="Notch Pie"
+                android:text="@string/app_name"
                 android:textColor="@color/colorTextDark"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"

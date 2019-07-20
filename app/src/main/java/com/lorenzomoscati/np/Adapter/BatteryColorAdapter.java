@@ -21,13 +21,13 @@ public class BatteryColorAdapter extends RecyclerView.Adapter<BatteryColorAdapte
 
 	// Required items
 	// Array list of items for colors
-	private ArrayList<ColorLevel> list;
+	private final ArrayList<ColorLevel> list;
 
 	// onClick listener for the color items/levels
-	private OnTouchColorLevel listener;
+	private final OnTouchColorLevel listener;
 
 	// Parametrized constructor
-	public BatteryColorAdapter(Context context, ArrayList<ColorLevel> list, OnTouchColorLevel listener) {
+	public BatteryColorAdapter(@SuppressWarnings("unused") Context context, ArrayList<ColorLevel> list, OnTouchColorLevel listener) {
 
 		this.list = list;
 		this.listener = listener;
@@ -93,8 +93,10 @@ public class BatteryColorAdapter extends RecyclerView.Adapter<BatteryColorAdapte
 	class ViewHolder extends RecyclerView.ViewHolder {
 
 		// Defining the modifiable items of the item view
-		TextView start, end;
-		View color, touch;
+		final TextView start;
+		final TextView end;
+		final View color;
+		final View touch;
 
 		ViewHolder(@NonNull View itemView) {
 

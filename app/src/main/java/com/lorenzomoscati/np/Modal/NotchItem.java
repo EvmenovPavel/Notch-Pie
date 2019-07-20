@@ -2,8 +2,12 @@ package com.lorenzomoscati.np.Modal;
 
 public class NotchItem {
 
-	private int height, width, size, topRadius, bottomRadius;
-	private String title;
+	private final int height;
+	private final int width;
+	private final int size;
+	private final int topRadius;
+	private final int bottomRadius;
+	private final String title;
 
 	// Method to contain a notch preset
 	public NotchItem(int height, int width, int size, int topRadius, int bottomRadius, String title) {

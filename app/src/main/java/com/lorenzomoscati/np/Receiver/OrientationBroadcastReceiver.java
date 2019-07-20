@@ -11,7 +11,7 @@ import com.lorenzomoscati.np.Interface.OnRotate;
 public class OrientationBroadcastReceiver extends BroadcastReceiver {
 
     // Interface
-    private OnRotate onRotateInterface;
+    private final OnRotate onRotateInterface;
 
     // Constructor
     public OrientationBroadcastReceiver(OnRotate onRotateInterface) {

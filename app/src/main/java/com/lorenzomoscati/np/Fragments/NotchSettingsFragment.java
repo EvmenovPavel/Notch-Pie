@@ -651,10 +651,10 @@ public class NotchSettingsFragment extends Fragment {
 		ArrayList<NotchItem> list = new ArrayList<>();
 
 		// Defines the notch presets array's elements
-		NotchItem rounded = new NotchItem(90, 1, 80, 0, 100, "Rounded");
-		NotchItem teardrop = new NotchItem(86, 1, 127, 71, 60, "Teardrop");
-		NotchItem mid = new NotchItem(92, 53, 125, 52, 100, "Medium");
-		NotchItem wide = new NotchItem(92, 53, 125, 52, 100, "Large");
+		NotchItem rounded = new NotchItem(90, 1, 80, 0, 100, getString(R.string.notchTitle_rounded));
+		NotchItem teardrop = new NotchItem(86, 1, 127, 71, 60, getString(R.string.notchTitle_teardrop));
+		NotchItem mid = new NotchItem(92, 53, 125, 52, 100, getString(R.string.notchTitle_Medium));
+		NotchItem wide = new NotchItem(92, 53, 125, 52, 100, getString(R.string.notchTitle_large));
 
 		// Adds these elements
 		list.add(rounded);

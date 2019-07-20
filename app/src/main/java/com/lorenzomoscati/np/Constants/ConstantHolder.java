@@ -11,8 +11,8 @@ public class ConstantHolder {
 		return "com.lorenzomoscati.np";
 
 	}
-
-
+	
+	
 
 	// Returns [string] the path of the internal folder where configurations are saved
 	public String getConfigFolderPathInternal(Context context) {
