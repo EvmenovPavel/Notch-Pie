@@ -753,9 +753,9 @@ public class OverlayAccessibilityService extends AccessibilityService {
 		String color1 = batteryManager.getLinearStart();
 		String color2 = batteryManager.getLinearEnd();
 		
-		float red1 = Float.parseFloat(color1.substring(1, 3)) / 255;
-		float green1 = Float.parseFloat(color1.substring(3, 5)) / 255;
-		float blue1 = Float.parseFloat(color1.substring(5)) / 255;
+		float red1 = (float) Integer.parseInt(color1.substring(1, 3), 16) / 255;
+		float green1 = (float) Integer.parseInt(color1.substring(3, 5), 16) / 255;
+		float blue1 = (float) Integer.parseInt(color1.substring(5), 16) / 255;
 		
 		float MAX1 = Math.max(Math.max(red1, green1), blue1);
 		float MIN1 = Math.min(Math.min(red1, green1), blue1);
@@ -811,9 +811,9 @@ public class OverlayAccessibilityService extends AccessibilityService {
 		
 		
 		
-		float red2 = Float.parseFloat(color2.substring(1, 3)) / 255;
-		float green2 = Float.parseFloat(color2.substring(3, 5)) / 255;
-		float blue2 = Float.parseFloat(color2.substring(5)) / 255;
+		float red2 = (float) Integer.parseInt(color2.substring(1, 3), 16) / 255;
+		float green2 = (float) Integer.parseInt(color2.substring(3, 5), 16) / 255;
+		float blue2 = (float )Integer.parseInt(color2.substring(5), 16) / 255;
 		
 		float MAX2 = Math.max(Math.max(red2, green2), blue2);
 		float MIN2 = Math.min(Math.min(red2, green2), blue2);
