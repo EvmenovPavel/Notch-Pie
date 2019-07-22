@@ -46,7 +46,7 @@
             android:id="@+id/view18"
             android:layout_width="180dp"
             android:layout_height="180dp"
-            android:background="@mipmap/ic_launcher_foreground"
+            android:background="@mipmap/ic_launcher"
             app:layout_constraintBottom_toBottomOf="@+id/view17"
             app:layout_constraintEnd_toEndOf="@+id/view17"
             app:layout_constraintStart_toStartOf="@+id/view17"
