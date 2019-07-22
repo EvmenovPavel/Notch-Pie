@@ -44,7 +44,7 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 	}
 
 	private final String[] amounts = {"$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9", "$10"};
-	private final String[] amount_id = {"one_dollar", "two_dollar", "three_dollars", "four_dollar", "five_dollars", "six_dollars", "seven_dollar", "eight_dollars", "nine_dollars", "ten_dollars"};
+	private final String[] amount_id = {"one_dollar", "two_dollar", "three_dollar", "four_dollar", "five_dollar", "six_dollar", "seven_dollar", "eight_dollar", "nine_dollar", "ten_dollar"};
 	private List<SkuDetails> detailsList = null;
 
 	private int current = 0;
