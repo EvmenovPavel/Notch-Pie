@@ -30,11 +30,10 @@ import java.util.Objects;
 public class TabbedActivity extends AppCompatActivity {
 	
 	private ViewPager viewPager;
-	private final String[] titles = {getString(R.string.title_notch), getString(R.string.title_config), getString(R.string.title_battery), getString(R.string.title_about)};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
+		
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_tabbed);
@@ -57,6 +56,8 @@ public class TabbedActivity extends AppCompatActivity {
 
 	private void init() {
 		
+		final String[] titles = {getString(R.string.title_notch), getString(R.string.title_config), getString(R.string.title_battery), getString(R.string.title_about)};
+		
 		TabLayout tabLayout = findViewById(R.id.tabs);
 		viewPager = findViewById(R.id.view_pager);
 		viewPager.setAdapter(new SectionsPageAdapter(getSupportFragmentManager(), titles));
@@ -70,13 +71,12 @@ public class TabbedActivity extends AppCompatActivity {
 		File folderInternal = new File(new ConstantHolder().getConfigFolderPathInternal(getApplicationContext()));
 		boolean success;
 		if (!folderInternal.exists()) {
-
 			
 			success = folderInternal.mkdirs();
 			
 			if (!success) {
 				
-				Toast.makeText(getApplicationContext(), R.string.folderCreationSucc, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), R.string.folderCreationUnsucc, Toast.LENGTH_SHORT).show();
 				
 			}
 

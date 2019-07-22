@@ -746,55 +746,255 @@ public class OverlayAccessibilityService extends AccessibilityService {
 		return c;
 	}
 
-	@SuppressLint("Range")
 	private int[] getColorArrayLinear(int battery, boolean isFullStatus) {
+		
 		int[] c = new int[181];
+		
 		String color1 = batteryManager.getLinearStart();
 		String color2 = batteryManager.getLinearEnd();
-		int red1 = Integer.parseInt(color1.substring(1, 3), 16);
-		int green1 = Integer.parseInt(color1.substring(3, 5), 16);
-		int blue1 = Integer.parseInt(color1.substring(5), 16);
-		int red2 = Integer.parseInt(color2.substring(1, 3), 16);
-		int green2 = Integer.parseInt(color2.substring(3, 5), 16);
-		int blue2 = Integer.parseInt(color2.substring(5), 16);
-
-		int red = Math.abs((int) ((red2 - red1) / 100.0) * battery);
-		int green = Math.abs((int) ((green2 - green1) / 100.0) * battery);
-		int blue = Math.abs((int) ((blue2 - blue1) / 100.0) * battery);
+		
+		float red1 = Float.parseFloat(color1.substring(1, 3)) / 255;
+		float green1 = Float.parseFloat(color1.substring(3, 5)) / 255;
+		float blue1 = Float.parseFloat(color1.substring(5)) / 255;
+		
+		float MAX1 = Math.max(Math.max(red1, green1), blue1);
+		float MIN1 = Math.min(Math.min(red1, green1), blue1);
+		
+		float H1;
+		float S1;
+		float V1;
+		
+		if (MAX1 == MIN1) {
+		
+			H1 = 0;
+		
+		}
+		
+		else if (MAX1 == red1) {
+			
+			H1 = 60 * ((green1 - blue1) / (MAX1 - MIN1));
+			
+		}
+		
+		else if (MAX1 == green1) {
+		
+			H1 = 60 * (2 + ((blue1 - red1) / (MAX1 - MIN1)));
+		
+		}
+		
+		else {
+			
+			H1 = 60 * (2 + ((red1 - green1) / (MAX1 - MIN1)));
+			
+		}
+		
+		if (H1 < 0) {
+			
+			H1 = H1 + 360;
+			
+		}
+		
+		
+		if (MAX1 == 0) {
+			
+			S1 = 0;
+			
+		}
+		
+		else {
+		
+			S1 = (MAX1 - MIN1) / MAX1;
+		
+		}
+		
+		V1 = MAX1;
+		
+		
+		
+		float red2 = Float.parseFloat(color2.substring(1, 3)) / 255;
+		float green2 = Float.parseFloat(color2.substring(3, 5)) / 255;
+		float blue2 = Float.parseFloat(color2.substring(5)) / 255;
+		
+		float MAX2 = Math.max(Math.max(red2, green2), blue2);
+		float MIN2 = Math.min(Math.min(red2, green2), blue2);
+		
+		float H2;
+		float S2;
+		float V2;
+		
+		if (MAX2 == MIN2) {
+			
+			H2 = 0;
+			
+		}
+		
+		else if (MAX2 == red2) {
+			
+			H2 = 60 * ((green2 - blue2) / (MAX2 - MIN2));
+			
+		}
+		
+		else if (MAX2 == green2) {
+			
+			H2 = 60 * (2 + ((blue2 - red2) / (MAX2 - MIN2)));
+			
+		}
+		
+		else {
+			
+			H2 = 60 * (2 + ((red2 - green2) / (MAX2 - MIN2)));
+			
+		}
+		
+		if (H2 < 0) {
+			
+			H2 = H2 + 360;
+			
+		}
+		
+		
+		if (MAX2 == 0) {
+			
+			S2 = 0;
+			
+		}
+		
+		else {
+			
+			S2 = (MAX2 - MIN2) / MAX2;
+			
+		}
+		
+		V2 = MAX2;
+		
+		
+		float hue = H1 * ((float) battery / 100) + H2 * (1 - ((float) battery / 100));
+		float saturation = S1 * ((float) battery / 100) + S2 * (1 - ((float) battery / 100));
+		float value = V1 * ((float) battery / 100) + V2 * (1 - ((float) battery / 100));
+		
+		
+		
+		float red = 255;
+		float green = 255;
+		float blue = 255;
+		
+		float chroma = saturation * value;
+		float x = chroma * (1 - Math.abs((hue / 60) % 2 - 1));
+		float m = value - chroma;
+		
+		if (hue >= 0 && hue < 60) {
+		
+			red = chroma;
+			green = x;
+			blue = 0;
+		
+		}
+		
+		else if (hue >= 60 && hue < 120) {
+		
+			red = x;
+			green = chroma;
+			blue = 0;
+		
+		}
+		
+		else if (hue >= 120 && hue < 180) {
+		
+			red = 0;
+			green = chroma;
+			blue = x;
+		
+		}
+		
+		else if (hue >= 180 && hue < 240) {
+		
+			red = 0;
+			green = x;
+			blue = chroma;
+		
+		}
+		
+		else if (hue >= 240 && hue < 300) {
+		
+			red = x;
+			green = 0;
+			blue = chroma;
+		
+		}
+		
+		else if (hue >= 300 && hue < 360) {
+		
+			red = chroma;
+			green = 0;
+			blue = x;
+		
+		}
+		
+		red = (red + m) * 255;
+		green = (green + m) * 255;
+		blue = (blue + m) * 255;
+		
+		
 
 		Log.e("RED", red + " " + green + blue);
 
-		String r = Integer.toString(red, 16);
+		String r = Integer.toString(Math.round(red), 16);
 		if (r.length() == 1)
 			r = "0" + r;
-		String g = Integer.toString(green, 16);
+		
+		String g = Integer.toString(Math.round(green), 16);
 		if (g.length() == 1)
 			g = "0" + g;
-		String b = Integer.toString(blue, 16);
+		
+		String b = Integer.toString(Math.round(blue), 16);
 		if (b.length() == 1)
 			b = "0" + b;
+		
 		String color = "#" + r + "" + g + "" + b;
-		if (isFullStatus) { // fill the overlay with one color
+		
+		if (isFullStatus) {
+			
+			// Fill the overlay with one color
 			for (int i = 0; i < 181; i++) {
+				
 				Log.e("color", color);
 				c[i] = Color.parseColor(color);
+				
 			}
 
-		} else { // need partially filler overlay
-			for (int i = 0; i < 181; i++)
+		} else {
+			
+			// First of all the array is filled with transparent color or background color
+			for (int i = 0; i < 181; i++) {
+				
 				c[i] = (settingsManager.isShowBackground()) ? Color.parseColor(settingsManager.getBackgroundColor()) : Color.TRANSPARENT;
+				
+			}
+			
+			// Then it's colored again to show the right battery level
 			for (ColorLevel item : batteryManager.getColorLevels()) {
+				
 				if (battery >= item.getStartLevel() && battery <= item.getEndLevel()) {
+					
 					int val = (int) ((battery / 100.0) * 180.0);
+					
 					for (int i = 0; i < val; i++) {
+						
 						Log.e("color", color);
 						c[i] = Color.parseColor(color);
+						
 					}
+					
 					break;
+					
 				}
+				
 			}
+			
 		}
+		
 		return c;
+		
 	}
 
 	// this method generates an evenly spread position point array

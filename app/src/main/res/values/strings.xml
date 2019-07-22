@@ -22,7 +22,6 @@
     <string name="alert_overlay_description">In order to show the overlay this app requires the permission to draw over other apps.</string>
     <string name="alert_overlay_title">Overlay Permission</string>
     <string name="alert_overlay_request">Please enable Notch Pie.</string>
-	<string name="folderCreationSucc">Folder creation was unsuccessful</string>
     <string name="folderCreationUnsucc">Folder creation was unsuccessful</string>
     <string name="turnServiceOn">Please turn overlay service on!</string>
     <string name="enable">Enable</string>

@@ -23,13 +23,14 @@ public class BatteryConfigManager {
 	private final String filePath;
 
 
+	
 	// Configs the default colors
 	public BatteryConfigManager(Context context) {
 
 		filePath = new ConstantHolder().getBatteryFilePathInternal(context);
-		ColorLevel level = new ColorLevel();
-
 		colorLevels = new ArrayList<>();
+		
+		ColorLevel level = new ColorLevel();
 		level.setColor("#FF5555");
 		level.setStartLevel(0);
 		level.setEndLevel(5);
