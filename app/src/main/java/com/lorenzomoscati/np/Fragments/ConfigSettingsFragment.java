@@ -65,7 +65,7 @@ public class ConfigSettingsFragment extends Fragment {
 			fullStatus.setChecked(manager.isFullStatus());
 			showBackground.setChecked(manager.isShowBackground());
 			chargingAnimation.setChecked(manager.isChargingAnimation());
-			backgroundColorText.setText(String.format("%s%s", getString(R.string.current_color), manager.getBackgroundColor()));
+			backgroundColorText.setText(String.format("%s %s", getString(R.string.current_color), manager.getBackgroundColor()));
 
 		}
 

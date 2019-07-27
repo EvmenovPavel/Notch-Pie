@@ -18,7 +18,7 @@ public class BatteryConfigManager {
 
 	private final String TAG = "BatteryConfigManager";
 	private boolean isLinear = false, isDefined = true;
-	private String linearStart = "#FF0000", linearEnd = "#00FF00";
+	private String linearStart = "#00FF00", linearEnd = "#FF0000";
 	private ArrayList<ColorLevel> colorLevels;
 	private final String filePath;
 
