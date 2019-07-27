@@ -654,7 +654,7 @@ public class NotchSettingsFragment extends Fragment {
 		NotchItem rounded = new NotchItem(90, 1, 80, 0, 100, getString(R.string.notchTitle_rounded));
 		NotchItem teardrop = new NotchItem(86, 1, 127, 71, 60, getString(R.string.notchTitle_teardrop));
 		NotchItem mid = new NotchItem(92, 53, 125, 52, 100, getString(R.string.notchTitle_Medium));
-		NotchItem wide = new NotchItem(92, 53, 125, 52, 100, getString(R.string.notchTitle_large));
+		NotchItem wide = new NotchItem(92, 212, 125, 52, 100, getString(R.string.notchTitle_large));
 
 		// Adds these elements
 		list.add(rounded);
