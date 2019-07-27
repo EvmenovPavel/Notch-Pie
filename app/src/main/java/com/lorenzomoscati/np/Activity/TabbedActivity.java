@@ -1,13 +1,18 @@
 package com.lorenzomoscati.np.Activity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ServiceInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
@@ -144,6 +149,30 @@ public class TabbedActivity extends AppCompatActivity {
 			bar.show();
 
 		}
+		
+		// If Doze is on for the app a snackBar is shown
+		else if (checkDozeOn()) {
+			
+			Snackbar bar = Snackbar.make(viewPager, "Please turn off battery optimization", Snackbar.LENGTH_INDEFINITE);
+			
+			bar.setAction("Disable", new View.OnClickListener() {
+				
+				@SuppressLint("BatteryLife")
+				@Override
+				public void onClick(View v) {
+					
+					Intent intent = new Intent();
+					intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+					intent.setData(Uri.parse("package:" + getPackageName()));
+					startActivity(intent);
+					
+				}
+				
+			});
+			
+			bar.show();
+			
+		}
 
 	}
 
@@ -162,6 +191,13 @@ public class TabbedActivity extends AppCompatActivity {
 
 		return isAccessibilityServiceEnabled(getApplicationContext());
 
+	}
+	
+	private boolean checkDozeOn() {
+		
+		PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+		return !Objects.requireNonNull(pm).isIgnoringBatteryOptimizations(getPackageName());
+	
 	}
 
 	// Method that checks the status of the accessibility service

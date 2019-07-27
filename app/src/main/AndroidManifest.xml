@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="com.android.vending.BILLING"/>
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
 
 
     <application
@@ -25,8 +26,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.lorenzomoscati.np.Activity.TabbedActivity"
-            tools:ignore="InnerclassSeparator" />
-
+            tools:ignore="InnerclassSeparator"/>
         <service
             android:name="com.lorenzomoscati.np.Service.OverlayAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
