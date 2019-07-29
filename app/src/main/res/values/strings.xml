@@ -97,4 +97,11 @@
     <string name="notch_shape">Notch shape</string>
     <string name="notch_title_def">TextView</string>
     <string name="notch">Notch</string>
+	<string name="battery_optimization">Please turn off battery optimization</string>
+    <string name="disable">Disable</string>
+	<string name="miui_note">Note for MIUI ROMs</string>
+    <string name="more_info">More Info</string>
+    <string name="overlay_disappearing">Overlay Disappearing</string>
+    <string name="understood">Understood</string>
+    <string name="overlay_disappearing_desc"><![CDATA[This is a common problem on MIUI. In order to not face this: configure the overlay and after doing it, close the Notch Pie app from recent apps and go to Settings > > Additional settings > Accessibility and then turn off and on again Notch Pie service.]]></string>
 </resources>

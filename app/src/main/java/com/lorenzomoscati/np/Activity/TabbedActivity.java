@@ -6,9 +6,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,6 +37,7 @@ import java.util.Objects;
 public class TabbedActivity extends AppCompatActivity {
 	
 	private ViewPager viewPager;
+	Context mContext;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,8 @@ public class TabbedActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_tabbed);
+		
+		mContext = this;
 
 		// Creates the configuration directories
 		createDirectories();
@@ -144,7 +149,7 @@ public class TabbedActivity extends AppCompatActivity {
 				}
 
 			});
-
+			
 			// Shows the bar
 			bar.show();
 
@@ -153,14 +158,17 @@ public class TabbedActivity extends AppCompatActivity {
 		// If Doze is on for the app a snackBar is shown
 		else if (checkDozeOn()) {
 			
-			Snackbar bar = Snackbar.make(viewPager, "Please turn off battery optimization", Snackbar.LENGTH_INDEFINITE);
+			// Sets the title and length (infinite)
+			Snackbar bar = Snackbar.make(viewPager, getString(R.string.battery_optimization), Snackbar.LENGTH_INDEFINITE);
 			
-			bar.setAction("Disable", new View.OnClickListener() {
+			// Sets the button to disable it
+			bar.setAction(getString(R.string.disable), new View.OnClickListener() {
 				
 				@SuppressLint("BatteryLife")
 				@Override
 				public void onClick(View v) {
 					
+					// Creates the intent to the settings page
 					Intent intent = new Intent();
 					intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
 					intent.setData(Uri.parse("package:" + getPackageName()));
@@ -170,8 +178,35 @@ public class TabbedActivity extends AppCompatActivity {
 				
 			});
 			
+			// Shows the bar
 			bar.show();
 			
+		}
+		
+		// If the app is running on MIUI a snackBar is shown
+		else if (checkMIUI(getApplicationContext())) {
+			
+			// Sets the title and length (infinite)
+			Snackbar bar = Snackbar.make(viewPager, getString(R.string.miui_note), Snackbar.LENGTH_INDEFINITE);
+			
+			bar.setAction(getString(R.string.more_info), new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+					new AlertDialog.Builder(mContext)
+							.setTitle(getString(R.string.overlay_disappearing))
+							.setMessage(getString(R.string.overlay_disappearing_desc))
+							.setPositiveButton(getString(R.string.understood), null)
+							.show();
+				
+				}
+				
+			});
+			
+			// Shows the bar
+			bar.show();
+		
 		}
 
 	}
@@ -198,6 +233,21 @@ public class TabbedActivity extends AppCompatActivity {
 		PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
 		return !Objects.requireNonNull(pm).isIgnoringBatteryOptimizations(getPackageName());
 	
+	}
+	
+	private boolean isIntentResolved(Context ctx, Intent intent ){
+		
+		return (intent!=null && ctx.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null);
+		
+	}
+	
+	private boolean checkMIUI(Context ctx) {
+		
+		return isIntentResolved(ctx, new Intent("miui.intent.action.OP_AUTO_START").addCategory(Intent.CATEGORY_DEFAULT))
+				|| isIntentResolved(ctx, new Intent().setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity")))
+				|| isIntentResolved(ctx, new Intent("miui.intent.action.POWER_HIDE_MODE_APP_LIST").addCategory(Intent.CATEGORY_DEFAULT))
+				|| isIntentResolved(ctx, new Intent().setComponent(new ComponentName("com.miui.securitycenter", "com.miui.powercenter.PowerSettings")));
+		
 	}
 
 	// Method that checks the status of the accessibility service

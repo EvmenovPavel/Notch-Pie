@@ -139,21 +139,10 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 					public void onClick(DialogInterface dialog, int which) {
 				
 						if (detailsList != null) {
-					
-							try {
 								
-								BillingFlowParams params = BillingFlowParams.newBuilder().setSkuDetails(detailsList.get(current)).build();
-								billingClient.launchBillingFlow(getActivity(), params);
-								
-							}
+							BillingFlowParams params = BillingFlowParams.newBuilder().setSkuDetails(detailsList.get(current)).build();
+							billingClient.launchBillingFlow(getActivity(), params);
 							
-							catch (IndexOutOfBoundsException ignored) {
-								
-								Toast.makeText(getContext(), R.string.donation_error, Toast.LENGTH_LONG).show();
-								
-							}
-
-					
 						}
 				
 						else {
@@ -190,17 +179,17 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 				// If the billing client is successful the data is loaded
 				if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
 
-					Toast.makeText(getContext(), R.string.billing_connected, Toast.LENGTH_SHORT).show();
+					//Toast.makeText(getContext(), R.string.billing_connected, Toast.LENGTH_SHORT).show();
 					loadData();
 
 				}
 
-				else {
+				/*else {
 
 					// If there is an error, a debug message is toasted
 					Toast.makeText(getContext(), billingResult.getDebugMessage(), Toast.LENGTH_SHORT).show();
 
-				}
+				}*/
 
 			}
 
@@ -208,7 +197,7 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 			public void onBillingServiceDisconnected() {
 
 				// If the service is disconnected, the user is notified via a toast
-				Toast.makeText(getContext(), R.string.billing_disconnected, Toast.LENGTH_SHORT).show();
+				//Toast.makeText(getContext(), R.string.billing_disconnected, Toast.LENGTH_SHORT).show();
 
 			}
 
@@ -240,7 +229,7 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 				@Override
 				public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> skuDetailsList) {
 
-					Toast.makeText(getContext(), skuDetailsList.size()+ " lol", Toast.LENGTH_SHORT).show();
+					//Toast.makeText(getContext(), skuDetailsList.size()+ " lol", Toast.LENGTH_SHORT).show();
 
 					if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
 
@@ -254,11 +243,11 @@ public class AboutFragment extends Fragment implements PurchasesUpdatedListener 
 
 		}
 
-		else {
+		/*else {
 
 			Toast.makeText(getContext(), R.string.billing_notReady, Toast.LENGTH_SHORT).show();
 
-		}
+		}*/
 
 	}
 
