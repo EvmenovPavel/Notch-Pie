@@ -1,187 +1,79 @@
 package com.lorenzomoscati.np.Utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.lorenzomoscati.np.Constants.ConstantHolder;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-
 // Handles data related to notch.
 public class NotchManager {
-
-	private final String TAG = "NotchManager";
-	private int height = 0,
-				width = 0,
-				notchSize = 0,
-				topRadius = 0,
-				bottomRadius = 0,
-				xPositionPortrait = 0,
-				yPositionPortrait = 0,
-				xPositionLandscape = 0,
-				yPositionLandscape = 0;
-	private final String filePath;
+	
+	private int height,
+				width,
+				notchSize,
+				topRadius,
+				bottomRadius,
+				xPositionPortrait,
+				yPositionPortrait,
+				xPositionLandscape,
+				yPositionLandscape;
+	private SharedPreferences preferences;
 
 	// Requests to the ConstantHolder the path to where the file where the settings are written
 	public NotchManager(Context context) {
-
-		filePath = new ConstantHolder().getConfigFilePathInternal(context);
+		
+		new ConstantHolder().getConfigFilePathInternal(context);
+		
+		preferences = context.getSharedPreferences("preferences", 0);
+		
+		height = preferences.getInt("height", 90);
+		width = preferences.getInt("width", 1);
+		notchSize = preferences.getInt("notch_size", 80);
+		topRadius = preferences.getInt("top_radius", 0);
+		bottomRadius = preferences.getInt("bottom_radius", 100);
+		xPositionPortrait = preferences.getInt("x_pos_port", 0);
+		yPositionPortrait = preferences.getInt("y_pos_port", 0);
+		xPositionLandscape = preferences.getInt("x_pos_land", 0);
+		yPositionLandscape = preferences.getInt("y_pos_land", 0);
 
 	}
 	
 	// Reads the config file and returns true if read was successful
 	public boolean read(Context context) {
-
-		try {
-
-			// Prepares to read the file
-			File dataFile = new File(filePath);
-
-			BufferedReader reader = new BufferedReader(new FileReader(dataFile));
-
-			while (true) {
-
-				// Initialize the line reader
-				String line = reader.readLine();
-
-				// If the line is empty (which means that the file is empty) breaks the loop and returns false (which means that the read of the config file is unsuccessful)
-				if (line == null) {
-
-					break;
-
-				}
-
-				// Reads the height
-				else if (line.startsWith("H:")) {
-
-					height = Integer.parseInt(line.substring(line.indexOf(":") + 1));
-
-				}
-
-				// Reads the width
-				else if (line.startsWith("W:")) {
-
-					width = Integer.parseInt(line.substring(line.indexOf(":") + 1));
-
-				}
-
-				// Reads the notchSize
-				else if (line.startsWith("NS:")) {
-
-					notchSize = Integer.parseInt(line.substring(line.indexOf(":") + 1));
-
-				}
-
-				// Reads the topRadius
-				else if (line.startsWith("TR:")) {
-
-					topRadius = Integer.parseInt(line.substring(line.indexOf(":") + 1));
-
-				}
-
-				// Reads the bottomRadius
-				else if (line.startsWith("BR:")) {
-
-					bottomRadius = Integer.parseInt(line.substring(line.indexOf(":") + 1));
-
-				}
-
-				// Reads the xPosition in portrait mode
-				else if (line.startsWith("XP:")) {
-
-					xPositionPortrait = Integer.parseInt(line.substring(line.indexOf(":") + 1));
-
-				}
-
-				// Reads the yPosition in portrait mode
-				else if (line.startsWith("YP:")) {
-
-					yPositionPortrait = Integer.parseInt(line.substring(line.indexOf(":") + 1));
-
-				}
-
-				// Reads the xPosition in landscape mode
-				else if (line.startsWith("XL:")) {
-
-					xPositionLandscape = Integer.parseInt(line.substring(line.indexOf(":") + 1));
-
-				}
-
-				// Reads the yPosition in landscape mode
-				else if (line.startsWith("YL:")) {
-
-					yPositionLandscape = Integer.parseInt(line.substring(line.indexOf(":") + 1));
-
-				}
-
-			}
-
-			// Closes the reader
-			reader.close();
-
-			return true;
-
-		} catch (Exception e) {
-
-			// If an error is thrown the error is handled by the ErrorHandler util
-
-			// The TAG and the Exception are sets
-			ErrorHandler handler = new ErrorHandler(TAG, e);
-			// The prepared packet is written to the log file
-			handler.toFile(context);
-
-			return false;
-
-		}
+		
+		preferences = context.getSharedPreferences("preferences", 0);
+		
+		height = preferences.getInt("height", 90);
+		width = preferences.getInt("width", 1);
+		notchSize = preferences.getInt("notch_size", 80);
+		topRadius = preferences.getInt("top_radius", 0);
+		bottomRadius = preferences.getInt("bottom_radius", 100);
+		xPositionPortrait = preferences.getInt("x_pos_port", 0);
+		yPositionPortrait = preferences.getInt("y_pos_port", 0);
+		xPositionLandscape = preferences.getInt("x_pos_land", 0);
+		yPositionLandscape = preferences.getInt("y_pos_land", 0);
+		
+		return true;
 
 	}
 
 	// This method saves the file
 	public void save(Context context) {
-
-		try {
-
-			// Prepares to write the file
-			File dataFile = new File(filePath);
-
-			PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(dataFile)));
-
-			// Writes the height
-			writer.println("H:" + height);
-			// Writes the width
-			writer.println("W:" + width);
-			// Writes the notchSize
-			writer.println("NS:" + notchSize);
-			// Writes the topRadius
-			writer.println("TR:" + topRadius);
-			// Writes the bottomRadius
-			writer.println("BR:" + bottomRadius);
-			// Writes the xPosition in portrait mode
-			writer.println("XP:" + xPositionPortrait);
-			// Writes the yPosition in portrait mode
-			writer.println("YP:" + yPositionPortrait);
-			// Writes the xPosition in landscape mode
-			writer.println("XL:" + xPositionLandscape);
-			// Writes the yPosition in landscape mode
-			writer.println("YL:" + yPositionLandscape);
-
-			// Closes the writer
-			writer.close();
-			
-		} catch (Exception e) {
-
-			// If an error is thrown the error is handled by the ErrorHandler util
-
-			// The TAG and the Exception are sets
-			ErrorHandler handler = new ErrorHandler(TAG, e);
-			// The prepared packet is written to the log file
-			handler.toFile(context);
-			
-		}
+		
+		preferences = context.getSharedPreferences("preferences", 0);
+		SharedPreferences.Editor editor = preferences.edit();
+		
+		editor.putInt("height", height);
+		editor.putInt("width", width);
+		editor.putInt("notch_size", notchSize);
+		editor.putInt("top_radius", topRadius);
+		editor.putInt("bottom_radius", bottomRadius);
+		editor.putInt("x_pos_port", xPositionPortrait);
+		editor.putInt("y_pos_port", yPositionPortrait);
+		editor.putInt("x_pos_land", xPositionLandscape);
+		editor.putInt("y_pos_land", yPositionLandscape);
+		
+		editor.apply();
 
 	}
 
