@@ -10,6 +10,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
 import android.net.Uri;
@@ -33,6 +34,7 @@ import com.lorenzomoscati.np.Utils.SettingsManager;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
+import java.util.prefs.PreferenceChangeEvent;
 
 public class TabbedActivity extends AppCompatActivity {
 	
@@ -186,26 +188,44 @@ public class TabbedActivity extends AppCompatActivity {
 		// If the app is running on MIUI a snackBar is shown
 		else if (checkMIUI(getApplicationContext())) {
 			
-			// Sets the title and length (infinite)
-			Snackbar bar = Snackbar.make(viewPager, getString(R.string.miui_note), Snackbar.LENGTH_INDEFINITE);
+			SharedPreferences preferences = getApplicationContext().getSharedPreferences("preferences", 0);
 			
-			bar.setAction(getString(R.string.more_info), new View.OnClickListener() {
+			final SharedPreferences.Editor editor = preferences.edit();
+			
+			if (!preferences.getBoolean("already_appeared_miui", false)) {
 				
-				@Override
-				public void onClick(View v) {
+				// Sets the title and length (infinite)
+				Snackbar bar = Snackbar.make(viewPager, getString(R.string.miui_note), Snackbar.LENGTH_INDEFINITE);
+				
+				bar.setAction(getString(R.string.more_info), new View.OnClickListener() {
 					
-					new AlertDialog.Builder(mContext)
-							.setTitle(getString(R.string.overlay_disappearing))
-							.setMessage(getString(R.string.overlay_disappearing_desc))
-							.setPositiveButton(getString(R.string.understood), null)
-							.show();
+					@Override
+					public void onClick(View v) {
+						
+						new AlertDialog.Builder(mContext)
+								.setTitle(getString(R.string.overlay_disappearing))
+								.setMessage(getString(R.string.overlay_disappearing_desc))
+								.setPositiveButton(getString(R.string.understood), new DialogInterface.OnClickListener() {
+									
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										
+										editor.putBoolean("already_appeared_miui", true);
+										editor.apply();
+										
+									}
+							
+								})
+								.show();
+						
+					}
+					
+				});
 				
-				}
+				// Shows the bar
+				bar.show();
 				
-			});
-			
-			// Shows the bar
-			bar.show();
+			}
 		
 		}
 
