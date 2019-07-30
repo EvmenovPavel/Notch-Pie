@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-import com.lorenzomoscati.np.Constants.ConstantHolder;
 import com.lorenzomoscati.np.Adapter.SectionsPageAdapter;
 import com.lorenzomoscati.np.R;
 import com.lorenzomoscati.np.Service.OverlayAccessibilityService;
@@ -31,10 +30,8 @@ import com.lorenzomoscati.np.Utils.BatteryConfigManager;
 import com.lorenzomoscati.np.Utils.NotchManager;
 import com.lorenzomoscati.np.Utils.SettingsManager;
 
-import java.io.File;
 import java.util.List;
 import java.util.Objects;
-import java.util.prefs.PreferenceChangeEvent;
 
 public class TabbedActivity extends AppCompatActivity {
 	
@@ -49,16 +46,8 @@ public class TabbedActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_tabbed);
 		
 		mContext = this;
-
-		// Creates the configuration directories
-		createDirectories();
-
-		// Creates the config files, if not already present
-		if (!checkConfigs()) {
-
-			createConfigs();
-
-		}
+		
+		createConfigs();
 
 		init();
 
@@ -77,39 +66,6 @@ public class TabbedActivity extends AppCompatActivity {
 
 	}
 
-	private void createDirectories() {
-
-		// Creates the internal folder, if it is not already present
-		File folderInternal = new File(new ConstantHolder().getConfigFolderPathInternal(getApplicationContext()));
-		boolean success;
-		if (!folderInternal.exists()) {
-			
-			success = folderInternal.mkdirs();
-			
-			if (!success) {
-				
-				Toast.makeText(getApplicationContext(), R.string.folderCreationUnsucc, Toast.LENGTH_SHORT).show();
-				
-			}
-
-		}
-
-		// Creates the external folder, if it is not already present
-		File folderExternal = new File(new ConstantHolder().getConfigFolderPathExternal(getApplicationContext()));
-		if (!folderExternal.exists()) {
-			
-			success = folderExternal.mkdirs();
-			
-			if (!success) {
-				
-				Toast.makeText(getApplicationContext(), R.string.folderCreationUnsucc, Toast.LENGTH_SHORT).show();
-				
-			}
-
-		}
-
-	}
-
 	// Creates the config files for each section, based on the results from the setting manager
 	private void createConfigs() {
 
@@ -118,14 +74,7 @@ public class TabbedActivity extends AppCompatActivity {
 		new NotchManager(getApplicationContext()).save(getApplicationContext());
 
 	}
-
-	// Checks if the config files are existing
-	private boolean checkConfigs() {
-
-		return new File(new ConstantHolder().getConfigFilePathInternal(getApplicationContext())).exists() && new File(new ConstantHolder().getSettingsFilePathInternal(getApplicationContext())).exists() && new File(new ConstantHolder().getBatteryFilePathInternal(getApplicationContext())).exists();
-
-	}
-
+	
 	// Checks if the accessibility service is turned on
 	private void makeServiceSnackbar() {
 

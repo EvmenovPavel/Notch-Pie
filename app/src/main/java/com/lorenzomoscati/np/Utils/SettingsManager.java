@@ -3,8 +3,6 @@ package com.lorenzomoscati.np.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.lorenzomoscati.np.Constants.ConstantHolder;
-
 // Handles data related to notch.
 public class SettingsManager {
 	
@@ -16,10 +14,7 @@ public class SettingsManager {
 	
 	private SharedPreferences preferences;
 
-	// Requests to the ConstantHolder the path to where the file where the settings are written
 	public SettingsManager(Context context) {
-		
-		new ConstantHolder().getSettingsFilePathInternal(context);
 		
 		preferences = context.getSharedPreferences("preferences", 0);
 		

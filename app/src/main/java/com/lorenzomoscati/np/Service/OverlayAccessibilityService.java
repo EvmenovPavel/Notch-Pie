@@ -28,7 +28,6 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 
-import com.lorenzomoscati.np.Constants.ConstantHolder;
 import com.lorenzomoscati.np.Interface.OnBatteryLevelChanged;
 import com.lorenzomoscati.np.Interface.OnRotate;
 import com.lorenzomoscati.np.Modal.ColorLevel;
@@ -41,8 +40,7 @@ import com.lorenzomoscati.np.Utils.NotchManager;
 
 // The Service class to show and handle the overlay
 public class OverlayAccessibilityService extends AccessibilityService {
-
-	private ConstantHolder constants;
+	
 	private WindowManager windowManager;
 	private View overlayView;
 
@@ -53,6 +51,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
 	private boolean isInApp = false;
 	private int batteryLevel;
 	private int currentRotation = Surface.ROTATION_0;
+	private static final String packageName = "com.lorenzomoscati.np";
 
 	// Executed when service started
 	@Override
@@ -98,7 +97,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
 
 					String activity = componentName.flattenToShortString();
 
-					if (activity.startsWith(constants.getPackageName())) {
+					if (activity.startsWith(packageName)) {
 
 						isInApp = true;
 
@@ -145,9 +144,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
 	// -- Handlers --
 	@SuppressLint("InflateParams")
 	private void init() {
-
-		constants = new ConstantHolder();
-
+		
 		// Getting the window manager
 		windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 

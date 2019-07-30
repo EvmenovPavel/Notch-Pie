@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.lorenzomoscati.np.Constants.ConstantHolder;
 import com.lorenzomoscati.np.Modal.ColorLevel;
 
 import java.util.ArrayList;
@@ -32,7 +31,6 @@ public class BatteryConfigManager {
 
 		preferences = context.getSharedPreferences("preferences", 0);
 		
-		new ConstantHolder().getBatteryFilePathInternal(context);
 		colorLevels = new ArrayList<>();
 		ColorLevel level;
 		
