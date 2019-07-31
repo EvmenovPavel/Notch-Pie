@@ -26,9 +26,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.lorenzomoscati.np.Adapter.SectionsPageAdapter;
 import com.lorenzomoscati.np.R;
 import com.lorenzomoscati.np.Service.OverlayAccessibilityService;
-import com.lorenzomoscati.np.Utils.BatteryConfigManager;
-import com.lorenzomoscati.np.Utils.NotchManager;
-import com.lorenzomoscati.np.Utils.SettingsManager;
 
 import java.util.List;
 import java.util.Objects;
@@ -47,8 +44,6 @@ public class TabbedActivity extends AppCompatActivity {
 		
 		mContext = this;
 		
-		createConfigs();
-
 		init();
 
 		makeServiceSnackbar();
@@ -63,15 +58,6 @@ public class TabbedActivity extends AppCompatActivity {
 		viewPager = findViewById(R.id.view_pager);
 		viewPager.setAdapter(new SectionsPageAdapter(getSupportFragmentManager(), titles));
 		tabLayout.setupWithViewPager(viewPager);
-
-	}
-
-	// Creates the config files for each section, based on the results from the setting manager
-	private void createConfigs() {
-
-		new SettingsManager(getApplicationContext()).save(getApplicationContext());
-		new BatteryConfigManager(getApplicationContext()).save(getApplicationContext());
-		new NotchManager(getApplicationContext()).save(getApplicationContext());
 
 	}
 	

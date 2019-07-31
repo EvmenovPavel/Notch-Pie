@@ -72,9 +72,7 @@ public class ConfigSettingsFragment extends Fragment {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
 				// Changes the status
-				manager.setFullStatus(isChecked);
-				// Saves the configuration
-				manager.save(getContext());
+				manager.setFullStatus(isChecked, getContext());
 
 			}
 
@@ -87,9 +85,7 @@ public class ConfigSettingsFragment extends Fragment {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
 				// Changes the status
-				manager.setShowBackground(isChecked);
-				// Saves the configuration
-				manager.save(getContext());
+				manager.setShowBackground(isChecked, getContext());
 
 			}
 
@@ -102,9 +98,7 @@ public class ConfigSettingsFragment extends Fragment {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
 				// Changes the status
-				manager.setChargingAnimation(isChecked);
-				// Saves the configuration
-				manager.save(getContext());
+				manager.setChargingAnimation(isChecked, getContext());
 
 			}
 
@@ -117,9 +111,7 @@ public class ConfigSettingsFragment extends Fragment {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
 				// Changes the status
-				manager.setLandscapeSupport(isChecked);
-				// Saves the configuration
-				manager.save(getContext());
+				manager.setLandscapeSupport(isChecked, getContext());
 
 			}
 
@@ -138,9 +130,7 @@ public class ConfigSettingsFragment extends Fragment {
 					public void onColorSet(String color) {
 
 						// Sets the background color
-						manager.setBackgroundColor(color);
-						// Saves the configuration
-						manager.save(getContext());
+						manager.setBackgroundColor(color, getContext());
 						// Updates the string shown in the fragment
 						backgroundColorText.setText(String.format("%s%s", getString(R.string.current_color), color));
 

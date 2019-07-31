@@ -156,11 +156,6 @@ public class OverlayAccessibilityService extends AccessibilityService {
 		settingsManager = new SettingsManager(getApplicationContext());
 		batteryManager = new BatteryConfigManager(getApplicationContext());
 
-		// Reads the settings
-		notchManager.read(getApplicationContext());
-		settingsManager.read(getApplicationContext());
-		batteryManager.read(getApplicationContext());
-
 		// Properly rotates the overlay
 		overlayView.setRotationY(180);
 
@@ -237,8 +232,6 @@ public class OverlayAccessibilityService extends AccessibilityService {
 			@Override
 			public void onChargingConnected(int battery) {
 				
-				settingsManager.read(getApplicationContext());
-				
 				// When the battery is charging, if the settings allow so, the charging animation starts
 				if (settingsManager.isChargingAnimation() && !isAnimation1Active) {
 					
@@ -276,10 +269,6 @@ public class OverlayAccessibilityService extends AccessibilityService {
 
 			@Override
 			public void run() {
-
-				notchManager.read(getApplicationContext());
-				settingsManager.read(getApplicationContext());
-				batteryManager.read(getApplicationContext());
 
 				makeOverlay(batteryLevel);
 

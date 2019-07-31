@@ -101,9 +101,7 @@ public class NotchSettingsFragment extends Fragment {
 				// Reads the progress
 				txHeight.setText(String.valueOf(progress));
 				// Sets the corresponding value
-				manager.setHeight(progress);
-				// Saves the configuration
-				manager.save(getContext());
+				manager.setHeight(progress, getContext());
 
 			}
 
@@ -137,9 +135,7 @@ public class NotchSettingsFragment extends Fragment {
 				// Reads the progress
 				txWidth.setText(String.valueOf(progress));
 				// Sets the corresponding value
-				manager.setWidth(progress);
-				// Saves the configuration
-				manager.save(getContext());
+				manager.setWidth(progress, getContext());
 
 			}
 
@@ -172,9 +168,7 @@ public class NotchSettingsFragment extends Fragment {
 				// Reads the progress
 				txNotchSize.setText(String.valueOf(progress));
 				// Sets the corresponding value
-				manager.setNotchSize(progress);
-				// Saves the configuration
-				manager.save(getContext());
+				manager.setNotchSize(progress, getContext());
 
 			}
 
@@ -208,9 +202,7 @@ public class NotchSettingsFragment extends Fragment {
 				// Reads the progress
 				txTopRadius.setText(String.valueOf(progress));
 				// Sets the corresponding value
-				manager.setTopRadius(progress);
-				// Saves the configuration
-				manager.save(getContext());
+				manager.setTopRadius(progress, getContext());
 
 			}
 
@@ -244,9 +236,7 @@ public class NotchSettingsFragment extends Fragment {
 				// Reads the progress
 				txBottomRadius.setText(String.valueOf(progress));
 				// Sets the corresponding value
-				manager.setBottomRadius(progress);
-				// Saves the configuration
-				manager.save(getContext());
+				manager.setBottomRadius(progress, getContext());
 
 			}
 
@@ -280,9 +270,7 @@ public class NotchSettingsFragment extends Fragment {
 				// Reads the progress
 				txXPositionP.setText(String.valueOf(progress));
 				// Sets the corresponding value
-				manager.setxPositionPortrait(progress);
-				// Saves the configuration
-				manager.save(getContext());
+				manager.setxPositionPortrait(progress, getContext());
 
 			}
 
@@ -316,9 +304,7 @@ public class NotchSettingsFragment extends Fragment {
 				// Reads the progress
 				txYPositionP.setText(String.valueOf(progress));
 				// Sets the corresponding value
-				manager.setyPositionPortrait(progress);
-				// Saves the configuration
-				manager.save(getContext());
+				manager.setyPositionPortrait(progress, getContext());
 
 			}
 
@@ -352,9 +338,7 @@ public class NotchSettingsFragment extends Fragment {
 				// Reads the progress
 				txXPositionL.setText(String.valueOf(progress));
 				// Sets the corresponding value
-				manager.setxPositionLandscape(progress);
-				// Saves the configuration
-				manager.save(getContext());
+				manager.setxPositionLandscape(progress, getContext());
 
 			}
 
@@ -388,9 +372,7 @@ public class NotchSettingsFragment extends Fragment {
 				// Reads the progress
 				txYPositionL.setText(String.valueOf(progress));
 				// Sets the corresponding value
-				manager.setyPositionLandscape(progress);
-				//Saves the configuration
-				manager.save(getContext());
+				manager.setyPositionLandscape(progress, getContext());
 
 			}
 

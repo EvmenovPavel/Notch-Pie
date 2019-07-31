@@ -2,7 +2,6 @@ package com.lorenzomoscati.np.Fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,13 +74,11 @@ public class BatterySettingsFragment extends Fragment {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
 				// Updates the configuration
-				manager.setLinear(isChecked);
+				manager.setLinear(isChecked, getContext());
 				// Updates the opposite checkbox
 				definedAnimation.setChecked(!isChecked);
 				// Updates the configuration
-				manager.setDefined(!isChecked);
-				// Saves the configuration
-				manager.save(getContext());
+				manager.setDefined(!isChecked, getContext());
 
 			}
 
@@ -102,9 +99,7 @@ public class BatterySettingsFragment extends Fragment {
 						// Updates the text view
 						linearStart.setText(color);
 						// Updates the configuration
-						manager.setLinearStart(color);
-						// Saves the configuration
-						manager.save(getContext());
+						manager.setLinearStart(color, getContext());
 						// Updates the color preview
 						linearStartBorder.setBackgroundColor(Color.parseColor(color));
 
@@ -134,9 +129,7 @@ public class BatterySettingsFragment extends Fragment {
 						// Updates the text view
 						linearEnd.setText(color);
 						// Updates the configuration
-						manager.setLinearEnd(color);
-						// Saves the configuration
-						manager.save(getContext());
+						manager.setLinearEnd(color, getContext());
 						// Updates the color preview
 						linearEndBorder.setBackgroundColor(Color.parseColor(color));
 
@@ -158,13 +151,11 @@ public class BatterySettingsFragment extends Fragment {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
 				// Updates the configuration
-				manager.setDefined(isChecked);
+				manager.setDefined(isChecked, getContext());
 				// Updates the opposite checkbox
 				linearAnimation.setChecked(!isChecked);
 				// Updates the configuration
-				manager.setDefined(!isChecked);
-				// Saves the configuration
-				manager.save(getContext());
+				manager.setDefined(!isChecked, getContext());
 
 			}
 
@@ -181,14 +172,6 @@ public class BatterySettingsFragment extends Fragment {
 
 		// Fills the array with the color levels from the settings
 		list = manager.getColorLevels();
-
-		// ###DEBUG###
-		if (getContext() == null) {
-
-			Log.e("why", "why");
-
-		}
-		// ###DEBUG###
 
 		// Applying a listener to get when the color is touched, so that a color picker can be summoned
 		batteryColorAdapter = new BatteryColorAdapter(getContext(), list, new OnTouchColorLevel() {
@@ -214,9 +197,7 @@ public class BatterySettingsFragment extends Fragment {
 						// Notifies the manager that a color has changed
 						batteryColorAdapter.notifyItemChanged(positionTouch);
 						// Updates the configuration
-						manager.setColorLevels(list);
-						// Saves the configuration
-						manager.save(getContext());
+						manager.setColorLevels(list, getContext());
 
 					}
 
