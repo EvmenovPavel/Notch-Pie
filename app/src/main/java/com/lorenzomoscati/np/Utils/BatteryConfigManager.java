@@ -14,6 +14,8 @@ public class BatteryConfigManager {
 	private String linearStart, linearEnd;
 	private ArrayList<ColorLevel> colorLevels;
 	private SharedPreferences preferences;
+	private static final String pref_name = "battery_config_preferences";
+	private static final int pref_mode = 0;
 	private static final String[] colorDefined = {  "color_05",
 													"color_610",
 													"color_1120",
@@ -29,7 +31,7 @@ public class BatteryConfigManager {
 	// Configs the default colors
 	public BatteryConfigManager(Context context) {
 
-		preferences = context.getSharedPreferences("preferences", 0);
+		preferences = context.getSharedPreferences(pref_name, pref_mode);
 		
 		colorLevels = new ArrayList<>();
 		ColorLevel level;
@@ -120,9 +122,9 @@ public class BatteryConfigManager {
 	}
 	
 	// Reads the config file and returns true if read was successful
-	public boolean read(Context context) {
+	public void read(Context context) {
 		
-		preferences = context.getSharedPreferences("preferences", 0);
+		preferences = context.getSharedPreferences(pref_name, pref_mode);
 		colorLevels = new ArrayList<>();
 		ColorLevel level;
 		
@@ -209,14 +211,12 @@ public class BatteryConfigManager {
 		level.setEndLevel(100);
 		colorLevels.add(level);
 		
-		return true;
-
 	}
 
 	// this method saves the file
 	public void save(Context context) {
 		
-		preferences = context.getSharedPreferences("preferences", 0);
+		preferences = context.getSharedPreferences(pref_name, pref_mode);
 		SharedPreferences.Editor editor = preferences.edit();
 		
 		editor.putBoolean("is_linear", isLinear);

@@ -13,10 +13,12 @@ public class SettingsManager {
 	private String backgroundColor;
 	
 	private SharedPreferences preferences;
+	private static final String pref_name = "settings_preferences";
+	private static final int pref_mode = 0;
 
 	public SettingsManager(Context context) {
 		
-		preferences = context.getSharedPreferences("preferences", 0);
+		preferences = context.getSharedPreferences(pref_name, pref_mode);
 		
 		fullStatus = preferences.getBoolean("full_status", false);
 		showBackground = preferences.getBoolean("show_background", false);
@@ -28,24 +30,22 @@ public class SettingsManager {
 
 
 	// Reads the config file and returns true if read was successful
-	public boolean read(Context context) {
+	public void read(Context context) {
 		
-		preferences = context.getSharedPreferences("preferences", 0);
+		preferences = context.getSharedPreferences(pref_name, pref_mode);
 		
 		fullStatus = preferences.getBoolean("full_status", false);
 		showBackground = preferences.getBoolean("show_background", false);
 		backgroundColor = preferences.getString("background_color", "#000000");
 		chargingAnimation = preferences.getBoolean("charging_animation", true);
 		landscapeSupport = preferences.getBoolean("landscape_support", false);
-
-		return true;
-
+		
 	}
 
 	// This method saves the file
 	public void save(Context context) {
 		
-		preferences = context.getSharedPreferences("preferences", 0);
+		preferences = context.getSharedPreferences(pref_name, pref_mode);
 		SharedPreferences.Editor editor = preferences.edit();
 		
 		editor.putBoolean("full_status", fullStatus);

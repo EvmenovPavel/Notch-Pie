@@ -40,7 +40,7 @@ public class ConfigSettingsFragment extends Fragment {
 	// Initializes the method to call the settings manager's methods
 	private void init() {
 
-		manager = new SettingsManager(getContext());
+		manager = new SettingsManager(Objects.requireNonNull(getContext()));
 
 	}
 
@@ -59,15 +59,10 @@ public class ConfigSettingsFragment extends Fragment {
 		// TextViews
 		final TextView backgroundColorText = parent.findViewById(R.id.txBackgroundColor);
 
-		// If the read is successful, sets the values to be shown
-		if (manager.read(getContext())) {
-
-			fullStatus.setChecked(manager.isFullStatus());
-			showBackground.setChecked(manager.isShowBackground());
-			chargingAnimation.setChecked(manager.isChargingAnimation());
-			backgroundColorText.setText(String.format("%s %s", getString(R.string.current_color), manager.getBackgroundColor()));
-
-		}
+		fullStatus.setChecked(manager.isFullStatus());
+		showBackground.setChecked(manager.isShowBackground());
+		chargingAnimation.setChecked(manager.isChargingAnimation());
+		backgroundColorText.setText(String.format("%s %s", getString(R.string.current_color), manager.getBackgroundColor()));
 
 
 		// Listener for fullStatus

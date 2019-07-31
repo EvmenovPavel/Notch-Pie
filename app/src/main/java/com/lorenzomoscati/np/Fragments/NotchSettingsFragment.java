@@ -21,6 +21,7 @@ import com.lorenzomoscati.np.R;
 import com.lorenzomoscati.np.Utils.NotchManager;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class NotchSettingsFragment extends Fragment {
 
@@ -42,7 +43,7 @@ public class NotchSettingsFragment extends Fragment {
 	// Initializes the method to call the notch manager's methods
 	private void init() {
 
-		manager = new NotchManager(getContext());
+		manager = new NotchManager(Objects.requireNonNull(getContext()));
 
 	}
 
@@ -692,23 +693,16 @@ public class NotchSettingsFragment extends Fragment {
 
 		// Applies the listener
 		notchStyles.setAdapter(adapter);
-
-
-
-		// Reads the file, and if the read is successful the progresses are written
-		if (manager.read(getContext())) {
-
-			height.setProgress(manager.getHeight());
-			width.setProgress(manager.getWidth());
-			topRadius.setProgress(manager.getTopRadius());
-			bottomRadius.setProgress(manager.getBottomRadius());
-			notchSize.setProgress(manager.getNotchSize());
-			xPositionP.setProgress(manager.getxPositionPortrait());
-			yPositionP.setProgress(manager.getyPositionPortrait());
-			xPositionL.setProgress(manager.getxPositionLandscape());
-			yPositionL.setProgress(manager.getyPositionLandscape());
-
-		}
+		
+		height.setProgress(manager.getHeight());
+		width.setProgress(manager.getWidth());
+		topRadius.setProgress(manager.getTopRadius());
+		bottomRadius.setProgress(manager.getBottomRadius());
+		notchSize.setProgress(manager.getNotchSize());
+		xPositionP.setProgress(manager.getxPositionPortrait());
+		yPositionP.setProgress(manager.getyPositionPortrait());
+		xPositionL.setProgress(manager.getxPositionLandscape());
+		yPositionL.setProgress(manager.getyPositionLandscape());
 
 		return main;
 

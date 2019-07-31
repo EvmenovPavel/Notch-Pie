@@ -49,7 +49,7 @@ public class BatterySettingsFragment extends Fragment {
 	// Initializes the method to call the battery configuration manager's methods
 	private void init() {
 
-		manager = new BatteryConfigManager(getContext());
+		manager = new BatteryConfigManager(Objects.requireNonNull(getContext()));
 
 	}
 
@@ -233,18 +233,13 @@ public class BatterySettingsFragment extends Fragment {
 
 		// Applies the adapter to the recycler view
 		recyclerView.setAdapter(batteryColorAdapter);
-
-		// If the read of the configuration is successful, then the settings are shown in the fragment
-		if (manager.read(getContext())) {
-
-			linearAnimation.setChecked(manager.isLinear());
-			definedAnimation.setChecked(manager.isDefined());
-			linearStart.setText(manager.getLinearStart());
-			linearEnd.setText(manager.getLinearEnd());
-			linearStartBorder.setBackgroundColor(Color.parseColor(manager.getLinearStart()));
-			linearEndBorder.setBackgroundColor(Color.parseColor(manager.getLinearEnd()));
-
-		}
+		
+		linearAnimation.setChecked(manager.isLinear());
+		definedAnimation.setChecked(manager.isDefined());
+		linearStart.setText(manager.getLinearStart());
+		linearEnd.setText(manager.getLinearEnd());
+		linearStartBorder.setBackgroundColor(Color.parseColor(manager.getLinearStart()));
+		linearEndBorder.setBackgroundColor(Color.parseColor(manager.getLinearEnd()));
 
 		return main;
 

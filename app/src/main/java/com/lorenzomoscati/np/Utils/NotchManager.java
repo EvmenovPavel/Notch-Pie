@@ -16,10 +16,12 @@ public class NotchManager {
 				xPositionLandscape,
 				yPositionLandscape;
 	private SharedPreferences preferences;
+	private static final String pref_name = "notch_preferences";
+	private static final int pref_mode = 0;
 
 	public NotchManager(Context context) {
 		
-		preferences = context.getSharedPreferences("preferences", 0);
+		preferences = context.getSharedPreferences(pref_name, pref_mode);
 		
 		height = preferences.getInt("height", 90);
 		width = preferences.getInt("width", 1);
@@ -34,9 +36,9 @@ public class NotchManager {
 	}
 	
 	// Reads the config file and returns true if read was successful
-	public boolean read(Context context) {
+	public void read(Context context) {
 		
-		preferences = context.getSharedPreferences("preferences", 0);
+		preferences = context.getSharedPreferences(pref_name, pref_mode);
 		
 		height = preferences.getInt("height", 90);
 		width = preferences.getInt("width", 1);
@@ -48,14 +50,12 @@ public class NotchManager {
 		xPositionLandscape = preferences.getInt("x_pos_land", 0);
 		yPositionLandscape = preferences.getInt("y_pos_land", 0);
 		
-		return true;
-
 	}
 
 	// This method saves the file
 	public void save(Context context) {
 		
-		preferences = context.getSharedPreferences("preferences", 0);
+		preferences = context.getSharedPreferences(pref_name, pref_mode);
 		SharedPreferences.Editor editor = preferences.edit();
 		
 		editor.putInt("height", height);
