@@ -3,11 +3,13 @@ package com.lorenzomoscati.np.Service;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
-import android.content.ComponentName;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -18,6 +20,7 @@ import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.RectF;
 import android.graphics.SweepGradient;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
@@ -28,6 +31,10 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+import com.lorenzomoscati.np.Activity.TabbedActivity;
 import com.lorenzomoscati.np.Interface.OnBatteryLevelChanged;
 import com.lorenzomoscati.np.Interface.OnRotate;
 import com.lorenzomoscati.np.Modal.ColorLevel;
@@ -38,8 +45,15 @@ import com.lorenzomoscati.np.Utils.BatteryConfigManager;
 import com.lorenzomoscati.np.Utils.SettingsManager;
 import com.lorenzomoscati.np.Utils.NotchManager;
 
+import java.util.Objects;
+
 // The Service class to show and handle the overlay
-public class OverlayAccessibilityService extends AccessibilityService {
+public class OverlayAccessibilityService extends AccessibilityService implements SharedPreferences.OnSharedPreferenceChangeListener {
+	
+	private SharedPreferences preferences;
+	private SharedPreferences notchPreferences;
+	private SharedPreferences batteryConfigPreferences;
+	private SharedPreferences settingsPreferences;
 	
 	private WindowManager windowManager;
 	private View overlayView;
@@ -47,12 +61,25 @@ public class OverlayAccessibilityService extends AccessibilityService {
 	private NotchManager notchManager;
 	private SettingsManager settingsManager;
 	private BatteryConfigManager batteryManager;
-
-	private boolean isInApp = false;
+	
 	private int batteryLevel;
 	private int currentRotation = Surface.ROTATION_0;
-	private static final String packageName = "com.lorenzomoscati.np";
-
+	
+	private Handler handler = new Handler();
+	
+	private Context mContext;
+	
+	private NotificationManagerCompat notificationManager;
+	private static final int notificationID = 1;
+	
+	private OrientationBroadcastReceiver receiverOrientation;
+	private BatteryBroadcastReceiver receiverBattery;
+	private SharedPreferences.OnSharedPreferenceChangeListener listenerNotchPreferences;
+	private SharedPreferences.OnSharedPreferenceChangeListener listenerBatteryConfigPreferences;
+	private SharedPreferences.OnSharedPreferenceChangeListener listenerSettingsPreferences;
+	private SharedPreferences.OnSharedPreferenceChangeListener listenerPreferences;
+	
+	
 	// Executed when service started
 	@Override
 	protected void onServiceConnected() {
@@ -64,78 +91,97 @@ public class OverlayAccessibilityService extends AccessibilityService {
 		config.flags = AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS;
 
 		setServiceInfo(config);
-
+		
+		mContext = this;
+		
 		init();
-
+		
 		startReceivers();
+		
+	}
+	
+	
+	
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		
+		init();
+		
+		startReceivers();
+		
+		makeNotification();
+		
+		if (preferences.getBoolean("service_status", false)) {
+			
+			updateOverlay(this);
+			
+		}
+		
+		final SharedPreferences.Editor editor = preferences.edit();
+		
+		editor.putBoolean("service_started", true);
+		
+		editor.apply();
+
+		return START_STICKY;
 
 	}
-
-
-
-	/// Method to check if the notch pie app is open so that the settings are continuously updated
+	
+	public void makeNotification() {
+		
+		Intent notifyIntent = new Intent(this, TabbedActivity.class);
+		notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, 0);
+		
+		String CHANNEL_ID = "notchPie_ID";
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			CharSequence name = "notchPie_ID";
+			String description = "Standard Notch Pie Channel to post notification";
+			int importance = NotificationManager.IMPORTANCE_LOW;
+			NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+			channel.setDescription(description);
+			NotificationManager notificationManager = getSystemService(NotificationManager.class);
+			Objects.requireNonNull(notificationManager).createNotificationChannel(channel);
+		}
+		
+		NotificationCompat.Builder notify = new NotificationCompat.Builder(this, CHANNEL_ID)
+				.setSmallIcon(R.drawable.ic_launcher_foreground)
+				.setContentTitle("Notch Pie")
+				.setContentText("Notch Pie is showing an overlay")
+				.setPriority(NotificationCompat.PRIORITY_LOW)
+				.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+				.setContentIntent(pendingIntent)
+				.setOngoing(true);
+		
+		notificationManager = NotificationManagerCompat.from(this);
+		notificationManager.notify(notificationID, notify.build());
+		
+	}
+	
+	@Override
+	public void onDestroy() {
+		
+		super.onDestroy();
+	
+	}
+	
+	@Override
+	public void onTaskRemoved(Intent rootIntent) {
+		
+		super.onTaskRemoved(rootIntent);
+	
+	}
+	
 	@Override
 	public void onAccessibilityEvent(AccessibilityEvent event) {
-
-		// Checks if the window has changed
-		if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-
-			// Checks if the window is now displaying an app
-			if (event.getPackageName() != null && event.getClassName() != null) {
-
-				ComponentName componentName = new ComponentName(
-						event.getPackageName().toString(),
-						event.getClassName().toString()
-				);
-				
-				ActivityInfo activityInfo = getCurrentActivity(componentName);
-
-				boolean isActivity = activityInfo != null;
-
-				// Checks if the activity belongs to our app
-				if (isActivity) {
-
-					String activity = componentName.flattenToShortString();
-
-					if (activity.startsWith(packageName)) {
-
-						isInApp = true;
-
-						readConfigsContinuously();
-
-					} else {
-
-						isInApp = false;
-
-					}
-
-				}
-
-			}
-
-		}
-
-	}
-
-	// Gets the foreground activity name
-	private ActivityInfo getCurrentActivity(ComponentName componentName) {
-
-		try {
-
-			return getPackageManager().getActivityInfo(componentName, 0);
-
-		} catch (PackageManager.NameNotFoundException e) {
-
-			return null;
-
-		}
-
+	
 	}
 
 	// When the service gets disabled, the receiver are also disabled
 	@Override
 	public void onInterrupt() {
-
+		
 		stopReceivers();
 
 	}
@@ -146,22 +192,33 @@ public class OverlayAccessibilityService extends AccessibilityService {
 	private void init() {
 		
 		// Getting the window manager
-		windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-
+		// WINDOW_SERVICE = "window" (it's static and final)
+		// windowManager is null
+		windowManager = (WindowManager) mContext.getSystemService(WINDOW_SERVICE);
+		
 		// The parent image view in which the bitmap is set
-		overlayView = LayoutInflater.from(this).inflate(R.layout.overlay_float, null);
-
+		overlayView = LayoutInflater.from(mContext).inflate(R.layout.overlay_float, null);
+		
 		// Sets the managers to read notch, color and settings
 		notchManager = new NotchManager(getApplicationContext());
 		settingsManager = new SettingsManager(getApplicationContext());
 		batteryManager = new BatteryConfigManager(getApplicationContext());
-
+		
+		initPref(mContext);
+		
 		// Properly rotates the overlay
 		overlayView.setRotationY(180);
-
-		// Every 100 ms the settings are read
-		readConfigsContinuously();
-
+		
+	}
+	
+	@SuppressLint("InflateParams")
+	private void initPref(Context context) {
+		
+		notchPreferences = context.getSharedPreferences("notch_preferences", 0);
+		batteryConfigPreferences = context.getSharedPreferences("battery_config_preferences", 0);
+		settingsPreferences = context.getSharedPreferences("settings_preferences", 0);
+		preferences = context.getSharedPreferences("preferences", 0);
+		
 	}
 
 	// -- Utils --
@@ -180,13 +237,7 @@ public class OverlayAccessibilityService extends AccessibilityService {
 		return 0;
 		
 	}
-
 	
-	
-	// -- Receiver / Observer handlers --
-	private OrientationBroadcastReceiver receiverOrientation;
-	private BatteryBroadcastReceiver receiverBattery;
-
 	
 	
 	// This method starts and initialises every receiver to be uses in service
@@ -200,7 +251,8 @@ public class OverlayAccessibilityService extends AccessibilityService {
 				
 				// When in portrait mode, the rotation is set and the notch is redrawn
 				currentRotation = Surface.ROTATION_0;
-				makeOverlay(batteryLevel);
+				//updateOverlay(getApplicationContext());
+				updateOverlay(getApplicationContext());
 				
 			}
 
@@ -209,14 +261,99 @@ public class OverlayAccessibilityService extends AccessibilityService {
 				
 				// When in landscape mode, the rotation is set and the notch is redrawn
 				currentRotation = windowManager.getDefaultDisplay().getRotation();
-				makeOverlay(batteryLevel);
+				//updateOverlay(getApplicationContext());
+				updateOverlay(getApplicationContext());
 				
 			}
 			
 		});
 		
 		IntentFilter intentFilterOrientation = new IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED);
-
+		
+		
+		
+		listenerNotchPreferences = new SharedPreferences.OnSharedPreferenceChangeListener() {
+			
+			@Override
+			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+			
+				updateOverlay(getApplicationContext());
+				
+			}
+		};
+		
+		
+		
+		listenerBatteryConfigPreferences = new SharedPreferences.OnSharedPreferenceChangeListener() {
+			
+			@Override
+			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+				
+				updateOverlay(getApplicationContext());
+				
+			}
+			
+		};
+		
+		
+		
+		listenerSettingsPreferences = new SharedPreferences.OnSharedPreferenceChangeListener() {
+			
+			@Override
+			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+				
+				updateOverlay(getApplicationContext());
+				
+			}
+			
+		};
+		
+		
+		
+		listenerPreferences = new SharedPreferences.OnSharedPreferenceChangeListener() {
+			
+			@Override
+			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+				
+				Log.d("Detected", "Preference change detected, filtering...");
+				
+				if (Objects.equals(key, "service_status")) {
+					
+					Log.d("Filtered", "The change interests service_status...");
+					
+					if (!preferences.getBoolean(key, false)) {
+						
+						Log.d("Filtered", "service_status is false, removing...");
+						
+						removeOverlay();
+						
+					}
+					
+					else if (preferences.getBoolean(key, false)) {
+						
+						Log.d("Filtered", "service_status is true, filtering again");
+						
+						if (preferences.getBoolean("service_started", false)) {
+							
+							Log.d("Filtered", "service_started is true, updating...");
+							
+							makeNotification();
+							
+							init();
+							
+							updateOverlay(getApplicationContext());
+							
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+		};
+		
+		
 		// Battery receiver
 		receiverBattery = new BatteryBroadcastReceiver(new OnBatteryLevelChanged() {
 			
@@ -225,7 +362,8 @@ public class OverlayAccessibilityService extends AccessibilityService {
 				
 				// When the battery level changes, the notch is redrawn according to the new percentage
 				batteryLevel = battery;
-				makeOverlay(batteryLevel);
+				//updateOverlay(getApplicationContext());
+				updateOverlay(getApplicationContext());
 				
 			}
 
@@ -233,11 +371,11 @@ public class OverlayAccessibilityService extends AccessibilityService {
 			public void onChargingConnected(int battery) {
 				
 				// When the battery is charging, if the settings allow so, the charging animation starts
-				if (settingsManager.isChargingAnimation() && !isAnimation1Active) {
+				if (settingsManager.isChargingAnimation() && !isAnimationActive) {
 					
-					isAnimation1Active = true;
-					tempBatteryLevel1 = batteryLevel;
-					animation1();
+					isAnimationActive = true;
+					tempBatteryLevel = batteryLevel;
+					animation();
 					
 				}
 				
@@ -247,8 +385,10 @@ public class OverlayAccessibilityService extends AccessibilityService {
 			public void oncChargingDisconnected(int battery) {
 				
 				// When the battery is not charging anymore, the charging animation stops
-				isAnimation1Active = false;
-				makeOverlay(batteryLevel);
+				isAnimationActive = false;
+				batteryLevel = battery;
+				//updateOverlay(getApplicationContext());
+				updateOverlay(getApplicationContext());
 				
 			}
 			
@@ -258,39 +398,23 @@ public class OverlayAccessibilityService extends AccessibilityService {
 
 		// Receiver registered
 		registerReceiver(receiverOrientation, intentFilterOrientation);
+		notchPreferences.registerOnSharedPreferenceChangeListener(listenerNotchPreferences);
+		batteryConfigPreferences.registerOnSharedPreferenceChangeListener(listenerBatteryConfigPreferences);
+		settingsPreferences.registerOnSharedPreferenceChangeListener(listenerSettingsPreferences);
+		preferences.registerOnSharedPreferenceChangeListener(listenerPreferences);
 		registerReceiver(receiverBattery, intentFilterBattery);
 		
 	}
-
-	private void readConfigsContinuously() {
+	
+	public void updateOverlay(Context context) {
 		
-		// Every 100 ms the settings are read
-		new Handler().postDelayed(new Runnable() {
-
-			@Override
-			public void run() {
-
-				makeOverlay(batteryLevel);
-
-				if (isInApp) {
-
-					readConfigsContinuously();
-
-					isAnimation1Active = settingsManager.isChargingAnimation();
-
-				}
-
-				else {
-
-					isAnimation1Active = settingsManager.isChargingAnimation();
-
-					makeOverlay(batteryLevel);
-
-				}
-
-			}
-
-		}, 100);
+		initPref(context);
+		
+		if (preferences.getBoolean("service_status", false)) {
+			
+			makeOverlay(batteryLevel);
+			
+		}
 
 	}
 
@@ -298,14 +422,24 @@ public class OverlayAccessibilityService extends AccessibilityService {
 	private void stopReceivers() {
 		
 		// When this is called, the receiver are unregistered
+		assert receiverOrientation != null;
 		unregisterReceiver(receiverOrientation);
+		
+		assert receiverBattery != null;
 		unregisterReceiver(receiverBattery);
+		
+		preferences.unregisterOnSharedPreferenceChangeListener(listenerPreferences);
+		notchPreferences.unregisterOnSharedPreferenceChangeListener(listenerNotchPreferences);
+		settingsPreferences.unregisterOnSharedPreferenceChangeListener(listenerSettingsPreferences);
+		batteryConfigPreferences.unregisterOnSharedPreferenceChangeListener(listenerBatteryConfigPreferences);
 		
 	}
 
 	// -- Overlay Manager --
 	private void makeOverlay(int battery) {
-
+		
+		Log.d("Called", "makeOverlay has been called");
+		
 		// Check if there is support for landscape, and according to this, the notch is drawn
 		if (settingsManager.isLandscapeSupport()) {
 
@@ -328,7 +462,9 @@ public class OverlayAccessibilityService extends AccessibilityService {
 			}
 
 			else {
-
+				
+				Log.d("Called", "else has been called");
+				
 				removeOverlay();
 
 			}
@@ -356,7 +492,9 @@ public class OverlayAccessibilityService extends AccessibilityService {
 			}
 
 			else {
-
+				
+				Log.d("Called", "else has been called");
+				
 				removeOverlay();
 
 			}
@@ -482,18 +620,25 @@ public class OverlayAccessibilityService extends AccessibilityService {
 	}
 
 	// This method removes the overlay from the view
-	private void removeOverlay() {
-
-		try {
-			
-			// Tries to remove the overlay
-			windowManager.removeView(overlayView);
-
-		} catch (Exception ignored) {
+	public void removeOverlay() {
 		
-			// The overlay is already removed
+		Log.d("Called", "removeOverlay has been called");
+		
+		if (windowManager == null) {
+			
+			Log.e("Null", "windowManager is null");
 			
 		}
+		
+		if (overlayView == null) {
+			
+			Log.e("Null", "overlayView is null");
+			
+		}
+		
+		windowManager.removeView(overlayView);
+		
+		notificationManager.cancel(notificationID);
 
 	}
 
@@ -1004,22 +1149,47 @@ public class OverlayAccessibilityService extends AccessibilityService {
 
 
 	// Animation methods
-	private boolean isAnimation1Active = false;
-	private int tempBatteryLevel1 = batteryLevel;
+	private boolean isAnimationActive = false;
+	private int tempBatteryLevel = batteryLevel;
 
-	private void animation1() {
-		new Handler().postDelayed(new Runnable() {
+	private void animation() {
+	
+		handler.postDelayed(new Runnable() {
+
 			@Override
 			public void run() {
-				if (tempBatteryLevel1 == 100)
-					tempBatteryLevel1 = batteryLevel;
-				else
-					tempBatteryLevel1++;
-				makeOverlay(tempBatteryLevel1);
-				if (isAnimation1Active)
-					animation1();
-			}
-		}, 100);
-	}
 
+				if (tempBatteryLevel == 100) {
+
+					tempBatteryLevel = batteryLevel;
+
+				}
+
+				else {
+
+					tempBatteryLevel++;
+
+				}
+
+				makeOverlay(tempBatteryLevel);
+
+				if (isAnimationActive) {
+
+					animation();
+
+				}
+
+			}
+
+		}, 100);
+		
+	}
+	
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+	
+	
+	
+	}
+	
 }

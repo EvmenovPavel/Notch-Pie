@@ -11,7 +11,7 @@ public class NotchManager {
 	private static final int pref_mode = 0;
 
 	public NotchManager(Context context) {
-
+		
 		preferences = context.getSharedPreferences(pref_name, pref_mode);
 		
 		preferences.getInt("height", 90);
@@ -104,7 +104,7 @@ public class NotchManager {
 		editor.putInt("height", height);
 		
 		editor.apply();
-
+		
 	}
 
 	// Sets the width
@@ -116,7 +116,7 @@ public class NotchManager {
 		editor.putInt("width", width);
 		
 		editor.apply();
-
+		
 	}
 
 	// Sets the notchSize
@@ -128,7 +128,7 @@ public class NotchManager {
 		editor.putInt("notch_size", notchSize);
 		
 		editor.apply();
-
+		
 	}
 
 	// Sets the topRadius
@@ -140,7 +140,7 @@ public class NotchManager {
 		editor.putInt("top_radius", topRadius);
 		
 		editor.apply();
-
+		
 	}
 
 	// Sets the bottomRadius
@@ -152,6 +152,8 @@ public class NotchManager {
 		editor.putInt("bottom_radius", bottomRadius);
 		
 		editor.apply();
+		
+		//updateOverlay(context);
 
 	}
 
@@ -164,7 +166,7 @@ public class NotchManager {
 		editor.putInt("x_pos_port", xPositionPortrait);
 		
 		editor.apply();
-
+		
 	}
 
 	// Sets the yPosition in portrait mode
@@ -176,7 +178,7 @@ public class NotchManager {
 		editor.putInt("y_pos_port", yPositionPortrait);
 		
 		editor.apply();
-
+		
 	}
 
 	// Sets the xPosition in landscape mode
@@ -188,7 +190,7 @@ public class NotchManager {
 		editor.putInt("x_pos_land", xPositionLandscape);
 		
 		editor.apply();
-
+		
 	}
 
 	// Sets the yPosition in landscape mode
@@ -200,7 +202,7 @@ public class NotchManager {
 		editor.putInt("y_pos_land", yPositionLandscape);
 		
 		editor.apply();
-
+		
 	}
 	
 }

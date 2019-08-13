@@ -30,8 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
 	// This method checks for all permissions
 	private void checkPermissions() {
-
-
+		
 		if (!canDrawOverlay()) {
 
 			notifyOverlayPermission();
@@ -39,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
 		} else {
 
 			// Starts the tabbed activity, the main one in the application
-			startActivity(new Intent(this,TabbedActivity.class));
-
+			startActivity(new Intent(this, TabbedActivity.class));
+			
 			// Terminates the activity
 			finish();
 
@@ -61,14 +60,14 @@ public class MainActivity extends AppCompatActivity {
 
 	// This method shows a dialog notifying the user about overlay permission
 	private void notifyOverlayPermission() {
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 		builder.setPositiveButton(getString(R.string.popup_positive), new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-
+				
 				requestOverlayPermission();
 
 			}
@@ -117,6 +116,13 @@ public class MainActivity extends AppCompatActivity {
 
 		checkPermissions();
 
+	}
+	
+	@Override
+	protected void onDestroy() {
+		
+		super.onDestroy();
+		
 	}
 
 }

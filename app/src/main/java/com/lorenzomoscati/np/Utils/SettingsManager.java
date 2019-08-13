@@ -3,6 +3,7 @@ package com.lorenzomoscati.np.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+
 // Handles data related to notch.
 public class SettingsManager {
 	
@@ -17,7 +18,7 @@ public class SettingsManager {
 		preferences.getBoolean("full_status", false);
 		preferences.getBoolean("show_background", false);
 		preferences.getString("background_color", "#000000");
-		preferences.getBoolean("charging_animation", true);
+		preferences.getBoolean("charging_animation", false);
 		preferences.getBoolean("landscape_support", false);
 
 	}
@@ -49,7 +50,7 @@ public class SettingsManager {
 	// Return [string] the chargingAnimation setting
 	public boolean isChargingAnimation() {
 
-		return preferences.getBoolean("charging_animation", true);
+		return preferences.getBoolean("charging_animation", false);
 
 	}
 
@@ -72,7 +73,7 @@ public class SettingsManager {
 		editor.putBoolean("full_status", fullStatus);
 		
 		editor.apply();
-
+		
 	}
 
 	// Sets the ShowBackground
@@ -84,7 +85,7 @@ public class SettingsManager {
 		editor.putBoolean("show_background", showBackground);
 		
 		editor.apply();
-
+		
 	}
 
 	// Sets the ChargingAnimation
@@ -96,7 +97,7 @@ public class SettingsManager {
 		editor.putBoolean("charging_animation", chargingAnimation);
 		
 		editor.apply();
-
+		
 	}
 
 	// Sets the BackgroundColor
@@ -108,7 +109,7 @@ public class SettingsManager {
 		editor.putString("background_color", backgroundColor);
 		
 		editor.apply();
-
+		
 	}
 
 	// Sets the LandscapeSupport
@@ -120,7 +121,7 @@ public class SettingsManager {
 		editor.putBoolean("landscape_support", landscapeSupport);
 		
 		editor.apply();
-
+		
 	}
 	
 	

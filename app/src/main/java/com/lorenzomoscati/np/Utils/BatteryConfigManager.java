@@ -38,7 +38,7 @@ public class BatteryConfigManager {
 	
 	// Configs the default colors
 	public BatteryConfigManager(Context context) {
-
+		
 		preferences = context.getSharedPreferences(pref_name, pref_mode);
 		
 		colorLevels = colorDefined();
@@ -140,7 +140,7 @@ public class BatteryConfigManager {
 		editor.putBoolean("is_linear", linear);
 		
 		editor.apply();
-
+		
 	}
 
 	// Sets the isDefined property
@@ -164,7 +164,7 @@ public class BatteryConfigManager {
 		editor.putString("color_linear_start", linearStart);
 		
 		editor.apply();
-
+		
 	}
 
 	// Sets the linearEnd color
@@ -176,7 +176,7 @@ public class BatteryConfigManager {
 		editor.putString("color_linear_end", linearEnd);
 		
 		editor.apply();
-
+		
 	}
 
 	// Sets the color level
@@ -194,7 +194,7 @@ public class BatteryConfigManager {
 		}
 		
 		editor.apply();
-
+		
 	}
 	
 }

@@ -17,10 +17,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.lorenzomoscati.np.Adapter.SectionsPageAdapter;
@@ -44,9 +46,70 @@ public class TabbedActivity extends AppCompatActivity {
 		
 		mContext = this;
 		
+		final SharedPreferences preferences = getApplicationContext().getSharedPreferences("preferences", 0);
+		final SharedPreferences.Editor editor = preferences.edit();
+		
 		init();
 
-		makeServiceSnackbar();
+		makeServiceSnackBar();
+		
+		FloatingActionButton fab = findViewById(R.id.floatingActionButton);
+		
+		fab.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				if (checkServiceOn()) {
+					
+					Intent serviceIntent = new Intent(getApplicationContext(), OverlayAccessibilityService.class);
+					
+					if (!preferences.getBoolean("service_status", false)) {
+						
+						if (!preferences.getBoolean("service_started", false)) {
+							
+							editor.putBoolean("service_status", true);
+							editor.apply();
+							
+							startService(serviceIntent);
+							
+						}
+						
+						else {
+							
+							editor.putBoolean("service_status", true);
+							editor.apply();
+							
+							
+						}
+						
+					} else {
+						
+						Log.d("Called", "stopService has been called");
+						
+						editor.putBoolean("service_status", false);
+						editor.apply();
+						
+						Log.d("Changed", "service_status changed to: " + preferences.getBoolean("service_status", true));
+						
+					}
+					
+				}
+				
+				else {
+					
+					// Creates the intent to the settings page
+					Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+					startActivity(intent);
+					
+					// Makes a toast to notify the user about what setting to turn on
+					Toast.makeText(getApplicationContext(), getString(R.string.popup_accessibility_toast), Toast.LENGTH_LONG).show();
+					
+				}
+				
+			}
+			
+		});
 
 	}
 
@@ -62,38 +125,10 @@ public class TabbedActivity extends AppCompatActivity {
 	}
 	
 	// Checks if the accessibility service is turned on
-	private void makeServiceSnackbar() {
-
-		// If the service is not on a snackBar is shown
-		if (!checkServiceOn()) {
-
-			// Sets the title and length (infinite)
-			Snackbar bar = Snackbar.make(viewPager, getString(R.string.turnServiceOn), Snackbar.LENGTH_INDEFINITE);
-
-			// Sets the button to enable it
-			bar.setAction(getString(R.string.enable), new View.OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-
-					// Creates the intent to the settings page
-					Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-					startActivity(intent);
-
-					// Makes a toast to notify the user about what setting to turn on
-					Toast.makeText(getApplicationContext(), getString(R.string.popup_accessibility_toast), Toast.LENGTH_LONG).show();
-
-				}
-
-			});
-			
-			// Shows the bar
-			bar.show();
-
-		}
+	private void makeServiceSnackBar() {
 		
 		// If Doze is on for the app a snackBar is shown
-		else if (checkDozeOn()) {
+		if (checkDozeOn()) {
 			
 			// Sets the title and length (infinite)
 			Snackbar bar = Snackbar.make(viewPager, getString(R.string.battery_optimization), Snackbar.LENGTH_INDEFINITE);
@@ -172,7 +207,7 @@ public class TabbedActivity extends AppCompatActivity {
 		super.onResume();
 
 		// Checks again if the accessibility service is enabled
-		makeServiceSnackbar();
+		makeServiceSnackBar();
 
 	}
 

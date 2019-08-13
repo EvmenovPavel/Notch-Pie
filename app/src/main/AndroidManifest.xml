@@ -30,6 +30,7 @@
         <service
             android:name="com.lorenzomoscati.np.Service.OverlayAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:stopWithTask="false"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
