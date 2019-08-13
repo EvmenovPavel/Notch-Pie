@@ -35,7 +35,7 @@ public class BatteryBroadcastReceiver extends BroadcastReceiver {
 		
 		if (isCharging) {
 			
-			onBatteryChangedInterface.onChargingConnected(level);
+			onBatteryChangedInterface.onChargingConnected();
 			
 		}
 		

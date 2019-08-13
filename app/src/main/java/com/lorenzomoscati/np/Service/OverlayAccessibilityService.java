@@ -65,7 +65,7 @@ public class OverlayAccessibilityService extends AccessibilityService implements
 	private int batteryLevel;
 	private int currentRotation = Surface.ROTATION_0;
 	
-	private Handler handler = new Handler();
+	private final Handler handler = new Handler();
 	
 	private Context mContext;
 	
@@ -127,7 +127,7 @@ public class OverlayAccessibilityService extends AccessibilityService implements
 
 	}
 	
-	public void makeNotification() {
+	private void makeNotification() {
 		
 		Intent notifyIntent = new Intent(this, TabbedActivity.class);
 		notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -368,7 +368,7 @@ public class OverlayAccessibilityService extends AccessibilityService implements
 			}
 
 			@Override
-			public void onChargingConnected(int battery) {
+			public void onChargingConnected() {
 				
 				// When the battery is charging, if the settings allow so, the charging animation starts
 				if (settingsManager.isChargingAnimation() && !isAnimationActive) {
@@ -406,7 +406,7 @@ public class OverlayAccessibilityService extends AccessibilityService implements
 		
 	}
 	
-	public void updateOverlay(Context context) {
+	private void updateOverlay(Context context) {
 		
 		initPref(context);
 		
@@ -620,7 +620,7 @@ public class OverlayAccessibilityService extends AccessibilityService implements
 	}
 
 	// This method removes the overlay from the view
-	public void removeOverlay() {
+	private void removeOverlay() {
 		
 		Log.d("Called", "removeOverlay has been called");
 		

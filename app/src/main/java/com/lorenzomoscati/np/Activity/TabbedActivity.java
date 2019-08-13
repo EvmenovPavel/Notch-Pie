@@ -35,7 +35,7 @@ import java.util.Objects;
 public class TabbedActivity extends AppCompatActivity {
 	
 	private ViewPager viewPager;
-	Context mContext;
+	private Context mContext;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

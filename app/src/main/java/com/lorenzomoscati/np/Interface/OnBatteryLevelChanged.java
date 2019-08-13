@@ -7,7 +7,7 @@ public interface OnBatteryLevelChanged {
 	void onChanged(int battery);
 	
 	// Battery is charging
-	void onChargingConnected(int battery);
+	void onChargingConnected();
 	
 	// Battery is no longer charging
 	void oncChargingDisconnected(int battery);
